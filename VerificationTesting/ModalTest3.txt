@@ -1,0 +1,6 @@
+<>Jx&~Jx
+|
+x,(Jx&Kx)->~Kx
+[]3x,Kx
+
+// Expected Result: MerelyPossible

@@ -1,0 +1,6 @@
+x,Gx->Hx
+3x,Hx
+->
+3x,Gx
+
+// Expected Result: MerelyPossible

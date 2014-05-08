@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--
+  somerby.net/mack/logic
+  Copyright (C) 2014 MacKenzie Cumings
+ 
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License along
+  with this program; if not, write to the Free Software Foundation, Inc.,
+  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+-->
+
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Verification Testing</title>
+
+<script type="text/javascript" src="../WebApplication/mscorlib.js"></script>
+<script type="text/javascript" src="../WebApplication/linq.js"></script>
+<script type="text/javascript" src="../WebApplication/Logic.js"></script>
+
+<script type="text/javascript">
+
+function now()
+{
+  return (new Date()).getTime();
+}
+
+function appendTestResult(aResult)
+{
+  var lListItem = document.createElement("li");
+  lListItem.appendChild( document.createTextNode(aResult) );
+  
+  document.getElementById("test_results").appendChild( lListItem );
+}
+
+function test(aTestFile)
+{  
+  var lText = aTestFile.contentDocument.body.textContent;
+  var expectedResult = global.UnitTests.UnitTestUtility.parseExpectedResult( lText );
+  var lStartTime = now();
+  var lPassed = expectedResult
+    === global.UnitTests.UnitTestUtility.getDecision( lText );
+  var lEndTime = now();
+  
+  appendTestResult( aTestFile.id + " " + (lPassed ? "passed" : "failed") + ".  Run time: "
+    + ( lEndTime - lStartTime ) + " milliseconds." );
+}
+
+</script>
+
+</head>
+<body>
+
+<h2>Test Results</h2>
+<h2>Propositions Tested</h2>
+<ul id="test_results">
+</ul>
+
+<h2>Propositions Tested</h2>
+<div id="test_files">
+<object id="AxiomsOfModalLogic" type="text/plain" data="AxiomsOfModalLogic.txt" onload="test(this);" />
+
+<object id="Socrates" type="text/plain" data="Socrates.txt" onload="test(this);" />
+
+<object id="BigNullPredicates" type="text/plain" data="BigNullPredicates.txt" onload="test(this);" />
+
+<object id="NullPredicates" type="text/plain" data="NullPredicates.txt" onload="test(this);" />
+<object id="SimpleContradiction" type="text/plain" data="SimpleContradiction.txt" onload="test(this);" />
+<object id="RulesOfPropositionalLogic" type="text/plain" data="RulesOfPropositionalLogic.txt" onload="test(this);" />
+<object id="MixedNullUnaryPredicates1" type="text/plain" data="MixedNullUnaryPredicates1.txt" onload="test(this);" />
+<object id="DiSpezio135" type="text/plain" data="DiSpezio135.txt" onload="test(this);" />
+<object id="Hurley213" type="text/plain" data="Socrates.txt" onload="test(this);" />
+<object id="Socrates" type="text/plain" data="Hurley213.txt" onload="test(this);" />
+<object id="Hurley454" type="text/plain" data="Hurley454.txt" onload="test(this);" />
+<object id="Hurley457" type="text/plain" data="Hurley457.txt" onload="test(this);" />
+
+<object id="ModalTest1" type="text/plain" data="ModalTest1.txt" onload="test(this);" />
+<object id="ModalTest2" type="text/plain" data="ModalTest2.txt" onload="test(this);" />
+<object id="ModalTest3" type="text/plain" data="ModalTest3.txt" onload="test(this);" />
+<object id="SocratesOverload" type="text/plain" data="SocratesOverload.txt" onload="test(this);" />
+<object id="EmptyUniverseTest" type="text/plain" data="EmptyUniverseTest.txt" onload="test(this);" />
+<object id="ToBeOrNotToBe" type="text/plain" data="ToBeOrNotToBe.txt" onload="test(this);" />
+<object id="LastUniverseTested" type="text/plain" data="LastUniverseTested.txt" onload="test(this);" />
+</div>
+
+</body>
+</html>

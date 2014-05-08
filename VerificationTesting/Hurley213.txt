@@ -1,0 +1,8 @@
+// Some T are not M.
+3x,Tx&~Mx
+// Therefore,
+->
+// It is false that all T are M.
+~(x,Tx->Mx)
+
+// Expected Result: Necessary

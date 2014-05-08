@@ -1,0 +1,14 @@
+// Everbody buys either a jazz album or a rock album, but not both.
+x,~(Rx<=>Jx)
+// Either Sheila or Roman will pick rock 'n' roll, but not both.
+~(Rs<=>Rr)
+// If Sheila picks rock 'n' roll, Niko picks jazz.
+Rs->Jn
+// Niko and Ramon do not both pick jazz.
+~(Jn&Jr)
+// Therefore,
+->
+// Sheila doesn't buy a rock album and Ramon doesn't buy a jazz album.
+~Rs&~Jr
+
+// Expected Result: Necessary

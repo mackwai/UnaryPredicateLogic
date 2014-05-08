@@ -1,0 +1,7 @@
+x,y, x=y <=> y=x
+x, x=x
+x,y,z, (x=y & y=z) -> x=z
+x,y, x=y -> (Px <=> Py)
+x, Px -> (y,x=y -> Py)
+
+// Expected Result: Necessary

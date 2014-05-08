@@ -1,0 +1,61 @@
+// Expected Result: Necessary
+
+//Modus Ponens
+((P->Q) & P) -> Q
+
+//Modus Tollens
+((P->Q) & ~Q) -> ~P
+
+//Hypothetical Syllogism
+((P->Q) & (Q->R)) -> (P->R)
+
+//Disjunctive Syllogism
+((P|Q) & ~P) -> Q
+
+//Constructive Dilemma
+( ((P->Q) & (R->S)) & (P|R) ) -> (Q|S)
+
+//Simplification
+(P&Q) -> P
+
+//Conjunction
+((P) & (Q)) -> (P&Q)
+
+//Addition
+P -> (P|Q)
+
+//DeMorgan's Rule
+~(P&Q) <=> (~P|~Q)
+~(P|Q) <=> (~P&~Q)
+
+//Commutativity
+(P|Q) <=> (Q|P)
+(P&Q) <=> (Q&P)
+
+//Associativity
+( P|(Q|R) ) <=> ( (P|Q)|R )
+( P&(Q&R) ) <=> ( (P&Q)&R )
+
+//Distribution
+( P&(Q|R) ) <=> ( (P&Q)|(P&R) )
+( P|(Q&R) ) <=> ( (P|Q)&(P|R) )
+
+//Double Negation
+P <=> ~~P
+
+//Transposition
+(P->Q) <=> (~Q->~P)
+
+//Material Implication
+(P->Q) <=> (~P|Q)
+
+//Material Equivalence
+(P<=>Q) <=> ( (P->Q) & (Q->P) )
+(P<=>Q) <=> ( (P&Q) | (~P&~Q) )
+
+//Exportation
+( (P&Q)->R ) <=> (P->(Q->R))
+
+//Tautology
+P <=> (P|P)
+P <=> (P&P)

@@ -1,0 +1,1 @@
+P&~P //Expected Result: Impossible

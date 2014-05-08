@@ -1,0 +1,3 @@
+x,((Jx&Kx&(~<>3y,Ay&~Ay))->(Kx&(<>3y,Ay&~Ay)))
+->
+~3z,Jz&Kz

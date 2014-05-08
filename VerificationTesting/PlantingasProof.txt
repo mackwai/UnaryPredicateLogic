@@ -1,0 +1,10 @@
+// If God exists in some possible universe, then God exists in all possible universes.
+<>G -> []G
+// God exists in some possible universe.
+<>G
+
+// Therefore,
+->
+
+// God exists.
+G

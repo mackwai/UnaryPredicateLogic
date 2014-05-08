@@ -1,0 +1,10 @@
+Ax&Bx
+x,Jx->~Bx
+Jy
+->
+~y=x
+
+//Aj&~Bj
+//j=k
+//->
+//~Ck

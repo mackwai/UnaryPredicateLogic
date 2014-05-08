@@ -1,0 +1,7 @@
+// Expected Result: MerelyPossible
+
+3x,Ax&Bx
+3x,Cx&~Bx
+x,Ax->Cx
+->
+3x,(Cx&Bx)&~Ax

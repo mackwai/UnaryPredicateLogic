@@ -1,0 +1,10 @@
+﻿// All men are mortal.
+x,Hx->Mx
+// Socrates is a man.
+Hx
+// Therefore,
+->
+// Socrates is mortal.
+Mx
+
+// Expected Result: Necessary

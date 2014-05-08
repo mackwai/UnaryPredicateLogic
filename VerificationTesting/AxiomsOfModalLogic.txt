@@ -1,0 +1,34 @@
+// Axiom D
+[]A -> <>A
+
+// Axiom M
+[]A -> A
+
+// Axiom 4
+[]A->[][]A
+
+// Axiom B
+A -> []<>A
+
+// Axiom 5
+<>A -> []<>A
+
+// Axiom CD
+// <>A -> []A (SW decides this is not necessarily true)
+
+// Axiom []M
+[]([]A -> A)
+
+// Axiom C4
+[][]A -> []A
+
+// Axiom C
+<>[]A -> []<>A
+
+// Axiom K
+[](A->B)->([]A->[]B)
+
+// Axiom T
+[]A -> A
+
+// Expected Result: Necessary

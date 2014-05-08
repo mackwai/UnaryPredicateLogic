@@ -1,0 +1,4 @@
+x,Px&~Px
+J|~J
+
+// Expected Result: Impossible

@@ -1,0 +1,17 @@
+The argument in Socrates.txt is valid.
+File not found: DiSpezio120.txt
+The argument in DiSpezio135.txt is valid.
+The argument in Hurley213.txt is valid.
+The argument in Hurley454.txt is invalid.
+The argument in Hurley457.txt is invalid.
+The contents of ModalTest1.txt are self-contradictory.
+The contents of ModalTest2.txt are necessarily true.
+The argument in ModalTest4.txt is valid.
+The argument in SocratesOverload.txt is valid.
+The contents of EmptyUniverseTest.txt are self-contradictory.
+The contents of NullPredicates.txt are possible.
+The argument in MixedNullUnaryPredicates1.txt is valid.
+The contents of BigNullPredicates.txt are necessarily true.
+invalid: Logic.ParseError: Could not parse "(~A&B&C&D&E)(~A&B&C&D&~E)"
+The contents of RulesOfLogic.txt are necessarily true.
+The contents of ToBeOrNotToBe.txt are necessarily true.

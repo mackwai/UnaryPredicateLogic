@@ -1,0 +1,214 @@
+/*
+  somerby.net/mack/logic
+  Copyright (C) 2014 MacKenzie Cumings
+ 
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License along
+  with this program; if not, write to the Free Software Foundation, Inc.,
+  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+*/
+
+.overline
+{
+  text-decoration: overline;
+}
+
+.symbolic
+{
+  font-family: monospace;
+  color: #006040;
+}
+
+pre.symbolic
+{
+  margin-left: 3em;
+}
+
+img
+{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.backwards
+{ 
+  unicode-bidi: bidi-override; 
+  direction: rtl; 
+}
+
+table
+{
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid #006040;
+  border-collapse: collapse;
+}
+
+td
+{
+  border: 1px solid #006040;
+  border-collapse: collapse;
+  padding: 4px;
+  min-width: 30px;
+}
+
+th
+{
+  text-align: center;
+}
+
+#result
+{
+  max-width: 40em;
+  text-align: center;
+  min-height: 5ex;
+}
+
+#all
+{
+  width: 1028px;
+}
+
+@media (min-device-width: 8in)
+{
+  body, html {
+    background-image: url('Leibniz_machine.jpeg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: right bottom;
+  }
+}
+
+
+/*@media (max-resolution: 200dpi) and not (max-width: 1600px)*/
+@media all /*(min-device-width: 8in)*/
+{
+
+  button
+  {
+    background-color: #F5F5F5;
+    border: 1px solid rgba(0, 96, 64, 0.1);
+    border-radius: 2px 2px 2px 2px;
+    color: #333333;
+    cursor: pointer;
+    font-family: monospace;
+    font-size: small;
+    height: 2.45em;
+    margin: 5px 0px 0px 0px;
+    min-width: 4.9em;
+    padding: 5px 6px 6px 6px;
+    text-align: center;
+  }
+
+  .chalkboard {
+    background-color: #443322;
+    color: #FFFFDD;
+    overflow: scroll;
+    font-family: "comic sans MS",monospace;
+  }
+
+  .text {
+    background-color: #FFFFFF;
+    color: #000000;
+    overflow: scroll;
+    font-family: monospace;
+    border-style: solid;
+    border-color: #006040;
+    border-width: 1px;
+    padding: 3px;
+  }
+  
+  body, html {
+    font-size: small;
+    font-family: monospace;
+    background-color: #FFFFFF;
+  }
+
+  div
+  {
+    padding: 10px;
+  }
+
+  h1
+  {
+    text-align: center;
+    max-width: 22em;
+    background-color:rgba(255,255,255,0.7);
+  }
+
+  h2
+  {
+    margin-bottom: 2px;
+  }
+
+  li
+  {
+    margin-left: 6px;
+    padding: 0px;
+  }
+
+  #sidebar
+  {
+    display: inline-block;
+    background-color:rgba(255,255,255,0.7);
+  }
+
+  #sidebar>ul
+  {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  #main
+  {
+    background-color:rgba(255,255,255,0.7);
+    display: inline;
+    float: left;
+  }
+
+  #text_column
+  {
+    /*font-family: serif;*/
+    min-width: 400px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color:rgba(255,255,255,0.80);
+    padding: 5em;
+    text-align: justify;
+    text-justify: distribute;
+  }
+
+  #text_column>p
+  {
+    font-family: serif;
+  }
+
+  #text_column>ul
+  {
+    font-family: serif;
+  }
+}
+
+@media only screen and (max-device-width:7.99in)
+{
+  h1
+  {
+    display:none;
+  }
+  #depict_button
+  {
+    display:none;
+  }
+}

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  somerby.net/mack/logic
+  Copyright (C) 2014 MacKenzie Cumings
+ 
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License along
+  with this program; if not, write to the Free Software Foundation, Inc.,
+  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+-->
+
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{54BAEA56-D660-40FE-8306-803831529967}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Logic</RootNamespace>
+    <AssemblyName>Saltarelle</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NoStdLib>True</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SALTARELLE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;SALTARELLE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Logic\BinaryOperator.cs">
+      <Link>BinaryOperator.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Conjunction.cs">
+      <Link>Conjunction.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Disjunction.cs">
+      <Link>Disjunction.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\EngineException.cs">
+      <Link>EngineException.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Equivalence.cs">
+      <Link>Equivalence.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Factory.cs">
+      <Link>Factory.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Identification.cs">
+      <Link>Identification.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\JointDenial.cs">
+      <Link>JointDenial.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\MaterialConditional.cs">
+      <Link>MaterialConditional.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Matrix.cs">
+      <Link>Matrix.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\NamedObject.cs">
+      <Link>NamedObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Necessity.cs">
+      <Link>Necessity.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Negation.cs">
+      <Link>Negation.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\NullPredicate.cs">
+      <Link>NullPredicate.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Predicates.cs">
+      <Link>Predicates.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\UnaryOperator.cs">
+      <Link>UnaryOperator.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\UnaryPredicate.cs">
+      <Link>UnaryPredicate.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\UnaryPredication.cs">
+      <Link>UnaryPredication.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\UniversalGeneralization.cs">
+      <Link>UniversalGeneralization.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Utility.cs">
+      <Link>Utility.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Variable.cs">
+      <Link>Variable.cs</Link>
+    </Compile>
+    <Compile Include="..\Parser\FreeVariableNotFoundException.cs">
+      <Link>FreeVariableNotFoundException.cs</Link>
+    </Compile>
+    <Compile Include="..\Parser\ParseError.cs">
+      <Link>ParseError.cs</Link>
+    </Compile>
+    <Compile Include="..\Parser\Parser.cs">
+      <Link>Parser.cs</Link>
+    </Compile>
+    <Compile Include="..\Parser\PredicateDictionary.cs">
+      <Link>PredicateDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\Parser\VariableDictionary.cs">
+      <Link>VariableDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\UnitTests\UnitTestUtility.cs">
+      <Link>UnitTestUtility.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib">
+      <HintPath>$(SolutionDir)packages\Saltarelle.Runtime.2.4.0\tools\Assemblies\mscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Saltarelle.Linq">
+      <HintPath>..\packages\Saltarelle.Linq.2.4.0\lib\Saltarelle.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="Saltarelle.Web">
+      <HintPath>..\packages\Saltarelle.Web.3.0.1\lib\Saltarelle.Web.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition="!Exists('$(SolutionDir)packages\Saltarelle.Compiler.2.4.0\tools\Saltarelle.Compiler.targets')" />
+  <Import Project="$(SolutionDir)packages\Saltarelle.Compiler.2.4.0\tools\Saltarelle.Compiler.targets" Condition="Exists('$(SolutionDir)packages\Saltarelle.Compiler.2.4.0\tools\Saltarelle.Compiler.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetDir)$(TargetName).js" "$(SolutionDir)WebApplication\$(SolutionName).js"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

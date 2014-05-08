@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<!--
+  somerby.net/mack/logic
+  Copyright (C) 2014 MacKenzie Cumings
+ 
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License along
+  with this program; if not, write to the Free Software Foundation, Inc.,
+  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+-->
+
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>somerby.net/mack/logic</title>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+
+<script type="text/javascript" src="mscorlib.js"></script>
+<script type="text/javascript" src="linq.js"></script>
+<script type="text/javascript" src="Logic.js"></script>
+
+</head>
+<body>
+
+<div id="all">
+
+<h1>somerby.net/mack/logic</h1>
+
+<div id="main">
+
+<textarea name="expression" id="expression" rows="15" cols="80" spellcheck="false" class="text" oninput="SetResult('');SetDepiction('');SaveInput();"></textarea>
+
+<div id="action_buttons">
+  <button id="decide_button" onclick="HandleDecideButtonClick(); return false;">Decide</button>
+  <button id="depict_button" onclick="HandleDepictButtonClick(); return false;">Depict</button>
+</div>
+
+<div id="result"></div>
+
+</div>
+
+<div id="sidebar">
+
+  <h2>Documentation:</h2>
+  <ul>
+    <li><a href="documentation.html#introduction" target="_blank">What is this?</a></li>
+    <li><a href="documentation.html#instructions" target="_blank">Instructions</a></li>
+    <li><a href="documentation.html#the_language" target="_blank">The Language</a></li>
+    <li><a href="documentation.html#the_algorithm" target="_blank">The Algorithm</a></li>
+  </ul>
+  <h2>Examples:</h2>
+  <ul>
+    <li><button onclick='ShowExample("Socrates");return false;'>A Categorical Syllogism</button></li>
+    <li><button onclick='ShowExample("OrderingDrinks");return false;'>Ordering Drinks</button></li>
+    <li><button onclick='ShowExample("HereButNotHere");return false;'>Here, but not Here</button></li>
+    <li><button onclick='ShowExample("RayOfSunshine");return false;'>A Formal Fallacy</button></li>
+    <li><button onclick='ShowExample("PandNP");return false;'>NP-Complete Problems</button></li>
+    <li><button onclick='ShowExample("Rules");return false;'>Rules of Inference and Replacement</button></li>
+    <li><button onclick='ShowExample("Axioms");return false;'>Axioms of Modal Logic</button></li>
+  </ul>
+</div>
+
+
+</div>
+
+<div id="depiction"></div>
+
+<!-- for debugging... <pre id="dot_output"></pre> -->
+
+<script type="text/javascript">
+
+function now()
+{
+  return (new Date()).getTime();
+}
+
+function ConvertToHTMLEntities(str)
+{
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+var examples = new Object;
+examples.Socrates = "// All men are mortal.\nx,Hx->Mx\n// Socrates is a man.\nHs\n// Therefore,\n->\n// Socrates is mortal.\nMs";
+examples.OrderingDrinks = "// Everyone will order tea or coffee, but not both.\nx, (Tx|Cx) & ~(Tx&Cx)\n// Either Jay or Kay will order coffee, but not both.\n(Cj|Ck) & ~(Cj|Ck)\n// If Jay orders coffee, Elle will order tea.\nCj->Tl\n// Elle and Kay will not both order tea.\n~(Tl&Tk)\n//Therefore:\n->\n// Jay won't order coffee.\n~Cj\n// Kay won't order tea.\n~Tk";
+examples.HereButNotHere = "// It's possible for something to be here but not here.\n<>3x,Hx&~Hx";
+examples.RayOfSunshine = "// Every person is a ray of sunshine.\nx,Px->Rx\n// Every person is a being of light and shade.\nx,Px->(Lx&Sx)\n// Therefore,\n->\n// every being of light and shade is a ray of sunshine.\nb,(Lb&Sb)->Rb";
+examples.PandNP = "// If any NP-complete problem can be solved in polynomial time,\n// then all NP-complete problems can be solved in\n// polynomial time.\n(3x,Nx&Px) -> (x,Nx -> Px)\n\n<=> // Equivalently,\n\n// if two problems are NP-complete, then if one is\n// solvable in polynomial time, the other is also solvable in\n// polynomial time.\nx,y, (Nx&Ny) -> (Px -> Py)";
+examples.Rules = "//Modus Ponens\n((P->Q) & P) -> Q\n\n//Modus Tollens\n((P->Q) & ~Q) -> ~P\n\n//Hypothetical Syllogism\n((P->Q) & (Q->R)) -> (P->R)\n\n//Disjunctive Syllogism\n((P|Q) & ~P) -> Q\n\n//Constructive Dilemma\n( ((P->Q) & (R->S)) & (P|R) ) -> (Q|S)\n\n//Simplification\n(P&Q) -> P\n\n//Conjunction\n((P) & (Q)) -> (P&Q)\n\n//Addition\nP -> (P|Q)\n\n//DeMorgan's Rule\n~(P&Q) <=> (~P|~Q)\n~(P|Q) <=> (~P&~Q)\n\n//Commutativity\n(P|Q) <=> (Q|P)\n(P&Q) <=> (Q&P)\n\n//Associativity\n( P|(Q|R) ) <=> ( (P|Q)|R )\n( P&(Q&R) ) <=> ( (P&Q)&R )\n\n//Distribution\n( P&(Q|R) ) <=> ( (P&Q)|(P&R) )\n( P|(Q&R) ) <=> ( (P|Q)&(P|R) )\n\n//Double Negation\nP <=> ~~P\n\n//Transposition\n(P->Q) <=> (~Q->~P)\n\n//Material Implication\n(P->Q) <=> (~P|Q)\n\n//Material Equivalence\n(P<=>Q) <=> ( (P->Q) & (Q->P) )\n(P<=>Q) <=> ( (P&Q) | (~P&~Q) )\n\n//Exportation\n( (P&Q)->R ) <=> (P->(Q->R))\n\n//Tautology\nP <=> (P|P)\nP <=> (P&P)";
+examples.Axioms = "// Axiom D\n[]A -> <>A\n\n// Axiom M\n[]A -> A\n\n// Axiom 4\n[]A->[][]A\n\n// Axiom B\nA -> []<>A\n\n// Axiom 5\n<>A -> []<>A\n\n// Axiom []M\n[]([]A -> A)\n\n// Axiom C4\n[][]A -> []A\n\n// Axiom C\n<>[]A -> []<>A\n\n// Axiom K\n[](A->B)->([]A->[]B)\n\n// Axiom T\n[]A -> A";
+
+function SetResult(aValue)
+{
+  document.getElementById("result").innerHTML = aValue;
+}
+
+function SetDepiction(aValue)
+{
+  document.getElementById("depiction").innerHTML = aValue;
+}
+
+function ShowExample(aExampleId)
+{
+  document.getElementById("expression").value = examples[aExampleId];
+  SetResult("");
+  SaveInput();
+}
+
+function HandleDecideButtonClick()
+{
+  SetResult( "Deciding..." );
+  
+  window.setTimeout(Decide,50);
+}
+
+function Depict()
+{
+  try
+  {
+    var dot = global.Logic.Parser.parse(document.getElementById("expression").value.split("\n")).get_graphvizDOT();
+    
+    //document.getElementById("dot_output").innerHTML = ConvertToHTMLEntities(dot);
+
+    SetDepiction(Viz(dot,"svg"));
+  }
+  catch( lException )
+  {
+    SetDepiction(ConvertToHTMLEntities( "Error: " + lException._message ));
+  }
+}
+
+function HandleDepictButtonClick()
+{
+  SetDepiction("Depicting...");
+  
+  window.setTimeout(Depict,50);
+}
+
+function Decide()
+{ 
+  try
+  {
+    var lStartTime = now();
+    var lResult = global.Logic.Utility.textForDecision( global.Logic.Parser.parse(document.getElementById("expression").value.split("\n")).decide() );
+    var lEndTime = now();
+    
+    SetResult( "The statement is " + lResult + ".  Deciding took " + ( ( lEndTime - lStartTime ) / 1000 ) + " seconds." );
+  }
+  catch( lException )
+  {
+    document.getElementById("result").innerHTML = "Error: " + lException._message;
+  }
+}
+
+function SaveInput()
+{
+  localStorage.expression = document.getElementById("expression").value;
+}
+
+function LoadSavedInput()
+{
+  if ( localStorage.expression )
+    document.getElementById("expression").value = localStorage.expression;
+}
+
+LoadSavedInput();
+</script>
+
+<script type="text/javascript" src="viz.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+﻿// If nothing is fatty, then we live in a fat-free universe.
+(~3x,Fx) -> ~F
+// If we live in a fat-free universe, then there is no bacon.
+~F -> (~3x,Bx)
+// I ate bacon for breakfast
+3x,Bx&Ax
+// Therefore,
+->
+// Some things are fatty.
+3x,Fx
+// Not all things are not fatty
+~x,~Fx
+// We do not live in a fat-free universe.
+~~F
+
+// Expected Result: Necessary

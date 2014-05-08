@@ -1,0 +1,10 @@
+3x,Ax&Bx&Cx
+3x,Ax&Bx&~Cx
+3x,Ax&~Bx&Cx
+3x,Ax&~Bx&~Cx
+3x,~Ax&Bx&Cx
+3x,~Ax&Bx&~Cx
+3x,~Ax&~Bx&Cx
+3x,~Ax&~Bx&~Cx
+
+// Expected Result: MerelyPossible
