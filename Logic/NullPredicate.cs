@@ -34,6 +34,11 @@ namespace Logic
       return aPredicates.TrueIn( this, aKindOfWorld );
     }
 
+    public override bool Propositional
+    {
+      get { return true; }
+    }
+
     public override string ToString()
     {
       return mDescription;

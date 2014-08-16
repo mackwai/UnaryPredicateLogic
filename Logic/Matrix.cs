@@ -185,6 +185,11 @@ namespace Logic
 		
 		internal abstract bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicateDictionary );
 
+    public virtual bool Propositional
+    {
+      get { return false; }
+    }
+
     public virtual string GraphvizDOT
     {
       get

@@ -15,36 +15,38 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+using System;
+
 namespace Logic
 {
-  /// <summary>
-  /// a negation
-  /// </summary>
-  internal class Negation : UnaryOperator
-  {
-    internal Negation( Matrix aProposition )
-      : base( aProposition )
-    {
-    }
-    
-    internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
-		{
-      return !mInnerMatrix.TrueIn( aInterpretation, aKindOfWorld, aPredicates );
-		}
+	/// <summary>
+	/// A class that encapsulates simple functionality for measuring elapsed time within the code.
+	/// </summary>
+	public class Stopwatch
+	{
+    /// <summary>
+    /// the time at which the stopwatch was last started
+    /// </summary>
+    private static DateTime oStartTime;
 
-    public override bool Propositional
+    /// <summary>
+    /// Start the stopwatch counting.
+    /// </summary>
+    public static void Start()
     {
-      get { return mInnerMatrix.Propositional; }
+      oStartTime = DateTime.Now;
     }
 
-    public override string ToString()
+    /// <summary>
+    /// Get the time elapsed since the stopwatch was last started.
+    /// </summary>
+    /// <returns>the time elapsed since the stopwatch was last started</returns>
+    public static TimeSpan ElapsedTime
     {
-      return string.Format( "~{0}", mInnerMatrix );
+      get
+      {
+        return DateTime.Now - oStartTime;
+      }
     }
-
-    internal override string DOTLabel
-    {
-      get { return "<Negation<BR/><B><FONT FACE=\"MONOSPACE\">~</FONT></B>>"; }
-    }
-  }
+	}
 }

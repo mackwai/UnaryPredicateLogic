@@ -59,6 +59,11 @@ namespace Logic
       get { return Left.ContainsModalities || Right.ContainsModalities; }
     }
 
+    public override bool Propositional
+    {
+      get { return mLeft.Propositional && mRight.Propositional; }
+    }
+
     internal override int MaxmimumNumberOfDistinguishableObjects
     {
       get

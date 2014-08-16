@@ -30,13 +30,15 @@
 
 <div id="text_column">
 
+<h3><a href="index.html">&#8666 home</a></h3>
+
 <h1>somerby.net/mack/logic</h1>
 
 <h2 id="introduction">Introduction</h2>
 
-<p>This web application (&quot;the software&quot;) decides the validity/satisfiablity/inconsistency of certain kinds of simple statements in symbolic logic.  Statements can contain nullary predicates, unary predictates, identity, necessity and possbility.  It's something I worked on infrequently for a few years as a .NET application (see <a href="http://mackwai.blogspot.com/2010/08/monadic-predicate-logic.html">here</a> and <a href="http://mackwai.blogspot.com/2011/10/monadic-predicate-logic-with-some-modal.html">here</a>), but now I've improved it and converted into a web application.  If you find this software useful or interesting, I would like to know.  If you find a statement that it decides incorrectly, I would like to know.  In either case, please contact me at <span class="backwards">g@sgnimuc.eiznekcam</span>mail.com.</p>
+<p>This web application (&quot;the software&quot;) decides the validity/satisfiablity/inconsistency of certain kinds of simple statements in symbolic logic.  Statements can contain nullary predicates, unary predictates, identity, necessity and possbility.  It's something I worked on infrequently for a few years as a .NET application (see <a href="http://mackwai.blogspot.com/2010/08/monadic-predicate-logic.html" target="_blank">here</a> and <a href="http://mackwai.blogspot.com/2011/10/monadic-predicate-logic-with-some-modal.html" target="_blank">here</a>), but now I've improved it and converted into a web application.  If you find this software useful or interesting, I would like to know.  If you find a statement that it decides incorrectly, I would like to know.  In either case, please contact me at <span class="backwards">g@sgnimuc.eiznekcam</span>mail.com.</p>
 
-<p>The software is written in C#, then translated into JavaScript with <a href="http://www.saltarelle-compiler.com/">Saltarelle</a>, which is awesome.  <a href="https://github.com/mdaines/viz.js/">Viz.js</a> is used to generate diagrams.</p>
+<p>The software is written in C#, then translated into JavaScript with <a href="http://www.saltarelle-compiler.com/" target="_blank">Saltarelle</a>, which is awesome.  The source code is on <a href="https://github.com/mackwai/UnaryPredicateLogic" target="_blank">GitHub</a>.  <a href="https://github.com/mdaines/viz.js/">Viz.js</a> is used to generate diagrams.  The truth table feature is adapted from <a href="https://github.com/mrieppel/TruthTableGenerator" target="_blank">code</a> written by Michael Rieppel.</p>
 
 <p>There are three sections in this documentation.  The <a href="#the_language">first</a> describes the symbolic language that the software recognizes.  The <a href ="#the_algorithm">second</a> explains the algorithm the software follows to decide statements.  The <a href="#future_work">third</a> describes some future work that could or should be done.</p>
 
@@ -49,7 +51,7 @@
 
 <h3>Elements of the Language</h3>
 
-<p>The language has the following elements:</p>
+<p>The language has these elements:</p>
 
 <ul class="bulletted">
   <li><a href="#language_logical_operators">Unary and binary logical operators</a></li>
@@ -93,13 +95,13 @@
 <pre class="symbolic">(~P) &amp; (~Q)</pre>
 
 <h4 id="language_variable">Variables</h4>
-<p>Variables are single lowercase letters that represent some object.  Variables can be bound by a universal generalization or an existential quantification, or left free, but the software will implicitly bind any free variable it finds in an expression within a universal generalization.  For example, if you give the software this:<p>
+<p>Variables are single lowercase letters that represent some object.  Variables can be bound by a universal generalization or an existential quantification, or left free, but the software will implicitly bind any free variable it finds in an expression with an existential quantification.  For example, if you give the software this:<p>
 
 <pre class="symbolic">Px|Py</pre>
 
 <p>The software will treat it as if it were</p>
 
-<pre class="symbolic">x,y, Px|Py</pre>
+<pre class="symbolic">3x,3y, Px|Py</pre>
 
 <h4 id="language_nullary_predicate">Predicates of Zero Variables</h4>
 
@@ -465,7 +467,7 @@ Ms       // Socrates is mortal.
   <li>The <a href="#kind_of_object">method</a> the software uses to evaluate propositions that contain indentifications needs a proof.</li>
   <li>The decision algorithm described in this documentation might need to be proven more rigorously than is what done in this document.</li>
   <li>The software needs to be verified thoroughly.  I've tested it quite a bit and ensured it is correct for all propositions I've tried, but software that claims to decide propositions must be 100% correct and proven correct in order to be useful.</li>
-  <li>Reconsider the software's treatment of empty worlds.  Right now, it excludes them for consideration when deciding a proposition.  This may or may not be a good thing.</li>
+  <li>Reconsider the software's treatment of empty worlds.  Right now, it excludes them from consideration when deciding a proposition.  This may or may not be a good thing.</li>
 </ul>
 
 <p></p>

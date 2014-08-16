@@ -145,9 +145,9 @@ namespace Logic
         aKindOfObject >>= 1;
       }
 
-      // Add the instance number, as a digit, to the string.  Numbers greater than 9
-      // will cause errors, in spite of the fact that the resulting string won't look right,
-      // because of how Identification.TrueForWorld() is implemented.
+      // Add the instance number, as a character (usually a digit), to the string.  Numbers greater than 9
+      // will not cause errors, in spite of the fact that the resulting string won't look right,
+      // because of how Identification.TrueIn() is implemented.
       lPredicateCombination[ lIndex ] = (char)(aInstanceNumber + 48);
 
       return new String( lPredicateCombination, 0, lIndex + 1 );

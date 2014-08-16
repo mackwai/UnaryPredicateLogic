@@ -113,8 +113,8 @@ namespace Logic
 
       foreach ( char lSymbol in lFreeVariableSymbols )
       {
-        //lParsedMatrix = Factory.ThereExists( lVariableDictionary.Retrieve( lSymbol ), lParsedMatrix );
-        lParsedMatrix = Factory.ForAll( lVariableDictionary.Retrieve( lSymbol ), lParsedMatrix );
+        lParsedMatrix = Factory.ThereExists( lVariableDictionary.Retrieve( lSymbol ), lParsedMatrix );
+        //lParsedMatrix = Factory.ForAll( lVariableDictionary.Retrieve( lSymbol ), lParsedMatrix );
       }
 
       return lParsedMatrix;

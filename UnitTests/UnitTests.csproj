@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
   somerby.net/mack/logic
   Copyright (C) 2014 MacKenzie Cumings
@@ -17,7 +17,6 @@
   with this program; if not, write to the Free Software Foundation, Inc.,
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
-
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -72,6 +71,7 @@
   <ItemGroup>
     <Compile Include="ParseTesting.cs" />
     <Compile Include="BitsNeeded.cs" />
+    <Compile Include="PropertyTesting.cs" />
     <Compile Include="UnitTestUtility.cs" />
     <Compile Include="DecisionTesting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

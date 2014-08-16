@@ -156,6 +156,12 @@ namespace UnitTests
     }
 
     [TestMethod]
+    public void Test_XorOnUnboundVariables()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\XorOnUnboundVariables.txt" );
+    }
+
+    [TestMethod]
     public void Test_Hurley213()
     {
       TestPropositionFile( @"..\..\..\VerificationTesting\Hurley213.txt" );

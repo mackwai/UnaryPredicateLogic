@@ -1,4 +1,3 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # somerby.net/mack/logic
 # Copyright (C) 2014 MacKenzie Cumings
@@ -31,6 +30,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{15F8F11B-7C72-4896-8EF2-26787EE78539}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplication", "WindowsFormsApplication\WindowsFormsApplication.csproj", "{C9FA47DE-EC4D-4B42-83F1-F07EC68868B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTrials", "TimeTrials\TimeTrials.csproj", "{D2133A89-31E5-4ED6-9B36-CB6831C76F31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -102,6 +103,16 @@ Global
 		{C9FA47DE-EC4D-4B42-83F1-F07EC68868B7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C9FA47DE-EC4D-4B42-83F1-F07EC68868B7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C9FA47DE-EC4D-4B42-83F1-F07EC68868B7}.Release|x86.ActiveCfg = Release|Any CPU
+		{D2133A89-31E5-4ED6-9B36-CB6831C76F31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2133A89-31E5-4ED6-9B36-CB6831C76F31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2133A89-31E5-4ED6-9B36-CB6831C76F31}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D2133A89-31E5-4ED6-9B36-CB6831C76F31}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D2133A89-31E5-4ED6-9B36-CB6831C76F31}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D2133A89-31E5-4ED6-9B36-CB6831C76F31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2133A89-31E5-4ED6-9B36-CB6831C76F31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2133A89-31E5-4ED6-9B36-CB6831C76F31}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D2133A89-31E5-4ED6-9B36-CB6831C76F31}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D2133A89-31E5-4ED6-9B36-CB6831C76F31}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

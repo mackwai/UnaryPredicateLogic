@@ -87,6 +87,54 @@ th
     background-attachment: fixed;
     background-position: right bottom;
   }
+  
+  /* styles for truth table */
+  td.space
+  {
+    width:1em;
+  }
+
+  #depiction div.center
+  {
+    margin: 0 auto;
+    display:table;
+  }
+
+  table.truth
+  {
+    border-collapse:collapse;
+    margin:0 auto;
+    font-family: sans-serif;
+    border: initial;
+    margin-left: initial;
+    margin-right: initial;
+  }
+
+  table.truth th
+  {
+    border-bottom:1px solid black;
+    text-align: center;
+    padding:.2em;
+    font-weight: normal;
+  }
+
+  table.truth td
+  {
+    border:0;
+    padding:.2em;
+    border-collapse: initial;
+    min-width:initial;
+  }
+
+  table.truth .dv
+  {
+    border-right:1px solid black;
+  }
+
+  table.truth .mc
+  {
+    color:red;
+  }
 }
 
 
@@ -96,7 +144,7 @@ th
 
   button
   {
-    background-color: #F5F5F5;
+    background-color: #F0F0F0;
     border: 1px solid rgba(0, 96, 64, 0.1);
     border-radius: 2px 2px 2px 2px;
     color: #333333;
@@ -109,6 +157,13 @@ th
     padding: 5px 6px 6px 6px;
     text-align: center;
   }
+  
+  button:disabled
+  {
+    background-color: #FFFFFF;
+    color: #888888;
+    cursor: default;
+  } 
 
   .chalkboard {
     background-color: #443322;
@@ -208,6 +263,10 @@ th
     display:none;
   }
   #depict_button
+  {
+    display:none;
+  }
+  #truth_table_button
   {
     display:none;
   }
