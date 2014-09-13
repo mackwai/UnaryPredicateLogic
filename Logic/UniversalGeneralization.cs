@@ -67,7 +67,7 @@ namespace Logic
 		{
       foreach ( string lKindOfObject in aPredicates.GetKindsOfObjectsIn( aKindOfWorld ) )
       {
-        Variable.Instantiate( lKindOfObject );
+        Variable.Instantiate( lKindOfObject, aKindOfWorld );
 
         if ( !mInnerMatrix.TrueIn( aInterpretation, aKindOfWorld, aPredicates ) )
           return false;
@@ -100,6 +100,12 @@ namespace Logic
           "<Universal Generalization<BR/><B><FONT FACE=\"MONOSPACE\">{0},</FONT></B>>",
           this.mVariable );
       }
+    }
+
+    internal override void AssignModality( Necessity aNecessity )
+    {
+      mVariable.Modality = aNecessity;
+      mInnerMatrix.AssignModality( aNecessity );
     }
 	}
 }

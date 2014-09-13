@@ -24,10 +24,17 @@ namespace Logic
   {
     private char mLetter;
     private string mCurrentlyInstantiatedKindOfObject;
+    private uint mCurrentlyInstantiatedKindOfWorld;
+    private Necessity mModality;
     
     internal string InstantiatedKindOfObject
     {
       get { return mCurrentlyInstantiatedKindOfObject; }
+    }
+
+    internal uint InstantiatedKindOfWorld
+    {
+      get { return mCurrentlyInstantiatedKindOfWorld; }
     }
     
     internal Variable( char aLetter )
@@ -35,14 +42,30 @@ namespace Logic
       mLetter = aLetter;
     }
       
-    internal void Instantiate( string aKindOfObject )
+    internal void Instantiate( string aKindOfObject, uint aKindOfWorld )
     {
       mCurrentlyInstantiatedKindOfObject = aKindOfObject;
+      mCurrentlyInstantiatedKindOfWorld = aKindOfWorld;
     }
       
     public override string ToString()
     {
       return mLetter.ToString();
+    }
+
+    internal Necessity Modality
+    {
+      get
+      {
+        return mModality;
+      }
+      set
+      {
+        if ( mModality != null && mModality != value )
+          throw new EngineException( "Attempted to assign a modality to a variable that already had a different modality assigned to it." );
+
+        mModality = value;
+      }
     }
   }
 }

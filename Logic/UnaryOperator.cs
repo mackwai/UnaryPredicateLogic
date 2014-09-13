@@ -42,14 +42,24 @@ namespace Logic
       return mInnerMatrix.NullPredicates();
     }
 
-    internal override System.Collections.Generic.IEnumerable<Variable> FreeVariables
+    internal override IEnumerable<Variable> FreeVariables
     {
       get { return mInnerMatrix.FreeVariables; }
     }
 
-    internal override System.Collections.Generic.IEnumerable<Variable> IdentifiedVariables
+    internal override IEnumerable<Necessity> FreeModalities
+    {
+      get { return mInnerMatrix.FreeModalities; }
+    }
+
+    internal override IEnumerable<Variable> IdentifiedVariables
     {
       get { return mInnerMatrix.IdentifiedVariables; }
+    }
+
+    internal override IEnumerable<Necessity> ModalitiesInIdentifications
+    {
+      get { return mInnerMatrix.ModalitiesInIdentifications; }
     }
 
     internal override bool ContainsModalities
@@ -94,6 +104,11 @@ namespace Logic
     internal override int MaxmimumNumberOfDistinguishableObjects
     {
       get { return mInnerMatrix.MaxmimumNumberOfDistinguishableObjects; }
+    }
+
+    internal override int MaxmimumNumberOfModalitiesInIdentifications
+    {
+      get { return mInnerMatrix.MaxmimumNumberOfModalitiesInIdentifications; }
     }
   }
 }

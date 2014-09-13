@@ -17,6 +17,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Logic
@@ -30,75 +31,117 @@ namespace Logic
     }
 
     [TestMethod]
-    public void TestPropositional01()
+    public void Test_Propositional01()
     {
       Assert.AreEqual( true, IsPropositional( @"P" ) );
     }
 
     [TestMethod]
-    public void TestPropositional02()
+    public void Test_Propositional02()
     {
       Assert.AreEqual( true, IsPropositional( @"P&Q" ) );
     }
 
     [TestMethod]
-    public void TestPropositional03()
+    public void Test_Propositional03()
     {
       Assert.AreEqual( true, IsPropositional( @"P->Q" ) );
     }
 
     [TestMethod]
-    public void TestPropositional04()
+    public void Test_Propositional04()
     {
       Assert.AreEqual( true, IsPropositional( @"P->Q->R" ) );
     }
 
     [TestMethod]
-    public void TestPropositional05()
+    public void Test_Propositional05()
     {
      Assert.AreEqual( true, IsPropositional( @"~P->Q->R" ) );
     }
 
     [TestMethod]
-    public void TestPropositional06()
+    public void Test_Propositional06()
     {
       Assert.AreEqual( false, IsPropositional( @"P->(x,Qx)->R" ) );
     }
 
     [TestMethod]
-    public void TestPropositional07()
+    public void Test_Propositional07()
     {
       Assert.AreEqual( false, IsPropositional( @"P->(x,Qx)->(3x,R)" ) );
     }
 
     [TestMethod]
-    public void TestPropositional08()
+    public void Test_Propositional08()
     {
       Assert.AreEqual( false, IsPropositional( @"[]P&<>Q" ) );
     }
 
     [TestMethod]
-    public void TestPropositional09()
+    public void Test_Propositional09()
     {
       Assert.AreEqual( false, IsPropositional( @"[]P" ) );
     }
 
     [TestMethod]
-    public void TestPropositional10()
+    public void Test_Propositional10()
     {
       Assert.AreEqual( false, IsPropositional( @"<>Q" ) );
     }
 
     [TestMethod]
-    public void TestPropositional11()
+    public void Test_Propositional11()
     {
       Assert.AreEqual( false, IsPropositional( @"x,x=y" ) );
     }
 
     [TestMethod]
-    public void TestPropositional12()
+    public void Test_Propositional12()
     {
       Assert.AreEqual( false, IsPropositional( @"3x,P" ) );
+    }
+
+    private static int MaxmimumNumberOfModalitiesInIdentifications( string aStatement )
+    {
+      return Parser.Parse( aStatement.Split( '\n' ) ).MaxmimumNumberOfModalitiesInIdentifications;
+    }
+
+    [TestMethod]
+    public void Test_MaxmimumNumberOfModalitiesInIdentifications1()
+    {
+      Assert.AreEqual( 1, MaxmimumNumberOfModalitiesInIdentifications( @"x,y, x=y" ) );
+    }
+
+    [TestMethod]
+    public void Test_MaxmimumNumberOfModalitiesInIdentifications2()
+    {
+      Assert.AreEqual( 2, MaxmimumNumberOfModalitiesInIdentifications( @"x,[]y,x=y" ) );
+    }
+
+    [TestMethod]
+    public void Test_MaxmimumNumberOfModalitiesInIdentifications3()
+    {
+      Assert.AreEqual( 2, MaxmimumNumberOfModalitiesInIdentifications( @"x,[]y,x=y|z=y" ) );
+    }
+
+    [TestMethod]
+    public void Test_MaxmimumNumberOfModalitiesInIdentifications4()
+    {
+      Assert.AreEqual( 2, MaxmimumNumberOfModalitiesInIdentifications( @"x,([]y,x=y|(<>(z=y|x=y)))" ) );
+    }
+
+    [TestMethod]
+    public void Test_MaxmimumNumberOfModalitiesInIdentifications5()
+    {
+      Assert.AreEqual( 3, MaxmimumNumberOfModalitiesInIdentifications( @"x,([]y,x=y|(<>3z,(z=y|x=y)))" ) );
+    }
+
+    [TestMethod]
+    public void Test_ModalitiesInIdentifications()
+    {
+      Necessity[] lModalities = Parser.Parse(new string[]{@"x,([]y,x=y|(<>(z=y|x=y)))"}).ModalitiesInIdentifications.ToArray();
+      Assert.IsTrue(lModalities.Contains(null));
     }
   }
 }

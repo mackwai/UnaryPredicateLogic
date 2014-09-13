@@ -49,9 +49,19 @@ namespace Logic
       get { return Left.FreeVariables.Union( Right.FreeVariables ); }
     }
 
+    internal override IEnumerable<Necessity> FreeModalities
+    {
+      get { return Left.FreeModalities.Union( Right.FreeModalities ); }
+    }
+
     internal override IEnumerable<Variable> IdentifiedVariables
     {
       get { return Left.IdentifiedVariables.Union( Right.IdentifiedVariables ); }
+    }
+
+    internal override IEnumerable<Necessity> ModalitiesInIdentifications
+    {
+      get { return Left.ModalitiesInIdentifications.Union( Right.ModalitiesInIdentifications ); }
     }
 
     internal override bool ContainsModalities
@@ -71,6 +81,16 @@ namespace Logic
         return Math.Max(
           Left.MaxmimumNumberOfDistinguishableObjects,
           Right.MaxmimumNumberOfDistinguishableObjects );
+      }
+    }
+
+    internal override int MaxmimumNumberOfModalitiesInIdentifications
+    {
+      get
+      {
+        return Math.Max(
+          Left.MaxmimumNumberOfModalitiesInIdentifications,
+          Right.MaxmimumNumberOfModalitiesInIdentifications );
       }
     }
     
@@ -140,6 +160,12 @@ namespace Logic
           yield return lPair;
         }
       }
+    }
+
+    internal override void AssignModality( Necessity aNecessity )
+    {
+      Left.AssignModality( aNecessity );
+      Right.AssignModality( aNecessity );
     }
 	}
 }

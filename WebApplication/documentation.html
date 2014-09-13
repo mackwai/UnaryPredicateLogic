@@ -331,7 +331,7 @@ Ms       // Socrates is mortal.
 
 <p>Whenever the software evaluates an identification, it has already instantiated each of the identification's variables with one <a href="#kind_of_object">kind of object</a> or another.  Proof: Since the software binds all unbound variables with <a href="#universal_generalization">universal generalizations</a>, all variables in a proposition are bound.  Since the software proceeds from the top of the tree downward, a identification of two variables is only evaluated in order to evaluate the universal generalizations that binds the variables, and, because of the process of evaluating universal generalizations, that variable has always been instantiated by the software by the time the predication is evaluated.</p>
 
-<p>The identification is true if its variables have been instantiated with the same kind of object, and false if they have been instantiated with two different kinds of object.</p>
+<p>The identification is true if its variables have been instantiated with the same kind of object, and false if they have been instantiated with two different kinds of object.  The software assumes that transworld identity of indisceribles is impossible; it always considers two objects to be different kinds of objects if they are from two different kinds of universes.  A Proof that transworld identity of indisceribles is impossible can be found <a href="http://mackwai.blogspot.com/2014/08/transworld-identity-of-indiscserables.html" target="_blank">here</a>.</p>
 
 <h3>Definitions</h3>
 
@@ -375,9 +375,11 @@ Ms       // Socrates is mortal.
 
 <!--<p>Interestingly, if a proposition contains only nullary predicates and logical connectives and no modalities, unary predicates, or universal generalizations, the software is virtually the same as the <a href="http://en.wikipedia.org/wiki/Truth_table">truth table</a> method for deciding a propositional expression.</p>-->
 
-<p>Either a world has a certain kind of object in it or it doesn't.  If a proposition contains unary predicates and identifications but no nullary predicates, the kinds of worlds it can distinguish are defined in terms of the <a href="#kind_of_object">kinds of objects</a> present or absent in a world.  If the software defines <em>o</em> kinds of objects for such a proposition, then it defines 2<sup><em>o</em></sup>-1 kinds of worlds for that proposition.  One is subtracted from the total number of combinations because the empty world is excluded from evaluation.  The software effectively assumes that there is no such thing as an empty world.  If it didn't, the software would decide that <span class="symbolic">x,Ax&amp;~Ax</span> is possible.  Maybe it should.  Deciding what to do with empty worlds is <a href="#future_work">future work</a>.</p>
+<p>Either a world has a certain kind of object in it or it doesn't.  If a proposition contains unary predicates and in-world identifications but no nullary predicates, the kinds of worlds it can distinguish are defined in terms of the <a href="#kind_of_object">kinds of objects</a> present or absent in a world.  If the software defines <em>o</em> kinds of objects for such a proposition, then it defines 2<sup><em>o</em></sup>-1 kinds of worlds for that proposition.  One is subtracted from the total number of combinations because the empty world is excluded from evaluation.  The software effectively assumes that there is no such thing as an empty world.  If it didn't, the software would decide that <span class="symbolic">x,Ax&amp;~Ax</span> is possible.  Maybe it should.  Deciding what to do with empty worlds is <a href="#future_work">future work</a>.</p>
 
-<p>If a proposition contains nullary predicates and either unary predicates or identifications, the software must define a kind of world for each combination of nullary predicates verified and combinations of kinds of objects present.  This is just the Cartesian product of the two, so there are up to 2<sup><em>n</em></sup>(2<sup><em>o</em></sup>-1) kinds of worlds that must be evaluated.</p>
+<p>If a proposition contains nullary predicates and either unary predicates or in-world identifications, the software must define a kind of world for each combination of nullary predicates verified and combinations of kinds of objects present.  This is just the Cartesian product of the two, so there are up to 2<sup><em>n</em></sup>(2<sup><em>o</em></sup>-1) kinds of worlds that must be evaluated.</p>
+
+<p>A proposition that contains modalities might involve <em>transworld identifications</em>, i.e. it might involve identifications whose subjects might belong to two different possible worlds.  For example, in &quot;<span class="symbolic">x,P&amp;&lt;&gt;(3y,y=x &amp; ~P)</span>&quot;, <span class="symbolic">y</span> is inside of a modality (<span class="symbolic">&lt;&gt;</span>) that <span class="symbolic">x</span> is outside of, and therefore <span class="symbolic">x</span> and <span class="symbolic">y</span> may belong to different possible worlds when <span class="symbolic">y=x</span> is evaluated. Because of this, the software must define multiple versions of each of the kinds of worlds mentioned in the preceding paragraph.  When there are <em>t</em> such transworld identifications, there are up to 2<sup><em>n</em></sup>(2<sup><em>o</em></sup>&nbsp;-&nbsp;1)&nbsp;&times;&nbsp;<em>t</em> kinds of worlds that must be evaluated.</p>
 
 <h4 id="kind_of_object">Kinds of Objects</h4>
 
@@ -413,24 +415,25 @@ Ms       // Socrates is mortal.
 
 <h3>Run-Time Efficiency and Limitations</h3>
 
-<p>As can be seen by combining the formulas given in the sections on <a href="#kind_of_object">kinds of objects</a>, <a href="#kind_of_world">kinds of worlds</a>, and <a href="#interpretation">interpretations</a>, in order to decide a proposition with no modalities, the software must evaluate the proposition in up to <span style="font-size: medium;">2<sup><em>n</em></sup>&nbsp;&times;&nbsp;Max(0,&nbsp;2<sup><em>i</em>2<sup><em>u</em></sup></sup>&nbsp;-&nbsp;1)</span> kinds of worlds, where <em>n</em> is the number of distinct nullary predicates in the proposition, <em>u</em> is the number of distinct unary predicates in the proposition, and <em>i</em> is the number of objects with one set of properties that might be distinguished from another by the proposition.  In order to decide a proposition with modalities, the software must evaluate the proposition in up to <span style="font-size: large;">2<sup>2<sup><em>n</em></sup>&nbsp;&times;&nbsp;Max(0,&nbsp;2<sup><em>i</em>2<sup><em>u</em></sup></sup>&nbsp;-&nbsp;1)</sup></span> interpretations.  This means that the algorithm does not scale well; its run time is exponential or super-exponential in relation to the complexity of the proposition being decided.  This does not, however, prevent the software from performing fast enough when deciding propositions with small values for <em>n</em>, <em>u</em> and <em>i</em>.</p>
+<p>As can be seen by combining the formulas given in the sections on <a href="#kind_of_object">kinds of objects</a>, <a href="#kind_of_world">kinds of worlds</a>, and <a href="#interpretation">interpretations</a>, in order to decide a proposition with no modalities, the software must evaluate the proposition in up to <span style="font-size: medium;">2<sup><em>n</em></sup>&nbsp;&times;&nbsp;Max(0,&nbsp;2<sup><em>i</em>2<sup><em>u</em></sup></sup>&nbsp;-&nbsp;1)</span> kinds of worlds, where <em>n</em> is the number of distinct nullary predicates in the proposition, <em>u</em> is the number of distinct unary predicates in the proposition, and <em>i</em> is the number of objects with the same set of properties that might be distinguished from another by the proposition.  In order to decide a proposition with modalities, the software must evaluate the proposition in up to <span style="font-size: large;">2<sup>2<sup><em>n</em></sup>&nbsp;&times;&nbsp;Max(0,&nbsp;2<sup><em>i</em>2<sup><em>u</em></sup></sup>&nbsp;-&nbsp;1)&nbsp;&times;&nbsp;<em>t</em></sup></span> interpretations, where <em>t</em> is the number of possible worlds that might be distinguished by transworld identifications in the proposition.  This means that the algorithm does not scale well; its run time is exponential or super-exponential in relation to the complexity of the proposition being decided.  This does not, however, prevent the software from performing fast enough when deciding propositions with small values for <em>n</em>, <em>u</em> and <em>i</em>.</p>
 
-<p>The software actually defines <em>i&#772;</em>2<sup><em>u</em></sup> kinds of objects, where <em>i&#772;</em> is <em>i</em> rounded up to the nearest power of 2.  It is not necessary for <em>i</em> to be rounded up in order for the algorithm to be correct, but it makes it easier to encode kinds of objects as binary numbers.  Also to keep binary encoding simple, it does define empty worlds, but it skips over them when evaluating propositions.  The software actually encodes kinds of worlds and interpretations as 32-bit binary numbers.  This enables the software to go fast, but does put a hard limit on the complexity of propositions it can decide; <span style="font-size: medium;"><em>n</em><em>&nbsp;+&nbsp;i&#772;</em>2<sup><em>u</em></sup>&nbsp;&le;&nbsp;32</span> for non-modal propisitions and  <span style="font-size: medium;">2<sup><em>n</em>&nbsp;+&nbsp;<em>i&#772;</em>2<sup><em>u</em></sup></sup>  &le; 32</span> for modal propositions.</p>
+<p>The software actually defines <em>i&#772;</em>2<sup><em>u</em></sup> kinds of objects, where <em>i&#772;</em> is <em>i</em> rounded up to the nearest power of 2.  It is not necessary for <em>i</em> to be rounded up in order for the algorithm to be correct, but it makes it easier to encode kinds of objects as binary numbers.  Also to keep binary encoding simple, it does define empty worlds, but it skips over them when evaluating propositions.  The software actually encodes kinds of worlds and interpretations as 32-bit binary numbers.  This enables the software to go fast, but does put a hard limit on the complexity of propositions it can decide; <span style="font-size: medium;"><em>n</em><em>&nbsp;+&nbsp;i&#772;</em>2<sup><em>u</em></sup>&nbsp;&le;&nbsp;32</span> for non-modal propisitions and  <span style="font-size: medium;"><em>t</em>2<sup><em>n</em>&nbsp;+&nbsp;<em>i&#772;</em>2<sup><em>u</em></sup></sup> &le; 32</span> for modal propositions.</p>
 
-<p>The following tables list the largest combined values of <em>n</em>, <em>u</em> and <em>i</em> that the software supports.</p>
+<p>The following tables list the largest combined values of <em>n</em>, <em>u</em>, <em>i</em> and <em>t</em> that the software supports.</p>
 
 <table id="maxima_for_modal_propositions">
   <caption>Maxima for Modal Propositions</caption>
-  <tr><th>n</th><th>u</th><th>i</th></tr>
-  <tr><td>5</td><td>0</td><td>0</td></tr>
-  <tr><td>4</td><td>0</td><td>1</td></tr>
-  <tr><td>3</td><td>1</td><td>1</td></tr>
-  <tr><td>3</td><td>0</td><td>3</td></tr>
-  <tr><td>2</td><td>0</td><td>7</td></tr>
-  <tr><td>1</td><td>2</td><td>1</td></tr>
-  <tr><td>1</td><td>1</td><td>3</td></tr>
-  <tr><td>1</td><td>0</td><td>15</td></tr>
-  <tr><td>0</td><td>0</td><td>17</td></tr>
+  <tr><th>n</th><th>u</th><th>i</th><th>t</th></tr>
+  <tr><td>5</td><td>0</td><td>0</td><td>0</td></tr>
+  <tr><td>4</td><td>0</td><td>1</td><td>1</td></tr>
+  <tr><td>3</td><td>1</td><td>1</td><td>1</td></tr>
+  <tr><td>3</td><td>0</td><td>3</td><td>2</td></tr>
+  <tr><td>2</td><td>0</td><td>7</td><td>2</td></tr>
+  <tr><td>1</td><td>2</td><td>1</td><td>1</td></tr>
+  <tr><td>1</td><td>1</td><td>3</td><td>2</td></tr>
+  <tr><td>1</td><td>0</td><td>15</td><td>2</td></tr>
+  <tr><td>0</td><td>0</td><td>17</td><td>2</td></tr>
+  <tr><td>0</td><td>0</td><td>3</td><td>3</td></tr>
 </table>
 
 <table id="maxima_for_non_modal_propositions">
@@ -464,10 +467,9 @@ Ms       // Socrates is mortal.
 <h3 id="future_work">Future Work</h3>
 
 <ul>
-  <li>The <a href="#kind_of_object">method</a> the software uses to evaluate propositions that contain indentifications needs a proof.</li>
+  <li>The validity of the <a href="#kind_of_object">method</a> the software uses to evaluate propositions that contain identifications needs to be proven.</li>
   <li>The decision algorithm described in this documentation might need to be proven more rigorously than is what done in this document.</li>
   <li>The software needs to be verified thoroughly.  I've tested it quite a bit and ensured it is correct for all propositions I've tried, but software that claims to decide propositions must be 100% correct and proven correct in order to be useful.</li>
-  <li>Reconsider the software's treatment of empty worlds.  Right now, it excludes them from consideration when deciding a proposition.  This may or may not be a good thing.</li>
 </ul>
 
 <p></p>

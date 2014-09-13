@@ -47,14 +47,21 @@ namespace TimeTrials
       "Hurley454.txt",
       "Hurley457.txt",
       "ModalTest1.txt",
-      //"ModalTest2.txt",
+      "ModalTest2.txt",
       "ModalTest3.txt",
       "SocratesOverload.txt",
       "AxiomsOfModalLogic.txt",
       "EmptyWorldTest.txt",
       "ToBeOrNotToBe.txt",
       "LastWorldTested.txt",
-      "AxiomsOfIdentity.txt"
+      "AxiomsOfIdentity.txt",
+      "KindaSlowEvaluation.txt",
+    };
+
+    private static readonly string[] NamesOfSlowTestFiles =  new string[]
+    {
+      "ModalTest2.txt",
+      "KindaSlowEvaluation.txt"
     };
 
     private static Matrix ParseFile( string aPathToFile )
@@ -112,17 +119,25 @@ namespace TimeTrials
         lTrials = DefaultNumberOfTrials;
       }
 
+      string lNote;
+      if ( args.Length > 1 )
+        lNote = string.Join( " ", args.Skip( 1 ).ToArray() );
+      else
+        lNote = "";
+
       StringBuilder lContentsOfTestFiles = new StringBuilder();
       StringBuilder lTimingResults = new StringBuilder();
       List<long> lTimes = new List<long>();
 
       foreach ( string lTestFileName in TestFileNames )
       {
-        Console.Write( "{0}... ", lTestFileName );
+        Console.Write( "{0,32}... ", lTestFileName );
         try
         {
           string[] lFileText = File.ReadAllLines( Path.Combine( LocationOfTestFiles, lTestFileName ) );
-          long lDecisionTime = ObserveDecisionTime( Parser.Parse( lFileText ), lTrials );
+          long lDecisionTime = ObserveDecisionTime(
+            Parser.Parse( lFileText ),
+            NamesOfSlowTestFiles.Contains( lTestFileName ) ? 1 : lTrials );
           Console.WriteLine( "{0:X16} - {1} seconds", lDecisionTime, TimeSpan.FromTicks( lDecisionTime ).TotalSeconds );
           lContentsOfTestFiles.AppendLine();
           lContentsOfTestFiles.AddLine( "// Test File {0}:", lTestFileName );

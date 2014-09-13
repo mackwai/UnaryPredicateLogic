@@ -59,6 +59,11 @@ namespace Logic
       get { return IdentifiedVariables; }
     }
 
+    internal override IEnumerable<Necessity> FreeModalities
+    {
+      get { return ModalitiesInIdentifications; }
+    }
+
     internal override IEnumerable<Variable> IdentifiedVariables
     {
       get
@@ -70,6 +75,17 @@ namespace Logic
       }
     }
 
+    internal override IEnumerable<Necessity> ModalitiesInIdentifications
+    {
+      get
+      {
+        yield return Left.Modality;
+
+        if ( Left.Modality != Right.Modality )
+          yield return Right.Modality;
+      }
+    }
+
     internal override IEnumerable<UnaryPredicate> UnaryPredicates()
     {
       yield break;
@@ -77,7 +93,8 @@ namespace Logic
 
     internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicateDictionary )
     {
-      return Left.InstantiatedKindOfObject == Right.InstantiatedKindOfObject;
+      return Left.InstantiatedKindOfObject == Right.InstantiatedKindOfObject
+          && Left.InstantiatedKindOfWorld == Right.InstantiatedKindOfWorld;
     }
 
     public override int GetHashCode()
@@ -93,6 +110,11 @@ namespace Logic
     internal override int MaxmimumNumberOfDistinguishableObjects
     {
       get { return IdentifiedVariables.Count(); }
+    }
+
+    internal override int MaxmimumNumberOfModalitiesInIdentifications
+    {
+      get { return ModalitiesInIdentifications.Count(); }
     }
 
     internal override string DOTLabel

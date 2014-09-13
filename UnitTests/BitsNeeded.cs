@@ -40,7 +40,7 @@ namespace Logic
           {
             try
             {
-              new Predicates( lNullPredicates.Take( n ), lUnaryPredicates.Take( u ), i, false );
+              new Predicates( lNullPredicates.Take( n ), lUnaryPredicates.Take( u ), i, false, 0 );
               lMap[ n, u, i ] = true;
             }
             catch ( EngineException )
@@ -73,7 +73,7 @@ namespace Logic
     {
       NullPredicate[] lNullPredicates = new NullPredicate[ 34 ];
       UnaryPredicate[] lUnaryPredicates = new UnaryPredicate[ 7 ];
-      bool[ , , ] lMap = new bool[ lNullPredicates.Length + 2, lUnaryPredicates.Length + 2, 19 ];
+      bool[ , , , ] lMap = new bool[ lNullPredicates.Length + 2, lUnaryPredicates.Length + 2, 19, 19 ];
 
       for ( int n = lNullPredicates.Length; n >= 0; n-- )
       {
@@ -81,14 +81,17 @@ namespace Logic
         {
           for ( int i = 17; i >= 1 || (i == 0 && u == 0); i-- )
           {
-            try
+            for ( int t = i; t >= 0; t-- )
             {
-              new Predicates( lNullPredicates.Take( n ), lUnaryPredicates.Take( u ), i, true );
-              lMap[ n, u, i ] = true;
-            }
-            catch ( EngineException )
-            {
+              try
+              {
+                new Predicates( lNullPredicates.Take( n ), lUnaryPredicates.Take( u ), i, true, t );
+                lMap[ n, u, i, t ] = true;
+              }
+              catch ( EngineException )
+              {
 
+              }
             }
           }
         }
@@ -100,16 +103,19 @@ namespace Logic
         {
           for ( int i = 17; i >= 1 || ( i == 0 && u == 0 ); i-- )
           {
-            if ( lMap[ n, u, i ] && !lMap[ n + 1, u, i ] && !lMap[ n, u + 1, i ] && !lMap[ n, u, i + 1 ] )
+            for ( int t = i; t >= 0; t-- )
             {
-              //Console.WriteLine( "n = {0}, u = {1}, i = {2}", n, u, i );
-              Console.WriteLine( "  <tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>", n, u, i );
+              if ( lMap[ n, u, i, t ] && !lMap[ n + 1, u, i, t ] && !lMap[ n, u + 1, i, t ] && !lMap[ n, u, i + 1, t ] && !lMap[ n, u, i, t + 1 ] )
+              {
+                //Console.WriteLine( "n = {0}, u = {1}, i = {2}, t = {3}", n, u, i, t );
+                Console.WriteLine( "  <tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td></tr>", n, u, i, t );
+              }
             }
           }
         }
       }
 
-      new Predicates( lNullPredicates.Take( 32 ), lUnaryPredicates.Take( 0 ), 0, false );
+      new Predicates( lNullPredicates.Take( 32 ), lUnaryPredicates.Take( 0 ), 0, false, 0 );
     }
   }
 }

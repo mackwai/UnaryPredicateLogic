@@ -46,5 +46,10 @@ namespace Logic
     {
       get { return "<Negation<BR/><B><FONT FACE=\"MONOSPACE\">~</FONT></B>>"; }
     }
+
+    internal override void AssignModality( Necessity aNecessity )
+    {
+      mInnerMatrix.AssignModality( aNecessity );
+    }
   }
 }

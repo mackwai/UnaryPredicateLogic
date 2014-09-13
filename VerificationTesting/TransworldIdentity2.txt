@@ -1,0 +1,7 @@
+// If two objects are identical, then they are in the same possible world,
+// and therefore anything that is true one object's world is true in the
+// other object's world.
+
+x, (3a, Pa) -> ([]y, y=x -> (3a,Pa) )
+
+// Expected Result: Necessary

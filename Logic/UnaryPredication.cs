@@ -58,6 +58,11 @@ namespace Logic
       get { yield return mVariable; }
     }
 
+    internal override IEnumerable<Necessity> FreeModalities
+    {
+      get { yield return mVariable.Modality; }
+    }
+
     internal override IEnumerable<Variable> IdentifiedVariables
     {
       get { yield break; }
@@ -71,6 +76,11 @@ namespace Logic
     internal override int MaxmimumNumberOfDistinguishableObjects
     {
       get { return 1; }
+    }
+
+    internal override int MaxmimumNumberOfModalitiesInIdentifications
+    {
+      get { return 0; }
     }
 
     internal override string DOTLabel

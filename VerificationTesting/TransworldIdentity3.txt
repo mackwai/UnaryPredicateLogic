@@ -1,0 +1,6 @@
+// Just because two possible worlds affirm or deny the same
+// predicates doesn't mean they are the same possible world.
+
+3x, (P&~Q) -> [](P&~Q -> 3y, y=x)
+
+// Expected Result: MerelyPossible

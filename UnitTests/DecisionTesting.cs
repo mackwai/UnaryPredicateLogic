@@ -239,5 +239,53 @@ namespace UnitTests
     {
       TestPropositionFile( @"..\..\..\VerificationTesting\AxiomsOfIdentity.txt" );
     }
+
+    [TestMethod]
+    public void Test_TransworldIdentity1()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\TransworldIdentity1.txt" );
+    }
+
+    [TestMethod]
+    public void Test_TransworldIdentity2()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\TransworldIdentity2.txt" );
+    }
+
+    [TestMethod]
+    public void Test_TransworldIdentity3()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\TransworldIdentity3.txt" );
+    }
+
+    [TestMethod]
+    public void Test_TransworldIdentity4()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\TransworldIdentity4.txt" );
+    }
+
+    [TestMethod]
+    public void Test_TransworldIdentity5()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\TransworldIdentity5.txt" );
+    }
+
+    [TestMethod]
+    public void Test_Identification2()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\Identification2.txt" );
+    }
+
+    [TestMethod]
+    public void Test_Identification3()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\Identification3.txt" );
+    }
+
+    [TestMethod]
+    public void Test_KindaSlowEvaluation()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\KindaSlowEvaluation.txt" );
+    }
   }
 }

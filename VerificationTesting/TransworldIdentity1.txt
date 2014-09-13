@@ -1,0 +1,5 @@
+// Transworld identity is impossible.
+
+x, P & <>(3y,y=x & ~P)
+
+// Expected Result: Impossible

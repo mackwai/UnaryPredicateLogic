@@ -1,0 +1,4 @@
+x, (P&~Q) -> [](y, y=x -> (P&~Q))
+x, (P&~Q) & <>(y, y=x & ~(P&~Q))
+
+// Expected Result: Impossible

@@ -45,7 +45,8 @@ namespace Logic
           NullPredicates(),
           UnaryPredicates(),
           MaxmimumNumberOfDistinguishableObjects,
-          this.ContainsModalities );
+          this.ContainsModalities,
+          this.MaxmimumNumberOfModalitiesInIdentifications );
 
         foreach ( uint lInterpretation in lPredicates.Interpretations )
         {
@@ -90,7 +91,8 @@ namespace Logic
         NullPredicates(),
         UnaryPredicates(),
         MaxmimumNumberOfDistinguishableObjects,
-        ContainsModalities );
+        ContainsModalities,
+        MaxmimumNumberOfModalitiesInIdentifications );
 
       bool lNotImpossible = false;
       bool lNotNecessary = false;
@@ -148,6 +150,11 @@ namespace Logic
       get;
     }
 
+    internal abstract IEnumerable<Necessity> FreeModalities
+    {
+      get;
+    }
+
     internal abstract IEnumerable<Variable> IdentifiedVariables
     {
       get;
@@ -174,6 +181,11 @@ namespace Logic
     }
 
     internal abstract int MaxmimumNumberOfDistinguishableObjects
+    {
+      get;
+    }
+
+    internal abstract int MaxmimumNumberOfModalitiesInIdentifications
     {
       get;
     }
@@ -228,5 +240,12 @@ namespace Logic
     }
 
     internal abstract string DOTLabel { get; }
+
+    internal virtual void AssignModality( Necessity aNecessity ) {}
+
+    internal virtual IEnumerable<Necessity> ModalitiesInIdentifications
+    {
+      get { yield break; }
+    }
 	}
 }

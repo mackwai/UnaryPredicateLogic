@@ -15,6 +15,7 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -32,6 +33,8 @@ namespace Logic
     {
       if ( Memoizible )
         mTruthValues = Utility.CreateSByteArray( 1 << 16 );
+
+      aMatrix.AssignModality( this );
     }
 
     internal override bool ContainsModalities
@@ -74,6 +77,21 @@ namespace Logic
     internal override string DOTLabel
     {
       get { return "<Necessity<BR/><B><FONT FACE=\"MONOSPACE\">[]</FONT></B>>"; }
+    }
+
+    internal override IEnumerable<Necessity> FreeModalities
+    {
+      get { return mInnerMatrix.FreeModalities.Where( fModality => fModality != this ); }
+    }
+
+    internal override int MaxmimumNumberOfModalitiesInIdentifications
+    {
+      get
+      {
+        return Math.Max(
+          mInnerMatrix.MaxmimumNumberOfModalitiesInIdentifications,
+          mInnerMatrix.FreeModalities.Intersect( mInnerMatrix.ModalitiesInIdentifications ).Count() );
+      }
     }
   }
 }

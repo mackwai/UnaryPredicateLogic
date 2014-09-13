@@ -40,12 +40,15 @@ namespace Logic
       IEnumerable<NullPredicate> aNullPredicates,
       IEnumerable<UnaryPredicate> aUnaryPredicates,
       int aMaximumNumberOfDistinguishableObjects,
-      bool aModalitiesPresent )
+      bool aModalitiesPresent,
+      int aMaximumNumberOfModalitiesInvolvedInIdentifications )
     {
       mUnaryPredicates = aUnaryPredicates.ToArray();
       mNullPredicates = aNullPredicates.ToArray();
-      mBitsNeededToDistinguishObjects = BitsNeededToRepresent( aMaximumNumberOfDistinguishableObjects );
+      mBitsNeededToDistinguishObjects = BitsNeededToEnumerate( aMaximumNumberOfDistinguishableObjects + 1 );
       mBitsNeededToDistinguishWorlds = mBitsNeededToDistinguishObjects * NumberOfCombinationsOfUnaryPredicates + NumberOfNullPredicates;
+      if ( aMaximumNumberOfModalitiesInvolvedInIdentifications > 1 )
+        mBitsNeededToDistinguishWorlds *= BitsNeededToEnumerate( aMaximumNumberOfModalitiesInvolvedInIdentifications );
       mBitsNeeded = aModalitiesPresent
         ? 1UL << mBitsNeededToDistinguishWorlds
         : (ulong) mBitsNeededToDistinguishWorlds;
@@ -199,11 +202,17 @@ namespace Logic
       get { return 1 << NumberOfUnaryPredicates; }
     }
 
-    private static int BitsNeededToRepresent( int aNumberOfDistinguishableObjects )
+    /// <summary>
+    /// Calculate the number of bits needed to enumerate aNumber different things.
+    /// </summary>
+    /// <param name="aNumber">the number of different that are to be enumerated</param>
+    /// <returns>the number of bits needed to enumerate aNumber different things</returns>
+    private static int BitsNeededToEnumerate( int aNumber )
     {
       int i;
+      aNumber--;
 
-      for ( i = 0; aNumberOfDistinguishableObjects > 0; aNumberOfDistinguishableObjects >>= 1, i++ );
+      for ( i = 0; aNumber > 0; aNumber >>= 1, i++ );
 
       return i;
     }

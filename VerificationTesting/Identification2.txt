@@ -1,0 +1,4 @@
+3x,3y, Px & Py & ~[](x=y)
+//3x,3y,3z Px & Py & x=z & ~[](x=y)
+
+// Expected Result: MerelyPossible

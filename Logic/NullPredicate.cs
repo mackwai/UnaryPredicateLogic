@@ -59,6 +59,11 @@ namespace Logic
       get { yield break; }
     }
 
+    internal override IEnumerable<Necessity> FreeModalities
+    {
+      get { yield break; }
+    }
+
     internal override IEnumerable<Variable> IdentifiedVariables
     {
       get { yield break; }
@@ -75,6 +80,11 @@ namespace Logic
     }
 
     internal override int MaxmimumNumberOfDistinguishableObjects
+    {
+      get { return 0; }
+    }
+
+    internal override int MaxmimumNumberOfModalitiesInIdentifications
     {
       get { return 0; }
     }
