@@ -1,0 +1,3 @@
+(SaP|~(SaS)) <=> x,Sx->Px
+
+// Expected Result: Necessary

@@ -92,29 +92,16 @@ namespace Logic
 
     private static Matrix Parse( string aString )
     {
-      PredicateDictionary lPredicateDictionary = new PredicateDictionary();
+      CollectedItems lCollectedItems = new CollectedItems();
       VariableDictionary lVariableDictionary = new VariableDictionary();
       Matrix lParsedMatrix;
       List<char> lFreeVariableSymbols = new List<char>();
 
-      while ( true )
-      {
-        try
-        {
-          lParsedMatrix = Parse( aString.GetSubexpressions(), lPredicateDictionary, lVariableDictionary );
-          break;
-        }
-        catch ( FreeVariableNotFoundException lException )
-        {
-          lFreeVariableSymbols.Add( lException.VariableSymbol );
-          lVariableDictionary = lVariableDictionary.UpdateWith( lException.VariableSymbol, Factory.Variable( lException.VariableSymbol ) );
-        }
-      }
+      lParsedMatrix = Parse( aString.GetSubexpressions(), lCollectedItems, lVariableDictionary );
 
-      foreach ( char lSymbol in lFreeVariableSymbols )
+      foreach ( Variable lVariable in lCollectedItems.UnboundVariables )
       {
-        lParsedMatrix = Factory.ThereExists( lVariableDictionary.Retrieve( lSymbol ), lParsedMatrix );
-        //lParsedMatrix = Factory.ForAll( lVariableDictionary.Retrieve( lSymbol ), lParsedMatrix );
+        lParsedMatrix = Factory.ThereExists( lVariable, lParsedMatrix );
       }
 
       return lParsedMatrix;
@@ -135,11 +122,44 @@ namespace Logic
     private static Regex Nor = ExactMatch( @"!" );
     private static Regex Xor = ExactMatch( @"\^" );
     private static Regex Is = ExactMatch( @"[A-Z][a-z]" );
-    private static Regex Same = ExactMatch( @"[a-z]=[a-z]" );
+    private static Regex IsTheSameAs = ExactMatch( @"[a-z]=[a-z]" );
     private static Regex TrueThat = ExactMatch( @"[A-Z]" );
     private static Regex Possibly = ExactMatch( @"<>" );
     private static Regex Necessarily = ExactMatch( @"\[\]" );
     private static Regex ParenthesizedExpression = ExactMatch( @"\(.*\)" );
+    private static Regex TwoTermProposition = ExactMatch( @"(~?)([A-Z])([aeio])(~?)([A-Z])" );
+    private static Regex StringPrefixedWithTwoTermProposition = new Regex( @"^~?[A-Z][aeio]~?[A-Z]" );
+
+    private static Matrix ParseTwoTermProposition( string aExpression, CollectedItems aCollectedItems )
+    {
+      RegexMatch lMatch = TwoTermProposition.Exec( aExpression );
+
+      Term lSubject = Factory.AllAndOnly(
+        aCollectedItems.AddUnaryPredicate( lMatch[ 2 ][ 0 ] ),
+        lMatch[ 1 ].Length > 0 );
+      Term lPredicate = Factory.AllAndOnly(
+        aCollectedItems.AddUnaryPredicate( lMatch[ 5 ][ 0 ] ),
+        lMatch[ 4 ].Length > 0 );
+
+      return FormTwoTermProposition( lSubject, lPredicate, lMatch[ 3 ][ 0 ] );
+    }
+
+    private static Matrix FormTwoTermProposition( Term aSubject, Term aPredicate, char aForm )
+    {
+      switch ( aForm )
+      {
+        case 'a':
+          return Factory.FormA( aSubject, aPredicate );
+        case 'e':
+          return Factory.FormE( aSubject, aPredicate );
+        case 'i':
+          return Factory.FormI( aSubject, aPredicate );
+        case 'o':
+          return Factory.FormO( aSubject, aPredicate );
+        default:
+          throw new System.Exception( string.Format( "Unhandled form of two-term proposition: {0}", aForm.ToString() ) );
+      }
+    }
 
     private static char GetSymbolForVariable( string aQuantifier )
     {
@@ -158,7 +178,7 @@ namespace Logic
 
     private static bool IsAnyOf( this string aString, params Regex[] aRegularExpressions )
     {
-      return aRegularExpressions.Any( fRegex => fRegex.IsMatch( aString ) );
+      return aRegularExpressions.Any( fRegex => aString.Matches( fRegex ) );
     }
 
     private static bool IsParenthesizedGroup( this string aString )
@@ -178,11 +198,12 @@ namespace Logic
         Nor,
         Xor,
         Is,
-        Same,
+        IsTheSameAs,
         TrueThat,
         ForAll,
         Possibly,
-        Necessarily );
+        Necessarily,
+        TwoTermProposition );
     }
 
     private static string[] GetSubexpressions( this string aString )
@@ -192,8 +213,18 @@ namespace Logic
 
       for ( int i = 1; i < aString.Length; i++ )
       {
-        // Always interpret a capital letter followed by a lowercase latter as a predication over one variable.
-        if ( aString.Substring( lStartingPoint, 2 ).Matches( Is ) )
+        RegexMatch lMatchStringPrefixedWithTwoTermProposition =
+          StringPrefixedWithTwoTermProposition.Exec( aString.Substring( lStartingPoint ) );
+
+        if ( lMatchStringPrefixedWithTwoTermProposition != null )
+        {
+          lSubexpressions.Add( lMatchStringPrefixedWithTwoTermProposition[ 0 ] );
+          lStartingPoint += lMatchStringPrefixedWithTwoTermProposition[ 0 ].Length;
+          i = lStartingPoint;
+        }
+        // Always interpret a capital letter followed by a lowercase letter as a predication over one variable, unless it is part of
+        // a two-term proposition.
+        else if ( aString.Substring( lStartingPoint, 2 ).Matches( Is ) )
         {
           lSubexpressions.Add( aString.Substring( lStartingPoint, 2 ) );
           lStartingPoint += 2;
@@ -217,29 +248,10 @@ namespace Logic
       return aString.IsAnyOf( And, Or, IfAndOnlyIf, OnlyIf, Nor, Xor );
     }
 
-    private static T[] UpToLast<T>( this T[] aArray, Predicate<T> aPredicate )
+    private static bool IsQuantifier( this string aString )
     {
-      int lIndexOfLast;
-      for ( lIndexOfLast = aArray.Length - 1; lIndexOfLast >= 0; lIndexOfLast-- )
-      {
-        if ( aPredicate( aArray[ lIndexOfLast ] ) )
-          break;
-      }
-
-      return aArray.Subarray( 0, lIndexOfLast );
+      return aString.IsAnyOf( ForAll, ThereExists );
     }
-
-    private static T[] AfterLast<T>( this T[] aArray, Predicate<T> aPredicate )
-    {
-      int lIndexOfLast;
-      for ( lIndexOfLast = aArray.Length - 1; lIndexOfLast >= 0; lIndexOfLast-- )
-      {
-        if ( aPredicate( aArray[ lIndexOfLast ] ) )
-          break;
-      }
-
-      return aArray.Subarray( lIndexOfLast + 1, aArray.Length - lIndexOfLast - 1 );
-    } 
 
     private static string Conjoin( IEnumerable<string> aExpressions )
     {
@@ -251,34 +263,48 @@ namespace Logic
       return string.Format( "({0})", aExpression );
     }
 
-    private static Matrix ParsePredicationIdentificationOrGrouping(
-      string aExpression,
-      PredicateDictionary aCollectedPredicates,
-      VariableDictionary aFreeVariables )
+    private static Variable FindVariable(
+      char aSymbol,
+      VariableDictionary aBoundVariables,
+      CollectedItems aCollectedItems )
     {
+      if ( aBoundVariables.ContainsVariableForSymbol( aSymbol ) )
+        return aBoundVariables.Retrieve( aSymbol );
+      else
+        return aCollectedItems.AddUnboundVariable( aSymbol );
+    }
+
+    private static Matrix ParsePropositionalToken(
+      string aExpression,
+      CollectedItems aCollectedItems,
+      VariableDictionary aBoundVariables )
+    {
+      if ( aExpression.Matches( TwoTermProposition ) )
+        return ParseTwoTermProposition( aExpression, aCollectedItems );
+
       if ( aExpression.Matches( Is ) )
       {
-        return aCollectedPredicates.AddUnaryPredication(
-          aCollectedPredicates.AddUnaryPredicate( aExpression[ 0 ] ),
-          aFreeVariables.Retrieve( aExpression[ 1 ] ) );
+        return aCollectedItems.AddUnaryPredication(
+          aCollectedItems.AddUnaryPredicate( aExpression[ 0 ] ),
+          FindVariable( aExpression[ 1 ], aBoundVariables, aCollectedItems ) );
       }
 
       if ( aExpression.Matches( TrueThat ) )
-        return aCollectedPredicates.AddNullPredicate( aExpression[ 0 ] );
+        return aCollectedItems.AddNullPredicate( aExpression[ 0 ] );
 
-      if ( aExpression.Matches( Same ) )
+      if ( aExpression.Matches( IsTheSameAs ) )
       {
-        return aCollectedPredicates.AddIdentification(
-          aFreeVariables.Retrieve( aExpression[ 0 ] ),
-          aFreeVariables.Retrieve( aExpression[ 2 ] ) );
+        return aCollectedItems.AddIdentification(
+          FindVariable( aExpression[ 0 ], aBoundVariables, aCollectedItems ),
+          FindVariable( aExpression[ 2 ], aBoundVariables, aCollectedItems ) );
       }
 
       if ( aExpression.Matches( ParenthesizedExpression ) )
       {
         return Parse(
           aExpression.Substring( 1, aExpression.Length - 2 ).GetSubexpressions(),
-          aCollectedPredicates,
-          aFreeVariables );
+          aCollectedItems,
+          aBoundVariables );
       }
 
       throw new ParseError( "Expected predication or parenthesized expression, found \"{0}\"", aExpression );
@@ -287,15 +313,15 @@ namespace Logic
     private static Matrix ParseQuantification(
       string aQuantifier,
       string[] aBody,
-      PredicateDictionary aCollectedPredicates,
-      VariableDictionary aFreeVariables )
+      CollectedItems aCollectedItems,
+      VariableDictionary aBoundVariables )
     {
       char lSymbolForVariable = GetSymbolForVariable( aQuantifier );
       Variable lVariable = Factory.Variable( lSymbolForVariable );
       Matrix lBody = Parse(
         aBody,
-        aCollectedPredicates,
-        aFreeVariables.UpdateWith( lSymbolForVariable, lVariable ) );
+        aCollectedItems,
+        aBoundVariables.CreateNewSetThatRebinds( lSymbolForVariable, lVariable ) );
 
       if ( aQuantifier.Matches( ForAll ) )
         return Factory.ForAll( lVariable, lBody );
@@ -308,18 +334,31 @@ namespace Logic
 
     private static Matrix ParseBinaryOperator(
       string[] aTokens,
-      PredicateDictionary aCollectedPredicates,
-      VariableDictionary aFreeVariables )
+      CollectedItems aCollectedItems,
+      VariableDictionary aBoundVariables )
     {
-      string[] lTokensBeforeLastBinaryOperator = aTokens.UpToLast( fToken => fToken.IsBinaryOperator() );
-      string[] lTokensAfterLastBinaryOperator = aTokens.AfterLast( fToken => fToken.IsBinaryOperator() );
-      string lLastBinaryOperator = aTokens.Last( fToken => fToken.IsBinaryOperator() );
+      int lNumberOfTokensBeforeBinaryOperator = -1;
+      for ( int i = 0; i < aTokens.Length; i++ )
+      {
+        if ( aTokens[i].IsBinaryOperator() )
+          lNumberOfTokensBeforeBinaryOperator = i;
+        if ( aTokens[i].IsQuantifier() )
+          break;
+      }
+      string[] lTokensBeforeLastBinaryOperator = aTokens.Subarray( 0, lNumberOfTokensBeforeBinaryOperator );
+      string[] lTokensAfterLastBinaryOperator = aTokens.Subarray(
+        lNumberOfTokensBeforeBinaryOperator + 1,
+        aTokens.Length - lNumberOfTokensBeforeBinaryOperator - 1 );
+      string lLastBinaryOperator = aTokens[ lNumberOfTokensBeforeBinaryOperator ];
+      //string[] lTokensBeforeLastBinaryOperator = aTokens.UpToLast( fToken => fToken.IsBinaryOperator() );
+      //string[] lTokensAfterLastBinaryOperator = aTokens.AfterLast( fToken => fToken.IsBinaryOperator() );
+      //string lLastBinaryOperator = aTokens.Last( fToken => fToken.IsBinaryOperator() );
 
       if ( lTokensBeforeLastBinaryOperator.Length == 0 || lTokensAfterLastBinaryOperator.Length == 0 )
         throw new ParseError( "Could not parse \"{0}\"", string.Join( "", aTokens ) );
 
-      Matrix lLeft = Parse( lTokensBeforeLastBinaryOperator, aCollectedPredicates, aFreeVariables );
-      Matrix lRight = Parse( lTokensAfterLastBinaryOperator, aCollectedPredicates, aFreeVariables );
+      Matrix lLeft = Parse( lTokensBeforeLastBinaryOperator, aCollectedItems, aBoundVariables );
+      Matrix lRight = Parse( lTokensAfterLastBinaryOperator, aCollectedItems, aBoundVariables );
 
       if ( lLastBinaryOperator.Matches( And ) )
         return Factory.And( lLeft, lRight );
@@ -344,40 +383,40 @@ namespace Logic
 
     private static Matrix Parse(
       string[] aExpressions,
-      PredicateDictionary aCollectedPredicates,
-      VariableDictionary aFreeVariables )
+      CollectedItems aCollectedItems,
+      VariableDictionary aBoundVariables )
     {
       string lFirst = aExpressions[ 0 ];
 
       if ( aExpressions.Length == 1 )
-        return ParsePredicationIdentificationOrGrouping( lFirst, aCollectedPredicates, aFreeVariables );
+        return ParsePropositionalToken( lFirst, aCollectedItems, aBoundVariables );
 
       string[] lTail = aExpressions.Tail<string>();
 
       if ( AreUnariesFollowedByAQuantifier( aExpressions ) )
-        return ParseUnaryOperatorOnTail( lFirst, lTail, aCollectedPredicates, aFreeVariables );
+        return ParseUnaryOperatorOnTail( lFirst, lTail, aCollectedItems, aBoundVariables );
 
-      if ( lFirst.IsAnyOf( ForAll, ThereExists ) )
-        return ParseQuantification( lFirst, lTail, aCollectedPredicates, aFreeVariables );
+      if ( lFirst.IsQuantifier() )
+        return ParseQuantification( lFirst, lTail, aCollectedItems, aBoundVariables );
 
-      if ( aExpressions.TakeWhile( fExpression => !fExpression.IsAnyOf( ForAll, ThereExists ) ).Any( fToken => fToken.IsBinaryOperator() ) )
-        return ParseBinaryOperator( aExpressions, aCollectedPredicates, aFreeVariables );
+      if ( aExpressions.TakeWhile( fExpression => !fExpression.IsQuantifier() ).Any( fToken => fToken.IsBinaryOperator() ) )
+        return ParseBinaryOperator( aExpressions, aCollectedItems, aBoundVariables );
 
       if ( IsUnaryOperator( lFirst ) )
-        return ParseUnaryOperatorOnTail( lFirst, lTail, aCollectedPredicates, aFreeVariables );
+        return ParseUnaryOperatorOnTail( lFirst, lTail, aCollectedItems, aBoundVariables );
 
       throw new ParseError( "Could not parse \"{0}\"", string.Join( "", aExpressions ) );
     }
     
     private static bool IsUnaryOperator( string aExpression )
     {
-      return Not.IsMatch( aExpression ) || Possibly.IsMatch( aExpression ) || Necessarily.IsMatch( aExpression );
+      return aExpression.IsAnyOf( Not, Possibly, Necessarily );
     }
     
     private static bool AreUnariesFollowedByAQuantifier( IEnumerable<string> aExpressions )
     {
       if ( IsUnaryOperator( aExpressions.First() ) )
-        return aExpressions.SkipWhile( fToken => IsUnaryOperator( fToken ) ).First().IsAnyOf( ForAll, ThereExists );
+        return aExpressions.SkipWhile( fToken => IsUnaryOperator( fToken ) ).First().IsQuantifier();
       else
         return false;
     }
@@ -385,10 +424,10 @@ namespace Logic
     private static Matrix ParseUnaryOperatorOnTail(
       string aUnaryOperator,
       string[] aTail,
-      PredicateDictionary aCollectedPredicates,
-      VariableDictionary aFreeVariables )
+      CollectedItems aCollectedItems,
+      VariableDictionary aBoundVariables )
     {
-      Matrix lTail = Parse( aTail, aCollectedPredicates, aFreeVariables );
+      Matrix lTail = Parse( aTail, aCollectedItems, aBoundVariables );
       
       if ( aUnaryOperator.Matches( Not ) )
         return Factory.Not( lTail );
@@ -430,7 +469,7 @@ namespace Logic
     
     private static bool Matches( this string aString, Regex aRegularExpression )
     {
-      return aRegularExpression.IsMatch( aString );
+      return aRegularExpression.Exec( aString ) != null;
     }
   }
 }

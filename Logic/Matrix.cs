@@ -36,29 +36,7 @@ namespace Logic
 
     public bool Valid
     {
-      get
-      {
-        if ( this.FreeVariables.Any() )
-          throw new EngineException( "This proposition can't be decided; it contains free variables." );
-
-        Predicates lPredicates = new Predicates(
-          NullPredicates(),
-          UnaryPredicates(),
-          MaxmimumNumberOfDistinguishableObjects,
-          this.ContainsModalities,
-          this.MaxmimumNumberOfModalitiesInIdentifications );
-
-        foreach ( uint lInterpretation in lPredicates.Interpretations )
-        {
-          foreach ( uint lKindOfWorld in lPredicates.KindsOfWorlds( lInterpretation ) )
-          {
-            if ( !this.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
-              return false;
-          }
-        }
-
-        return true;
-      }
+      get { return this.Decide() == Alethicity.Necessary; }
     }
 
     /// <summary>
@@ -96,50 +74,93 @@ namespace Logic
 
       bool lNotImpossible = false;
       bool lNotNecessary = false;
-
       uint lLastInterpretation = lPredicates.LastInterpretation;
       uint lLastKindOfWorld = lPredicates.LastKindOfWorld;
-      if ( ContainsModalities )
-      {      
-        for ( uint lInterpretation = lPredicates.FirstInterpretation; lInterpretation <= lLastInterpretation; lInterpretation++ )
-        {
-          //foreach ( uint lKindOfWorld in lPredicates.KindsOfWorlds( lInterpretation ) )
 
-          for ( uint lKindOfWorld = lPredicates.FirstNonemptyWorld; lKindOfWorld <= lLastKindOfWorld; lKindOfWorld++ )
-          {
-            if ( ( ( 1U << (int) lKindOfWorld ) & lInterpretation ) == 0 )
-              continue;
+#if PARALLELIZE
+      //System.Windows.Forms.MessageBox.Show( string.Format( "Maximum number of distinguishable objects: {0}", MaxmimumNumberOfDistinguishableObjects ) );
+      
+      System.Threading.Tasks.ParallelOptions lParallelOptions = new System.Threading.Tasks.ParallelOptions();
+      System.Threading.CancellationTokenSource lCancellationTokenSource = new System.Threading.CancellationTokenSource();
+      lParallelOptions.CancellationToken = lCancellationTokenSource.Token;
+      lParallelOptions.MaxDegreeOfParallelism = System.Environment.ProcessorCount;
 
-            if ( this.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
-              lNotImpossible = true;
-            else
-              lNotNecessary = true;
-            if ( lNotImpossible && lNotNecessary )
-              return Alethicity.Contingent;
-          }
-        }
-      }
-      else
+      try
       {
-        for ( uint lInterpretation = lPredicates.FirstInterpretation; lInterpretation <= lLastInterpretation; lInterpretation++ )
+#endif
+        if ( ContainsModalities )
         {
-          //foreach ( uint lKindOfWorld in lPredicates.KindsOfWorlds( lInterpretation ) )
+#if PARALLELIZE
+          System.Threading.Tasks.Parallel.For(
+            Convert.ToInt64( lPredicates.FirstInterpretation ),
+            Convert.ToInt64( lLastInterpretation ) + 1,
+            lParallelOptions,
+            ( fInterpretation ) =>
+          {
+            uint lInterpretation = Convert.ToUInt32( fInterpretation );
+
+#else
+          for ( uint lInterpretation = lPredicates.FirstInterpretation; lInterpretation <= lLastInterpretation; lInterpretation++ )
+          {
+#endif
+            for ( uint lKindOfWorld = lPredicates.FirstNonemptyWorld; lKindOfWorld <= lLastKindOfWorld; lKindOfWorld++ )
+            {
+              if ( ( ( 1U << (int) lKindOfWorld ) & lInterpretation ) == 0 )
+                continue;
+
+              if ( this.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
+                lNotImpossible = true;
+              else
+                lNotNecessary = true;
+              if ( lNotImpossible && lNotNecessary )
+#if PARALLELIZE
+                lCancellationTokenSource.Cancel();
+            }
+          } );
+#else
+                return Alethicity.Contingent;
+            }
+          }
+#endif
+        }
+        else
+        {
+          uint lInterpretation = lPredicates.FirstInterpretation;
+#if PARALLELIZE
+          System.Threading.Tasks.Parallel.For(
+            Convert.ToInt64( lPredicates.FirstNonemptyWorld ),
+            Convert.ToInt64( lLastKindOfWorld ) + 1,
+            lParallelOptions,
+            ( fKindOfWorld ) =>
+          {
+            uint lKindOfWorld = Convert.ToUInt32( fKindOfWorld );
+#else
           for ( uint lKindOfWorld = lPredicates.FirstNonemptyWorld; lKindOfWorld <= lLastKindOfWorld; lKindOfWorld++ )
           {
+#endif         
             if ( this.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
               lNotImpossible = true;
             else
               lNotNecessary = true;
             if ( lNotImpossible && lNotNecessary )
+#if PARALLELIZE
+              lCancellationTokenSource.Cancel();
+          } );
+        }
+      }
+      catch ( OperationCanceledException )
+      {
+      }
+
+      if ( lNotImpossible && lNotNecessary )
+        return Alethicity.Contingent;
+#else
               return Alethicity.Contingent;
           }
         }
-      }
+#endif
 
-      if ( !lNotNecessary )
-        return Alethicity.Necessary;
-      else
-        return Alethicity.Impossible;
+      return lNotNecessary ? Alethicity.Impossible :  Alethicity.Necessary;
     }
 		
 		internal abstract IEnumerable<UnaryPredicate> UnaryPredicates();

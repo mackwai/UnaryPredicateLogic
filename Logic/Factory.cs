@@ -205,5 +205,90 @@ namespace Logic
     {
       return Necessarily( Not( aInnerProposition ) );
     }
+
+    /// <summary>
+    /// Create a term.
+    /// </summary>
+    /// <param name="aPredicate">a unary predicate</param>
+    /// <param name="aIsNegative">true if the term contains all and only objects which verify the predicate,
+    /// false if the term contains all and only objects which falsify the predicate</param>
+    /// <returns>a term</returns>
+    public static Term AllAndOnly( UnaryPredicate aPredicate, bool aIsNegative )
+    {
+      return new Term( aPredicate, aIsNegative );
+    }
+
+    /// <summary>
+    /// Create a two-term proposition of form A.
+    /// </summary>
+    /// <param name="aSubject">the subject term</param>
+    /// <param name="aPredicate">the predicate term</param>
+    /// <param name="aExistentialImport">true if the proposition has existential import, false if not.  This paramter defaults to
+    /// true, per Aristotle's interpretation</param>
+    /// <returns>a two-term proposition of form A</returns>
+    public static Matrix FormA( Term aSubject, Term aPredicate, bool aExistentialImport = true )
+    {
+      Variable lVariable1 = Variable( 'x' );
+
+      Matrix lProposition = ForAll( lVariable1, Factory.OnlyIf( aSubject.Apply( lVariable1 ), aPredicate.Apply( lVariable1 ) ) );
+
+      if ( aExistentialImport )
+      {
+        Variable lVariable2 = Variable( 'x' );
+        lProposition = And( lProposition, ThereExists( lVariable2, aSubject.Apply( lVariable2 ) ) );
+      }
+
+      return lProposition;
+    }
+
+    /// <summary>
+    /// Create a two-term proposition of form I.
+    /// </summary>
+    /// <param name="aSubject">the subject term</param>
+    /// <param name="aPredicate">the predicate term</param>
+    /// <returns>a two-term proposition of form A</returns>
+    public static Matrix FormI( Term aSubject, Term aPredicate )
+    {
+      Variable lVariable = Variable( 'x' );
+
+      return ThereExists( lVariable, And( aSubject.Apply( lVariable ), aPredicate.Apply( lVariable ) ) );
+    }
+
+    /// <summary>
+    /// Create a two-term proposition of form E.
+    /// </summary>
+    /// <param name="aSubject">the subject term</param>
+    /// <param name="aPredicate">the predicate term</param>
+    /// <returns>a two-term proposition of form A</returns>
+    public static Matrix FormE( Term aSubject, Term aPredicate )
+    {
+      Variable lVariable = Variable( 'x' );
+
+      return ForAll( lVariable, Factory.OnlyIf( aSubject.Apply( lVariable ), Not( aPredicate.Apply( lVariable ) ) ) );
+    }
+
+    /// <summary>
+    /// Create a two-term proposition of form O.
+    /// </summary>
+    /// <param name="aSubject">the subject term</param>
+    /// <param name="aPredicate">the predicate term</param>
+    /// <param name="aExistentialImport">true if the proposition has existential import, false if not.  This paramter defaults to
+    /// false, in order to complete the square of opposition under Aristotle's interpretation of form A</param>
+    /// <returns>a two-term proposition of form A</returns>
+    public static Matrix FormO( Term aSubject, Term aPredicate, bool aExistentialImport = false )
+    {
+      Variable lVariable1 = Variable( 'x' );
+
+      //Matrix lProposition = ThereExists( lVariable1, Factory.And( aSubject.Apply( lVariable1 ), Not( aPredicate.Apply( lVariable1 ) ) ) );
+      Matrix lProposition = Not( ForAll( lVariable1, Factory.OnlyIf( aSubject.Apply( lVariable1 ), aPredicate.Apply( lVariable1 ) ) ) );
+
+      if ( !aExistentialImport )
+      {
+        Variable lVariable2 = Variable( 'x' );
+        lProposition = Or( lProposition, ForAll( lVariable2, Not( aSubject.Apply( lVariable2 ) ) ) );
+      }
+
+      return lProposition;
+    }
 	}
 }

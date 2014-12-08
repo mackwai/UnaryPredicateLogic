@@ -46,6 +46,31 @@ namespace UnitTests
       Logic.Parser.Parse( new string[]{"P^Q"} );
     }
 
+    [TestMethod]
+    public void Test_Terms()
+    {
+      Logic.Parser.Parse( new string[] { "PoQ" } );
+      Logic.Parser.Parse( new string[] { "PaQ" } );
+      Logic.Parser.Parse( new string[] { "PiQ" } );
+      Logic.Parser.Parse( new string[] { "PeQ" } );
+      Logic.Parser.Parse( new string[] { "~PoQ" } );
+      Logic.Parser.Parse( new string[] { "~PaQ" } );
+      Logic.Parser.Parse( new string[] { "~PiQ" } );
+      Logic.Parser.Parse( new string[] { "~PeQ" } );
+      Logic.Parser.Parse( new string[] { "~Po~Q" } );
+      Logic.Parser.Parse( new string[] { "~Pa~Q" } );
+      Logic.Parser.Parse( new string[] { "~Pi~Q" } );
+      Logic.Parser.Parse( new string[] { "~Pe~Q" } );
+      Logic.Parser.Parse( new string[] { "Po~Q" } );
+      Logic.Parser.Parse( new string[] { "Pa~Q" } );
+      Logic.Parser.Parse( new string[] { "Pi~Q" } );
+      Logic.Parser.Parse( new string[] { "Pe~Q" } );
+      Logic.Parser.Parse( new string[] { "x,~Po~Q&Rx" } );
+      Logic.Parser.Parse( new string[] { "<>~Pa~Q" } );
+      Logic.Parser.Parse( new string[] { "<>(~Pi~Q|3a,PaR)" } );
+      Logic.Parser.Parse( new string[] { "<>(~Pi~Q|3a,PaR)&P&Pa~P" } );
+    }
+
     private static void ParseFile( string aPathToFile )
     {
       string lText = File.ReadAllText( aPathToFile );

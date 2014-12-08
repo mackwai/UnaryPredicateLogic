@@ -21,12 +21,12 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>somerby.net/mack/logic/documentation</title>
+<title>Documentation for somerby.net/mack/logic</title>
 
 <link rel="stylesheet" type="text/css" href="style.css">
 
 </head>
-<body>
+<body onload="sgnimuc()">
 
 <div id="text_column">
 
@@ -36,16 +36,16 @@
 
 <h2 id="introduction">Introduction</h2>
 
-<p>This web application (&quot;the software&quot;) decides the validity/satisfiablity/inconsistency of certain kinds of simple statements in symbolic logic.  Statements can contain nullary predicates, unary predictates, identity, necessity and possbility.  It's something I worked on infrequently for a few years as a .NET application (see <a href="http://mackwai.blogspot.com/2010/08/monadic-predicate-logic.html" target="_blank">here</a> and <a href="http://mackwai.blogspot.com/2011/10/monadic-predicate-logic-with-some-modal.html" target="_blank">here</a>), but now I've improved it and converted into a web application.  If you find this software useful or interesting, I would like to know.  If you find a statement that it decides incorrectly, I would like to know.  In either case, please contact me at <span class="backwards">g@sgnimuc.eiznekcam</span>mail.com.</p>
+<p>This web application (&quot;the software&quot;) decides the validity/satisfiablity/inconsistency of certain kinds of simple statements in symbolic logic.  Statements can contain nullary predicates, unary predictates, identity, necessity and possbility.  It's something I worked on infrequently for a few years as a .NET application (see <a href="http://mackwai.blogspot.com/2010/08/monadic-predicate-logic.html" target="_blank">here</a> and <a href="http://mackwai.blogspot.com/2011/10/monadic-predicate-logic-with-some-modal.html" target="_blank">here</a>), but now I've improved it and converted into a web application.</p>
 
 <p>The software is written in C#, then translated into JavaScript with <a href="http://www.saltarelle-compiler.com/" target="_blank">Saltarelle</a>, which is awesome.  The source code is on <a href="https://github.com/mackwai/UnaryPredicateLogic" target="_blank">GitHub</a>.  <a href="https://github.com/mdaines/viz.js/">Viz.js</a> is used to generate diagrams.  The truth table feature is adapted from <a href="https://github.com/mrieppel/TruthTableGenerator" target="_blank">code</a> written by Michael Rieppel.</p>
 
-<p>There are three sections in this documentation.  The <a href="#the_language">first</a> describes the symbolic language that the software recognizes.  The <a href ="#the_algorithm">second</a> explains the algorithm the software follows to decide statements.  The <a href="#future_work">third</a> describes some future work that could or should be done.</p>
+<p>There are three sections in this documentation.  The <a href="#the_language">first</a> describes the symbolic language that the software recognizes.  The <a href ="#the_algorithm">second</a> explains the algorithm the software follows to decide statements.  The <a href="#future_work">third</a> describes some future work that could or should be done for the software.</p>
 
 <h2 id="instructions">Instructions</h2>
 
 <p>To use this application, type a logical statement into the textbox on the main page, then click the "Decide" button.  If the application can decide the statement, it will.  Otherwise, it will show some kind of error message describing what went wrong.  The <a href="#the_language">language section</a> explains how to write logical statements for this application.  If you're looking for examples of such statements, click on any of the buttons under the heading entitled "Examples" and the application will fill the text box with an example statement, ready to be decided.</p>
-<p>To use this application, type a logical statement into the textbox on the main page, then click the "ecide" button.  If the application can decide the statement, it will.  Otherwise, it will show some kind of error message describing what went wrong.  The <a href="#the_language">language section</a> explains how to write logical statements for this application.  If you're looking for examples of such statements, click on any of the buttons under the heading entitled "Examples" and the application will fill the text box with an example statement, ready to be decided.</p>
+<p>To use this application, type a logical statement into the textbox on the main page, then click the "Decide" button.  If the application can decide the statement, it will.  Otherwise, it will show some kind of error message describing what went wrong.  The <a href="#the_language">language section</a> explains how to write logical statements for this application.  If you're looking for examples of such statements, click on any of the buttons under the heading entitled "Examples" and the application will fill the text box with an example statement, ready to be decided.</p>
 
 <h2 id="the_language">The Language</h2>
 
@@ -469,12 +469,62 @@ Ms       // Socrates is mortal.
 <ul>
   <li>The validity of the <a href="#kind_of_object">method</a> the software uses to evaluate propositions that contain identifications needs to be proven.</li>
   <li>The decision algorithm described in this documentation might need to be proven more rigorously than is what done in this document.</li>
-  <li>The software needs to be verified thoroughly.  I've tested it quite a bit and ensured it is correct for all propositions I've tried, but software that claims to decide propositions must be 100% correct and proven correct in order to be useful.</li>
+  <li>The software needs to be verified thoroughly.  I've tested it quite a bit and ensured it gives the correct result for all propositions which I've tried, but software that claims to decide propositions must be 100% correct and proven correct in order to be useful.</li>
 </ul>
 
-<p></p>
+<h3 id="feedback">Feedback</h3>
+
+<p>Thanks to Google Analytics, I can see that this site gets returning visitors.  So, dear logicians, I know you're out there.  I want your feedback.  You can contact me at <span id="a"><span id="sgnimuc" class="backwards">g@sgnimuc.eiznekcam</span>mail.com</span> or add a comment to <a href="http://mackwai.blogspot.com/2014/11/feedback-for-somerbynetmacklogic.html" target="_blank">this blog post</a>.</p>
+
+<p>You would be doing me a favor if you were to notify me of<p>
+
+<ul>
+  <li>bugs or errors in the software,</li>
+  <li>incorrect decisions made by the software,</li>
+  <li>typos in the documentation, or</li>
+  <li>unclear or or incorrect statements in the documentation.</li>
+</ul>
+
+<p>Also,</p>
+
+<ul>
+  <li>If you find this web app useful, I'm curious to know what you are using it for &mdash; even if it's just to play around with symbolic logic.</li>
+  <li>If there is any part of the user interface you find confusing, tell me and I'll try to improve it.</li>
+  <li>If you have ideas for new features, feel free to suggest them.  I'm open to expanding this web app's functionality, so long as it is in keeping with the Possible Worlds-based approach that the software is using to decide propositions.</li>
+</ul>
+
+<p>Thanks in advance.</p>
+
+<p><i>Se Lei &egrave; in Sud Italia, sono particolarmente interessato a quello che Lei pensa. Io non parlo italiano, ma se mi scrive in italiano, far&ograve; del mio meglio per interpretarlo.  Grazie.</i></p>
 
 </div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56050397-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+<script type="text/javascript">
+function ReverseString(s)
+{
+    return s.split("").reverse().join("");
+}
+function sgnimuc()
+{
+  var sgnimuc = document.getElementById("sgnimuc");
+  sgnimuc.className = sgnimuc.className.replace( /(?:^|\s)backwards(?!\S)/g , '' );
+  sgnimuc.innerHTML = ReverseString(sgnimuc.innerHTML);
+  var a = document.getElementById("a");
+  if ( !(a.textContent === undefined) )
+    a.innerHTML = "<a href=\"mailto:" + a.textContent + "\">" + a.innerHTML + "</a>";
+}
+</script>
 
 </body>
 </html>

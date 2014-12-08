@@ -287,5 +287,53 @@ namespace UnitTests
     {
       TestPropositionFile( @"..\..\..\VerificationTesting\KindaSlowEvaluation.txt" );
     }
+
+    [TestMethod]
+    public void Test_ATerm()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\ATerm.txt" );
+    }
+
+    [TestMethod]
+    public void Test_ITerm()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\ITerm.txt" );
+    }
+
+    [TestMethod]
+    public void Test_ETerm()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\ETerm.txt" );
+    }
+
+    [TestMethod]
+    public void Test_OTerm()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\OTerm.txt" );
+    }
+
+    [TestMethod]
+    public void Test_SquareOfOpposition()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\SquareOfOpposition.txt" );
+    }
+
+    [TestMethod]
+    public void Test_SquareOfOppositionWithSomeNegations()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\SquareOfOppositionWithSomeNegations.txt" );
+    }
+
+    [TestMethod]
+    public void Test_ProblemCaseTermA()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\ProblemCaseTermA.txt" );
+    }
+
+    [TestMethod]
+    public void Test_ProblemCaseExistence()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\ProblemCaseExistence.txt" );
+    }
   }
 }

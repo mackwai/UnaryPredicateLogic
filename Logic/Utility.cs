@@ -97,33 +97,19 @@ namespace Logic
     public static string RegexReplace( string aString, string aPattern, string aReplacement )
     {
 #if SALTARELLE
-      //Regex lRegex = new Regex( aPattern );
-      //RegexMatch lMatch = lRegex.Exec( aString );
-      //while ( lMatch != null && lMatch.Index >= 0 )
-      //{
-      //  aString.Replace( new Regex( aPattern ), aReplacement );
-      //}
       string lChangedString = aString;
+      Regex lPattern = new Regex( aPattern );
       do
       {
         aString = lChangedString;
-        lChangedString = aString.Replace( new Regex( aPattern ), aReplacement );
+        lChangedString = aString.Replace( lPattern, aReplacement );
       } while ( lChangedString != aString );
-      return aString;//.Replace( new Regex( aPattern ), aReplacement );
+      return aString;
 #else
-      //return aPattern.Replace( aString, aReplacement );
       return Regex.Replace( aString, aPattern, aReplacement );
 #endif
 
     }
-
-#if SALTARELLE
-    public static bool IsMatch( this Regex aRegex, string aString )
-    {
-      RegexMatch lMatch = aRegex.Exec( aString );
-      return lMatch != null && lMatch.Index >= 0;
-    }
-#endif
 
 #if SALTARELLE
     [InlineCode( "new Int8Array({aNumberOfElements})" )]

@@ -23,18 +23,33 @@ namespace Logic
   public class Variable
   {
     private char mLetter;
+
+#if SALTARELLE
     private string mCurrentlyInstantiatedKindOfObject;
     private uint mCurrentlyInstantiatedKindOfWorld;
+#else
+    private System.Threading.ThreadLocal<string> mCurrentlyInstantiatedKindOfObject = new System.Threading.ThreadLocal<string>();
+    private System.Threading.ThreadLocal<uint> mCurrentlyInstantiatedKindOfWorld = new System.Threading.ThreadLocal<uint>();
+#endif
+
     private Necessity mModality;
     
     internal string InstantiatedKindOfObject
     {
+#if SALTARELLE
       get { return mCurrentlyInstantiatedKindOfObject; }
+#else
+      get { return mCurrentlyInstantiatedKindOfObject.Value; }
+#endif
     }
 
     internal uint InstantiatedKindOfWorld
     {
+#if SALTARELLE
       get { return mCurrentlyInstantiatedKindOfWorld; }
+#else
+      get { return mCurrentlyInstantiatedKindOfWorld.Value; }
+#endif
     }
     
     internal Variable( char aLetter )
@@ -44,8 +59,13 @@ namespace Logic
       
     internal void Instantiate( string aKindOfObject, uint aKindOfWorld )
     {
+#if SALTARELLE
       mCurrentlyInstantiatedKindOfObject = aKindOfObject;
       mCurrentlyInstantiatedKindOfWorld = aKindOfWorld;
+#else
+      mCurrentlyInstantiatedKindOfObject.Value = aKindOfObject;
+      mCurrentlyInstantiatedKindOfWorld.Value = aKindOfWorld;
+#endif
     }
       
     public override string ToString()

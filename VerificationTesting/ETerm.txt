@@ -1,0 +1,5 @@
+SeP
+<=>
+(x,Sx->~Px)
+
+// Expected Result: Necessary

@@ -1,0 +1,5 @@
+SoP
+<=>
+(3x,Sx&~Px) | (~3x,Sx)
+
+// Expected Result: Necessary

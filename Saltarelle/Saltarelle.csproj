@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
   somerby.net/mack/logic
   Copyright (C) 2014 MacKenzie Cumings
@@ -17,7 +17,6 @@
   with this program; if not, write to the Free Software Foundation, Inc.,
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
-
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -104,6 +103,9 @@
     <Compile Include="..\Logic\Predicates.cs">
       <Link>Predicates.cs</Link>
     </Compile>
+    <Compile Include="..\Logic\Term.cs">
+      <Link>Term.cs</Link>
+    </Compile>
     <Compile Include="..\Logic\UnaryOperator.cs">
       <Link>UnaryOperator.cs</Link>
     </Compile>
@@ -122,6 +124,9 @@
     <Compile Include="..\Logic\Variable.cs">
       <Link>Variable.cs</Link>
     </Compile>
+    <Compile Include="..\Parser\CollectedItems.cs">
+      <Link>CollectedItems.cs</Link>
+    </Compile>
     <Compile Include="..\Parser\FreeVariableNotFoundException.cs">
       <Link>FreeVariableNotFoundException.cs</Link>
     </Compile>
@@ -130,9 +135,6 @@
     </Compile>
     <Compile Include="..\Parser\Parser.cs">
       <Link>Parser.cs</Link>
-    </Compile>
-    <Compile Include="..\Parser\PredicateDictionary.cs">
-      <Link>PredicateDictionary.cs</Link>
     </Compile>
     <Compile Include="..\Parser\VariableDictionary.cs">
       <Link>VariableDictionary.cs</Link>

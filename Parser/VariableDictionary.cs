@@ -33,7 +33,7 @@ namespace Logic
       mVariables.Add( aSymbol, aVariable );
     }
 
-    public VariableDictionary UpdateWith( char aSymbol, Variable aVariable )
+    public VariableDictionary CreateNewSetThatRebinds( char aSymbol, Variable aVariable )
     {
       VariableDictionary lUpdatedDictionary = new VariableDictionary();
 
@@ -46,6 +46,11 @@ namespace Logic
       lUpdatedDictionary.Add( aSymbol, aVariable );
 
       return lUpdatedDictionary;
+    }
+
+    public bool ContainsVariableForSymbol( char aSymbol )
+    {
+      return mVariables.ContainsKey( aSymbol );
     }
 
     public Variable Retrieve( char aSymbol )

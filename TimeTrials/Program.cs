@@ -56,12 +56,14 @@ namespace TimeTrials
       "LastWorldTested.txt",
       "AxiomsOfIdentity.txt",
       "KindaSlowEvaluation.txt",
+      "TransworldIdentity2.txt"
     };
 
     private static readonly string[] NamesOfSlowTestFiles =  new string[]
     {
       "ModalTest2.txt",
-      "KindaSlowEvaluation.txt"
+      "KindaSlowEvaluation.txt",
+      "TransworldIdentity2.txt"
     };
 
     private static Matrix ParseFile( string aPathToFile )
