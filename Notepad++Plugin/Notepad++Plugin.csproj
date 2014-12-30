@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  somerby.net/mack/logic
+  Copyright (C) 2014 MacKenzie Cumings
+ 
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License along
+  with this program; if not, write to the Free Software Foundation, Inc.,
+  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+-->
+
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E56F6E12-089C-40ED-BCFD-923E5FA121A1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Logic</RootNamespace>
+    <AssemblyName>Notepad++Plugin</AssemblyName>
+    <OutputPath>bin\Debug\</OutputPath>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DefineConstants>TRACE;PARALLELIZE</DefineConstants>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugType>pdbonly</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Logic\BinaryOperator.cs">
+      <Link>BinaryOperator.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Conjunction.cs">
+      <Link>Conjunction.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Disjunction.cs">
+      <Link>Disjunction.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\EngineException.cs">
+      <Link>EngineException.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Equivalence.cs">
+      <Link>Equivalence.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Factory.cs">
+      <Link>Factory.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Identification.cs">
+      <Link>Identification.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\JointDenial.cs">
+      <Link>JointDenial.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\MaterialConditional.cs">
+      <Link>MaterialConditional.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Matrix.cs">
+      <Link>Matrix.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\NamedObject.cs">
+      <Link>NamedObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Necessity.cs">
+      <Link>Necessity.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Negation.cs">
+      <Link>Negation.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\NullPredicate.cs">
+      <Link>NullPredicate.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Predicates.cs">
+      <Link>Predicates.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Term.cs">
+      <Link>Term.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\UnaryOperator.cs">
+      <Link>UnaryOperator.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\UnaryPredicate.cs">
+      <Link>UnaryPredicate.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\UnaryPredication.cs">
+      <Link>UnaryPredication.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\UniversalGeneralization.cs">
+      <Link>UniversalGeneralization.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Utility.cs">
+      <Link>Utility.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Variable.cs">
+      <Link>Variable.cs</Link>
+    </Compile>
+    <Compile Include="..\Parser\CollectedItems.cs">
+      <Link>CollectedItems.cs</Link>
+    </Compile>
+    <Compile Include="..\Parser\FreeVariableNotFoundException.cs">
+      <Link>FreeVariableNotFoundException.cs</Link>
+    </Compile>
+    <Compile Include="..\Parser\ParseError.cs">
+      <Link>ParseError.cs</Link>
+    </Compile>
+    <Compile Include="..\Parser\Parser.cs">
+      <Link>Parser.cs</Link>
+    </Compile>
+    <Compile Include="..\Parser\RegexMatch.cs">
+      <Link>RegexMatch.cs</Link>
+    </Compile>
+    <Compile Include="..\Parser\VariableDictionary.cs">
+      <Link>VariableDictionary.cs</Link>
+    </Compile>
+    <Compile Include="DllExport\DllExportAttribute.cs" />
+    <Compile Include="Forms\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IPluginReceiver.cs" />
+    <Compile Include="NppPluginReceiver.cs" />
+    <Compile Include="NppPluginNETBase.cs" />
+    <Compile Include="NppPluginNETHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UnmanagedExports.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Leibniz_machine.jpeg" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildProjectDirectory)\DllExport\NppPlugin.DllExport.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>echo "$(Platform)"
+echo "$(PlatformTarget)"
+echo "$(CpuType)"
+echo "$(DebugSymbols)"
+echo "$(DllExportAttributeAssemblyName)"
+echo "$(DllExportAttributeFullName)"
+echo "$(DllExportTimeout)"
+echo "$(KeyContainerName)$(AssemblyKeyContainerName)"
+echo "$(KeyOriginatorFile)"
+echo "$(MSBuildProjectDirectory)"
+echo "$(TargetPath)"
+echo "C:\Windows\Microsoft.NET\Framework\v4.0.30319"
+echo "$(DevEnvDir)\..\..\VC\bin"
+echo "$(DevEnvDir)"
+echo "$(SDK40ToolsPath)"</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>echo "hey!"
+echo "$(TargetPath)"
+echo "C:\Program Files (x86)\Notepad++\plugins\$(TargetFileName)"
+if exist $(TargetPath) copy /Y $(TargetPath) "C:\Program Files (x86)\Notepad++\plugins\$(TargetFileName)"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

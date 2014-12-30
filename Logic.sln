@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplication", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeTrials", "TimeTrials\TimeTrials.csproj", "{D2133A89-31E5-4ED6-9B36-CB6831C76F31}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notepad++Plugin", "Notepad++Plugin\Notepad++Plugin.csproj", "{E56F6E12-089C-40ED-BCFD-923E5FA121A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +115,16 @@ Global
 		{D2133A89-31E5-4ED6-9B36-CB6831C76F31}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D2133A89-31E5-4ED6-9B36-CB6831C76F31}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D2133A89-31E5-4ED6-9B36-CB6831C76F31}.Release|x86.ActiveCfg = Release|Any CPU
+		{E56F6E12-089C-40ED-BCFD-923E5FA121A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E56F6E12-089C-40ED-BCFD-923E5FA121A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E56F6E12-089C-40ED-BCFD-923E5FA121A1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E56F6E12-089C-40ED-BCFD-923E5FA121A1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E56F6E12-089C-40ED-BCFD-923E5FA121A1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E56F6E12-089C-40ED-BCFD-923E5FA121A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E56F6E12-089C-40ED-BCFD-923E5FA121A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E56F6E12-089C-40ED-BCFD-923E5FA121A1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E56F6E12-089C-40ED-BCFD-923E5FA121A1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E56F6E12-089C-40ED-BCFD-923E5FA121A1}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

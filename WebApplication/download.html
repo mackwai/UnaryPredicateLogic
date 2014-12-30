@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!--
+  somerby.net/mack/logic
+  Copyright (C) 2014 MacKenzie Cumings
+ 
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License along
+  with this program; if not, write to the Free Software Foundation, Inc.,
+  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+-->
+
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Download somerby.net/mack/logic</title>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+<body>
+
+<div id="text_column">
+
+<h3><a href="index.html">&#8666 home</a></h3>
+
+<h1>Download</h1>
+
+<h2 id="notepad_plus_plus">Plugin for Notepad++</h2>
+
+<img src="PluginInAction.png" />
+
+<p>I've built the "Decide" and "Depict" functions of the web application into a plugin for Notepad++, which is a fully-featured text editor.  It has some advantages over the web application:</p>
+
+<ul class="bulletted">
+  <li>You can use all the features of a text editor when you are working with statements, like editing multiple files at once and finding and replacing text.</li>
+  <li>The plugin is much faster.  On my computer, it decides statements about 30 times faster than the web application!</li>
+  <li>Once you've installed it, you don't need to be connected to the Internet to use it.</li>
+  <li>You can save the depictions of statement graphs as PNG files.</li>
+</ul>
+
+<h3>Prerequisites</h3>
+
+<p>To use the plugin, the following software must also be installed:
+
+<ul class="bulletted">
+  <li><a href="http://notepad-plus-plus.org/" target="_blank">Notepad++</a></li>
+  <li><a href="http://www.microsoft.com/en-us/download/details.aspx?id=40779" target="_blank">Microsoft .NET 4.5.1</a> or higher.  If you use Windows and Windows Update is enabled, this has probably been installed on your computer automatically.</li>
+  <li><a href="http://www.graphviz.org/" target="_blank">Graphviz</a>, but only if you want to "depict" statements.</li>
+</ul>
+
+<h3>Installation</h3>
+
+<p>To install the plugin:</p>
+
+<ol class="bulletted">
+  <li>Download <a href="Notepad++Plugin.zip">Notepad++Plugin.zip</a>.</li>
+  <li>Open the .zip file and copy its contents to NotePad++'s plugins folder (normally <em>C:\Program Files (x86)\Notepad++\plugins</em>).  Windows will ask if you want to merge the "Config" folder.  Choose "Yes".</li>
+  <li>If you have Graphviz, add Graphviz' binary folder (e.g. <em>C:\Program Files (x86)\Graphviz2.34\bin</em>) to the PATH environment variable.</li>
+</ol>
+
+<h3>Use</h3>
+
+<p>Once the plugin has been installed, all you need to do to is start Notepad++.  The plugin's functions should be in the menu under "Plugins &#8594;  Symbolic Logic".</p>
+<img src="MenuOptions.png" />
+
+<p>The "Decide" function will also have an icon on the toolbar:</p>
+
+<img src="IconInNotepadPlusPlus.png" />
+
+</div>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-56050397-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

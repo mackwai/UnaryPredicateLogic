@@ -56,6 +56,12 @@ A simple command-line or console application that uses Logic and Parser to
 read and decide statements in symbolic logic.
 
 
+- Notepad++Plugin
+
+A Notepad++Plugin that decides and depicts statements in symbolic logic.  It
+uses Graphviz, if it's installed and on the PATH, to generate depictions.
+
+
 - WindowsFormsAppliction
 
 A simple Windows application that uses Logic and Parser to read and decide
@@ -71,7 +77,7 @@ converts them to JavaScript suitable for use in a web application.
 - WebApplication
 
 A web application that uses the output of the project named "Saltarelle" to
-decide and depict statements in a symbolic logic.
+decide and depict statements in symbolic logic.
 
 
 - VerificationTesting

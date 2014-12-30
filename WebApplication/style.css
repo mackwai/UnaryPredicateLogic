@@ -67,6 +67,11 @@ th
   text-align: center;
 }
 
+img
+{
+  max-width: 100%;
+}
+
 #result
 {
   max-width: 40em;
@@ -251,6 +256,11 @@ th
   }
 
   #text_column>ul
+  {
+    font-family: serif;
+  }
+  
+  #text_column>ol
   {
     font-family: serif;
   }
