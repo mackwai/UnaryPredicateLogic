@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,6 +23,12 @@ using System.Threading.Tasks;
 
 namespace System.Text.RegularExpressions
 {
+  /// <summary>
+  /// This provides a facade for .NET regular expressions that matches
+  /// the regular expression classes available in Saltarelle, which are somewhat simpler and more limited.  It exists so the
+  /// the normal Windows version of the code can do regular expression processing the same way as the Saltarelle
+  /// version of the code.
+  /// </summary>
   internal static class RegexExtensions
   {
     public static RegexMatch Exec( this Regex aRegex, string aString )

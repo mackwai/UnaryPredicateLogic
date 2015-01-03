@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -33,6 +33,11 @@ namespace Logic
 #endif
 
     private Necessity mModality;
+
+    internal Variable( char aLetter )
+    {
+      mLetter = aLetter;
+    }
     
     internal string InstantiatedKindOfObject
     {
@@ -51,11 +56,6 @@ namespace Logic
       get { return mCurrentlyInstantiatedKindOfWorld.Value; }
 #endif
     }
-    
-    internal Variable( char aLetter )
-    {
-      mLetter = aLetter;
-    }
       
     internal void Instantiate( string aKindOfObject, uint aKindOfWorld )
     {
@@ -66,11 +66,6 @@ namespace Logic
       mCurrentlyInstantiatedKindOfObject.Value = aKindOfObject;
       mCurrentlyInstantiatedKindOfWorld.Value = aKindOfWorld;
 #endif
-    }
-      
-    public override string ToString()
-    {
-      return mLetter.ToString();
     }
 
     internal Necessity Modality
@@ -86,6 +81,11 @@ namespace Logic
 
         mModality = value;
       }
+    }
+ 
+    public override string ToString()
+    {
+      return mLetter.ToString();
     }
   }
 }

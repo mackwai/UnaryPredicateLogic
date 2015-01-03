@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,13 +19,14 @@ using System;
 
 namespace Logic
 {
+  //
   internal class FreeVariableNotFoundException : Exception
   {
-    public char VariableSymbol { get; private set; }
-
     public FreeVariableNotFoundException( char aVariableSymbol )
     {
       VariableSymbol = aVariableSymbol;
     }
+
+    public char VariableSymbol { get; private set; }
   }
 }

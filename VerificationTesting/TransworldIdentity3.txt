@@ -3,4 +3,4 @@
 
 3x, (P&~Q) -> [](P&~Q -> 3y, y=x)
 
-// Expected Result: MerelyPossible
+// Expected Result: Contingent

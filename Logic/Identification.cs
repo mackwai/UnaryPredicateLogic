@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -49,9 +49,9 @@ namespace Logic
         || ( this.Left.Equals( that.Right ) && this.Right.Equals( that.Left ) );
     }
 
-    internal override IEnumerable<NullPredicate> NullPredicates()
+    internal override IEnumerable<NullPredicate> NullPredicates
     {
-      yield break;
+      get { yield break; }
     }
 
     internal override IEnumerable<Variable> FreeVariables
@@ -86,9 +86,9 @@ namespace Logic
       }
     }
 
-    internal override IEnumerable<UnaryPredicate> UnaryPredicates()
+    internal override IEnumerable<UnaryPredicate> UnaryPredicates
     {
-      yield break;
+      get { yield break; }
     }
 
     internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicateDictionary )

@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -53,6 +53,8 @@ namespace UnitTests
       Logic.Parser.Parse( new string[] { "PaQ" } );
       Logic.Parser.Parse( new string[] { "PiQ" } );
       Logic.Parser.Parse( new string[] { "PeQ" } );
+      Logic.Parser.Parse( new string[] { "PyQ" } );
+      Logic.Parser.Parse( new string[] { "PuQ" } );
       Logic.Parser.Parse( new string[] { "~PoQ" } );
       Logic.Parser.Parse( new string[] { "~PaQ" } );
       Logic.Parser.Parse( new string[] { "~PiQ" } );

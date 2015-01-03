@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -33,6 +33,11 @@ namespace Logic
       mVariables.Add( aSymbol, aVariable );
     }
 
+    public bool ContainsVariableForSymbol( char aSymbol )
+    {
+      return mVariables.ContainsKey( aSymbol );
+    }
+
     public VariableDictionary CreateNewSetThatRebinds( char aSymbol, Variable aVariable )
     {
       VariableDictionary lUpdatedDictionary = new VariableDictionary();
@@ -46,12 +51,7 @@ namespace Logic
       lUpdatedDictionary.Add( aSymbol, aVariable );
 
       return lUpdatedDictionary;
-    }
-
-    public bool ContainsVariableForSymbol( char aSymbol )
-    {
-      return mVariables.ContainsKey( aSymbol );
-    }
+    } 
 
     public Variable Retrieve( char aSymbol )
     {

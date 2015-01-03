@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,7 +16,6 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Logic
 {
@@ -29,29 +28,14 @@ namespace Logic
       mDescription = aDescription;
     }
 
-    internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
+    internal override string DOTLabel
     {
-      return aPredicates.TrueIn( this, aKindOfWorld );
-    }
-
-    public override bool Propositional
-    {
-      get { return true; }
-    }
-
-    public override string ToString()
-    {
-      return mDescription;
-    }
-
-    internal override IEnumerable<UnaryPredicate> UnaryPredicates()
-    {
-      yield break;
-    }
-
-    internal override IEnumerable<NullPredicate> NullPredicates()
-    {
-      yield return this;
+      get
+      {
+        return string.Format(
+          "<Null Predicate<BR/><B><FONT FACE=\"MONOSPACE\">{0}</FONT></B>>",
+          this );
+      }
     }
 
     internal override IEnumerable<Variable> FreeVariables
@@ -69,14 +53,9 @@ namespace Logic
       get { yield break; }
     }
 
-    internal override string DOTLabel
+    public override bool IsPropositional
     {
-      get
-      {
-        return string.Format(
-          "<Null Predicate<BR/><B><FONT FACE=\"MONOSPACE\">{0}</FONT></B>>",
-          this );
-      }
+      get { return true; }
     }
 
     internal override int MaxmimumNumberOfDistinguishableObjects
@@ -88,5 +67,26 @@ namespace Logic
     {
       get { return 0; }
     }
+
+    internal override IEnumerable<NullPredicate> NullPredicates
+    {
+      get { yield return this; }
+    }
+
+    internal override IEnumerable<UnaryPredicate> UnaryPredicates
+    {
+      get { yield break; }
+    }
+
+    internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
+    {
+      return aPredicates.TrueIn( this, aKindOfWorld );
+    }
+
+    public override string ToString()
+    {
+      return mDescription;
+    }
+    
   }
 }

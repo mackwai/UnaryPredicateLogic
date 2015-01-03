@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -32,30 +32,15 @@ namespace Logic
       mPredicate = aPredicate;
       mVariable = aVariable;
     }
-    
-    internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
-    {
-      return mVariable.InstantiatedKindOfObject.IndexOf( mPredicate.ToString() ) >= 0;
-    }
-    
-    public override string ToString()
-    {
-      return string.Format( "{0}{1}", mPredicate, mVariable );
-    }
-    
-    internal override IEnumerable<UnaryPredicate> UnaryPredicates()
-    {
-      yield return mPredicate;
-    }
 
-    internal override IEnumerable<NullPredicate> NullPredicates()
+    internal override string DOTLabel
     {
-      yield break;
-    }
-
-    internal override IEnumerable<Variable> FreeVariables
-    {
-      get { yield return mVariable; }
+      get
+      {
+        return string.Format(
+          "<Unary Predication<BR/><B><FONT FACE=\"MONOSPACE\">{0}</FONT></B>>",
+          this );
+      }
     }
 
     internal override IEnumerable<Necessity> FreeModalities
@@ -63,14 +48,14 @@ namespace Logic
       get { yield return mVariable.Modality; }
     }
 
+    internal override IEnumerable<Variable> FreeVariables
+    {
+      get { yield return mVariable; }
+    }
+
     internal override IEnumerable<Variable> IdentifiedVariables
     {
       get { yield break; }
-    }
-
-    internal override IEnumerable<Matrix> NonNullPredications
-    {
-      get { yield return this; }
     }
 
     internal override int MaxmimumNumberOfDistinguishableObjects
@@ -83,14 +68,24 @@ namespace Logic
       get { return 0; }
     }
 
-    internal override string DOTLabel
+    internal override IEnumerable<Matrix> NonNullPredications
     {
-      get
-      {
-        return string.Format(
-          "<Unary Predication<BR/><B><FONT FACE=\"MONOSPACE\">{0}</FONT></B>>",
-          this );
-      }
+      get { yield return this; }
+    }
+
+    internal override IEnumerable<NullPredicate> NullPredicates
+    {
+      get { yield break; }
+    }
+
+    internal override IEnumerable<UnaryPredicate> UnaryPredicates
+    {
+      get { yield return mPredicate; }
+    }
+    
+    internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
+    {
+      return mVariable.InstantiatedKindOfObject.IndexOf( mPredicate.ToString() ) >= 0;
     }
 
     public override bool Equals( object obj )
@@ -106,6 +101,11 @@ namespace Logic
     public override int GetHashCode()
     {
       return mPredicate.GetHashCode() ^ mVariable.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+      return string.Format( "{0}{1}", mPredicate, mVariable );
     }
   }
 }

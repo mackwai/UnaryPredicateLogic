@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ namespace Logic
       Win32.SendMessage(PluginBase.nppData._nppHandle, NppMsg.NPPM_GETPLUGINSCONFIGDIR, Win32.MAX_PATH, sbIniFilePath);
 
       PluginBase.SetCommand( 0, "Decide", DecideContentsOfActiveDocument, new ShortcutKey( true, false, false, Keys.NumPad0 ) );
-      PluginBase.SetCommand( 1, "Decide Selected Text", DecideSelectedText, new ShortcutKey( true, false, true, Keys.NumPad0 ) );
+      PluginBase.SetCommand( 1, "Decide Selected Text", DecideSelectedText, new ShortcutKey( true, true, false, Keys.NumPad0 ) );
       if ( mDepictContentsOfActiveDocument != null )
         PluginBase.SetCommand( 2, "Depict", DepictContentsOfActiveDocument, new ShortcutKey( false, true, false, Keys.G ) );
       if ( mDepictSelectedText != null )

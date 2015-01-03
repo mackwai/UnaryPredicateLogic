@@ -1,4 +1,4 @@
-// Expected Result: MerelyPossible
+// Expected Result: Contingent
 
 3x,Ax&Bx
 3x,Cx&~Bx

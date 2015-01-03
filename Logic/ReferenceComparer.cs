@@ -15,30 +15,21 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+using System;
+using System.Collections.Generic;
+
 namespace Logic
 {
-  /// <summary>
-  /// a logical conjunction
-  /// </summary>
-  internal class Conjunction : BinaryOperator
+  internal class ReferenceComparer : IEqualityComparer<Object>
   {
-    internal Conjunction( Matrix aLeft, Matrix aRight ) : base( aLeft, aRight )
+    public new bool Equals( object x, object y )
     {
+      return x == y;
     }
 
-    protected override string Connector
+    public int GetHashCode( object obj )
     {
-      get { return "&"; }
-    }
-
-    internal override string DOTLabel
-    {
-      get { return "<Conjunction<BR/><B><FONT FACE=\"MONOSPACE\">&amp;</FONT></B>>"; }
-    }
-
-    internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
-    {
-      return Left.TrueIn( aInterpretation, aKindOfWorld, aPredicates ) && Right.TrueIn( aInterpretation, aKindOfWorld, aPredicates );
+      return obj.GetHashCode();
     }
   }
 }

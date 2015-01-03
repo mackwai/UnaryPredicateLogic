@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
   somerby.net/mack/logic
-  Copyright (C) 2014 MacKenzie Cumings
+  Copyright (C) 2015 MacKenzie Cumings
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
   with this program; if not, write to the Free Software Foundation, Inc.,
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
-
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -106,6 +105,9 @@
     </Compile>
     <Compile Include="..\Logic\Predicates.cs">
       <Link>Predicates.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\ReferenceComparer.cs">
+      <Link>ReferenceComparer.cs</Link>
     </Compile>
     <Compile Include="..\Logic\Term.cs">
       <Link>Term.cs</Link>
@@ -198,10 +200,8 @@ echo "$(DevEnvDir)"
 echo "$(SDK40ToolsPath)"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>echo "hey!"
-echo "$(TargetPath)"
-echo "C:\Program Files (x86)\Notepad++\plugins\$(TargetFileName)"
-if exist $(TargetPath) copy /Y $(TargetPath) "C:\Program Files (x86)\Notepad++\plugins\$(TargetFileName)"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

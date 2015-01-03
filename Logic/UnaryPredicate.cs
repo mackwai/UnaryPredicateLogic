@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,18 +22,13 @@ namespace Logic
   /// </summary>
   public class UnaryPredicate
   {
-    public char Letter { get; private set; }
-    
     internal UnaryPredicate( char aLetter )
     {
       Letter = aLetter;
     }
-    
-    public override string ToString()
-    {
-      return Letter.ToString();
-    }
-    
+
+    public char Letter { get; private set; }
+        
     public override bool Equals( object obj )
     {
       if ( obj is UnaryPredicate )
@@ -49,6 +44,11 @@ namespace Logic
     public override int GetHashCode()
     {
       return Letter.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+      return Letter.ToString();
     }
   }
 }

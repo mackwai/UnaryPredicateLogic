@@ -3,4 +3,4 @@
 // Either Sheila or Roman will pick rock 'n' roll, but not both.
 ~(Rs<=>Rr)
 
-// Expected Result: MerelyPossible
+// Expected Result: Contingent

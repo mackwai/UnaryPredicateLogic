@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,23 +22,23 @@ namespace Logic
   /// </summary>
   internal class Disjunction : BinaryOperator
   {
+    internal Disjunction( Matrix aLeft, Matrix aRight ) : base( aLeft, aRight )
+    {
+    }
+
     protected override string Connector
     {
       get { return "|"; }
     }
 
-    internal Disjunction( Matrix aLeft, Matrix aRight ) : base( aLeft, aRight )
+    internal override string DOTLabel
     {
+      get { return "<Disjunction<BR/><B><FONT FACE=\"MONOSPACE\">|</FONT></B>>"; }
     }
       
     internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
     {
       return Left.TrueIn( aInterpretation, aKindOfWorld, aPredicates ) || Right.TrueIn( aInterpretation, aKindOfWorld, aPredicates );
-    }
-
-    internal override string DOTLabel
-    {
-      get { return "<Disjunction<BR/><B><FONT FACE=\"MONOSPACE\">|</FONT></B>>"; }
     }
   }
 }

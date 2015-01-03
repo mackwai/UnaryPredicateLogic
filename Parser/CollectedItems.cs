@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -19,6 +19,9 @@ using System.Collections.Generic;
 
 namespace Logic
 {
+  /// <summary>
+  /// collections of matrices, predicates and variables created while parsing a statement
+  /// </summary>
   internal class CollectedItems
   {
     private Dictionary<char, UnaryPredicate> mUnaryPredicates;
@@ -34,6 +37,68 @@ namespace Logic
       mPredications = new Dictionary<Matrix, Matrix>();
       mIdentifications = new Dictionary<Matrix, Matrix>();
       mUnboundVariables = new Dictionary<char,Variable>();
+    }   
+
+    public Matrix AddIdentification( Variable aLeftVariable, Variable aRightVariable )
+    {
+      Matrix lIdentification = Factory.Identification( aLeftVariable, aRightVariable );
+      if ( mIdentifications.ContainsKey( lIdentification ) )
+      {
+        return mIdentifications[ lIdentification ];
+      }
+      else
+      {
+        mIdentifications.Add( lIdentification, lIdentification );
+
+        return lIdentification;
+      }
+    }
+    
+    public NullPredicate AddNullPredicate( char aSymbol )
+    {
+      if ( mNullPredicates.ContainsKey( aSymbol ) )
+      {
+        return mNullPredicates[ aSymbol ];
+      }
+      else
+      {
+        NullPredicate aPredicate = Factory.NullPredicate( aSymbol.ToString() );
+
+        mNullPredicates.Add( aSymbol, aPredicate );
+
+        return aPredicate;
+      }
+    }
+
+    public UnaryPredicate AddUnaryPredicate( char aSymbol )
+    {
+      if ( mUnaryPredicates.ContainsKey( aSymbol ) )
+      {
+        return mUnaryPredicates[ aSymbol ];
+      }
+      else
+      {
+        UnaryPredicate aPredicate = Factory.UnaryPredicate( aSymbol );
+
+        mUnaryPredicates.Add( aSymbol, aPredicate );
+
+        return aPredicate;
+      }
+    }
+
+    public Matrix AddUnaryPredication( UnaryPredicate aPredicate, Variable aVariable )
+    {
+      Matrix lPredication = Factory.Predication( aPredicate, aVariable );
+      if ( mPredications.ContainsKey( lPredication ) )
+      {
+        return mPredications[ lPredication ];
+      }
+      else
+      {
+        mPredications.Add( lPredication, lPredication );
+
+        return lPredication;
+      }
     }
 
     public Variable AddUnboundVariable( char aSymbol )
@@ -57,68 +122,6 @@ namespace Logic
       get
       {
         return mUnboundVariables.Values;
-      }
-    }
-
-    public UnaryPredicate AddUnaryPredicate( char aSymbol )
-    {
-      if ( mUnaryPredicates.ContainsKey( aSymbol ) )
-      {
-        return mUnaryPredicates[ aSymbol ];
-      }
-      else
-      {
-        UnaryPredicate aPredicate = Factory.UnaryPredicate( aSymbol );
-
-        mUnaryPredicates.Add( aSymbol, aPredicate );
-
-        return aPredicate;
-      }
-    }
-
-    public NullPredicate AddNullPredicate( char aSymbol )
-    {
-      if ( mNullPredicates.ContainsKey( aSymbol ) )
-      {
-        return mNullPredicates[ aSymbol ];
-      }
-      else
-      {
-        NullPredicate aPredicate = Factory.NullPredicate( aSymbol.ToString() );
-
-        mNullPredicates.Add( aSymbol, aPredicate );
-
-        return aPredicate;
-      }
-    }
-
-    public Matrix AddUnaryPredication( UnaryPredicate aPredicate, Variable aVariable )
-    {
-      Matrix lPredication = Factory.Predication( aPredicate, aVariable );
-      if ( mPredications.ContainsKey( lPredication ) )
-      {
-        return mPredications[ lPredication ];
-      }
-      else
-      {
-        mPredications.Add( lPredication, lPredication );
-
-        return lPredication;
-      }
-    }
-
-    public Matrix AddIdentification( Variable aLeftVariable, Variable aRightVariable )
-    {
-      Matrix lIdentification = Factory.Identification( aLeftVariable, aRightVariable );
-      if ( mIdentifications.ContainsKey( lIdentification ) )
-      {
-        return mIdentifications[ lIdentification ];
-      }
-      else
-      {
-        mIdentifications.Add( lIdentification, lIdentification );
-
-        return lIdentification;
       }
     }
   }

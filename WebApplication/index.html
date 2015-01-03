@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   somerby.net/mack/logic
-  Copyright (C) 2014 MacKenzie Cumings
+  Copyright (C) 2015 MacKenzie Cumings
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -223,6 +223,21 @@ function Decide()
   }
 }
 
+function GetQueryFields()
+{
+  var fields = {};
+  var queryString = location.search.slice(1);
+  var keyAndValueExpression = /([^&=]+)=([^&]*)/g;
+  var keyAndValue;
+
+  while ( keyAndValue = keyAndValueExpression.exec( queryString ) )
+  {
+    fields[ decodeURIComponent( keyAndValue[1] ) ] = decodeURIComponent( keyAndValue[2] );
+  }
+
+  return fields;
+}
+
 function SaveInput()
 {
   try
@@ -250,7 +265,20 @@ function LoadSavedInput()
   }
 }
 
-LoadSavedInput();
+function FillTextBox()
+{
+  var statement = GetQueryFields()["statement"];
+  if ( statement )
+  {
+    document.getElementById("expression").value = statement;
+  }
+  else
+  {
+    LoadSavedInput();
+  }
+}
+
+FillTextBox();
 UpdateTruthTableButton();
 </script>
 

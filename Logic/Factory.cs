@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@ using System.Linq;
 namespace Logic
 {
   /// <summary>
-  /// a factory which controls the creation of Variables and Predicates for use within Propositions.  The current implementation
-  /// supports the existence of only one set of predicates at a time, of which there cannot be more than five predicates.
+  /// a factory which controls the creation of Variables, Predicates and Matrices.
   /// </summary>
 	public class Factory
 	{
@@ -179,31 +178,31 @@ namespace Logic
     /// <summary>
     /// Create an assertion of logical necessity.
     /// </summary>
-    /// <param name="aInnerProposition">the matrix being asserted for all nonempty worlds</param>
+    /// <param name="aInnerMatrix">the matrix being asserted for all nonempty worlds</param>
     /// <returns>a logical necessity</returns>
-    public static Matrix Necessarily( Matrix aInnerProposition )
+    public static Matrix Necessarily( Matrix aInnerMatrix )
     {
-      return new Necessity( aInnerProposition );
+      return new Necessity( aInnerMatrix );
     }
 
     /// <summary>
     /// Create an assertion of possibility.
     /// </summary>
-    /// <param name="aInnerProposition">the matrix being asserted for one or more nonempty worlds</param>
+    /// <param name="aInnerMatrix">the matrix being asserted for one or more nonempty worlds</param>
     /// <returns>an assertion of possibility</returns>
-    public static Matrix Possibly( Matrix aInnerProposition )
+    public static Matrix Possibly( Matrix aInnerMatrix )
     {
-      return Not( Impossibly( aInnerProposition ) );
+      return Not( Impossibly( aInnerMatrix ) );
     }
 
     /// <summary>
     /// Create an assertion of impossibility.
     /// </summary>
-    /// <param name="aInnerProposition">the matrix being denied for all nonempty worlds</param>
+    /// <param name="aInnerMatrix">the matrix being denied for all nonempty worlds</param>
     /// <returns>an assertion of impossibility</returns>
-    public static Matrix Impossibly( Matrix aInnerProposition )
+    public static Matrix Impossibly( Matrix aInnerMatrix )
     {
-      return Necessarily( Not( aInnerProposition ) );
+      return Necessarily( Not( aInnerMatrix ) );
     }
 
     /// <summary>
@@ -246,7 +245,7 @@ namespace Logic
     /// </summary>
     /// <param name="aSubject">the subject term</param>
     /// <param name="aPredicate">the predicate term</param>
-    /// <returns>a two-term proposition of form A</returns>
+    /// <returns>a two-term proposition of form I</returns>
     public static Matrix FormI( Term aSubject, Term aPredicate )
     {
       Variable lVariable = Variable( 'x' );
@@ -259,7 +258,7 @@ namespace Logic
     /// </summary>
     /// <param name="aSubject">the subject term</param>
     /// <param name="aPredicate">the predicate term</param>
-    /// <returns>a two-term proposition of form A</returns>
+    /// <returns>a two-term proposition of form E</returns>
     public static Matrix FormE( Term aSubject, Term aPredicate )
     {
       Variable lVariable = Variable( 'x' );
@@ -274,7 +273,7 @@ namespace Logic
     /// <param name="aPredicate">the predicate term</param>
     /// <param name="aExistentialImport">true if the proposition has existential import, false if not.  This paramter defaults to
     /// false, in order to complete the square of opposition under Aristotle's interpretation of form A</param>
-    /// <returns>a two-term proposition of form A</returns>
+    /// <returns>a two-term proposition of form O</returns>
     public static Matrix FormO( Term aSubject, Term aPredicate, bool aExistentialImport = false )
     {
       Variable lVariable1 = Variable( 'x' );
@@ -289,6 +288,36 @@ namespace Logic
       }
 
       return lProposition;
+    }
+
+    /// <summary>
+    /// Create a two-term proposition of form U.
+    /// </summary>
+    /// <param name="aSubject">the subject term</param>
+    /// <param name="aPredicate">the predicate term</param>
+    /// <returns>a two-term proposition of form U</returns>
+    public static Matrix FormU( Term aSubject, Term aPredicate, bool aExistentialImport = false )
+    {
+      Variable lVariable = Variable( 'x' );
+
+      return Or(
+        ForAll( lVariable, Factory.OnlyIf( aSubject.Apply( lVariable ), aPredicate.Apply( lVariable ) ) ),
+        ForAll( lVariable, Factory.OnlyIf( aSubject.Apply( lVariable ), Not( aPredicate.Apply( lVariable ) ) ) ) );
+    }
+
+    /// <summary>
+    /// Create a two-term proposition of form Y.
+    /// </summary>
+    /// <param name="aSubject">the subject term</param>
+    /// <param name="aPredicate">the predicate term</param>
+    /// <returns>a two-term proposition of form Y</returns>
+    public static Matrix FormY( Term aSubject, Term aPredicate, bool aExistentialImport = false )
+    {
+      Variable lVariable = Variable( 'x' );
+
+      return And(
+        ThereExists( lVariable, And( aSubject.Apply( lVariable ), aPredicate.Apply( lVariable ) ) ),
+        ThereExists( lVariable, And( aSubject.Apply( lVariable ), Not( aPredicate.Apply( lVariable ) ) ) ) );
     }
 	}
 }

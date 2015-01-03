@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -79,10 +79,10 @@ namespace Logic
 
     private static void PrintUsage()
     {
-      Console.WriteLine( "Usage: mpl.exe [proposition file] [another proposition file] ..." );
+      Console.WriteLine( "Usage: upl.exe [proposition file] [another proposition file] ..." );
       Console.WriteLine();
       Console.WriteLine( "Parse each file in the command line and decide if the proposition in the is " );
-      Console.WriteLine( "is necessarily true, contingent, or self-contradictory." );
+      Console.WriteLine( "is necessary, contingent, or self-contradictory." );
     }
 
     private static void DecidePropositionInFile( string aPath )

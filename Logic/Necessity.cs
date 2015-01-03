@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -42,6 +42,26 @@ namespace Logic
       get { return true; }
     }
 
+    internal override string DOTLabel
+    {
+      get { return "<Necessity<BR/><B><FONT FACE=\"MONOSPACE\">[]</FONT></B>>"; }
+    }
+
+    internal override IEnumerable<Necessity> FreeModalities
+    {
+      get { return mInnerMatrix.FreeModalities.Where( fModality => fModality != this ); }
+    }
+
+    internal override int MaxmimumNumberOfModalitiesInIdentifications
+    {
+      get
+      {
+        return Math.Max(
+          mInnerMatrix.MaxmimumNumberOfModalitiesInIdentifications,
+          mInnerMatrix.FreeModalities.Intersect( mInnerMatrix.ModalitiesInIdentifications ).Count() );
+      }
+    }
+
     private bool Memoizible
     {
       get { return !mInnerMatrix.ContainsModalities && !this.FreeVariables.Any(); }
@@ -73,25 +93,5 @@ namespace Logic
 	  {
 	    return string.Format( "[]{0}", mInnerMatrix );
 	  }
-
-    internal override string DOTLabel
-    {
-      get { return "<Necessity<BR/><B><FONT FACE=\"MONOSPACE\">[]</FONT></B>>"; }
-    }
-
-    internal override IEnumerable<Necessity> FreeModalities
-    {
-      get { return mInnerMatrix.FreeModalities.Where( fModality => fModality != this ); }
-    }
-
-    internal override int MaxmimumNumberOfModalitiesInIdentifications
-    {
-      get
-      {
-        return Math.Max(
-          mInnerMatrix.MaxmimumNumberOfModalitiesInIdentifications,
-          mInnerMatrix.FreeModalities.Intersect( mInnerMatrix.ModalitiesInIdentifications ).Count() );
-      }
-    }
   }
 }

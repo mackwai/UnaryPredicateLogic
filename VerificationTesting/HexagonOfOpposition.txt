@@ -1,0 +1,24 @@
+// Contraries
+~( SaP & SeP )
+~( SeP & SyP )
+~( SaP & SyP )
+
+// Contradictories
+SaP ^ SoP
+SiP ^ SeP
+SuP ^ SyP
+
+// Subcontraries
+SiP | SoP
+SiP | SuP
+SoP | SuP
+
+// Subalterns
+SaP -> SiP
+SaP -> SuP
+SeP -> SoP
+SeP -> SuP
+SyP -> SiP
+SyP -> SoP
+
+// Expected Result: Necessary

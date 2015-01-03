@@ -3,4 +3,4 @@ x,Gx->Hx
 ->
 3x,Gx
 
-// Expected Result: MerelyPossible
+// Expected Result: Contingent

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
   somerby.net/mack/logic
-  Copyright (C) 2014 MacKenzie Cumings
+  Copyright (C) 2015 MacKenzie Cumings
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -70,6 +70,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <Prefer32Bit>false</Prefer32Bit>
     <PlatformTarget>x86</PlatformTarget>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <ItemGroup>
@@ -100,6 +101,7 @@
     <Compile Include="Equivalence.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="Predicates.cs" />
+    <Compile Include="ReferenceComparer.cs" />
     <Compile Include="Term.cs" />
     <Compile Include="UniversalGeneralization.cs" />
     <Compile Include="Necessity.cs" />

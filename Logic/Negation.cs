@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -26,30 +26,30 @@ namespace Logic
       : base( aProposition )
     {
     }
-    
-    internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
-		{
-      return !mInnerMatrix.TrueIn( aInterpretation, aKindOfWorld, aPredicates );
-		}
-
-    public override bool Propositional
-    {
-      get { return mInnerMatrix.Propositional; }
-    }
-
-    public override string ToString()
-    {
-      return string.Format( "~{0}", mInnerMatrix );
-    }
-
+  
     internal override string DOTLabel
     {
       get { return "<Negation<BR/><B><FONT FACE=\"MONOSPACE\">~</FONT></B>>"; }
     }
 
+    public override bool IsPropositional
+    {
+      get { return mInnerMatrix.IsPropositional; }
+    }
+
     internal override void AssignModality( Necessity aNecessity )
     {
       mInnerMatrix.AssignModality( aNecessity );
+    }
+
+    internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
+    {
+      return !mInnerMatrix.TrueIn( aInterpretation, aKindOfWorld, aPredicates );
+    }
+
+    public override string ToString()
+    {
+      return string.Format( "~{0}", mInnerMatrix );
     }
   }
 }

@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -33,16 +33,6 @@ namespace Logic
 		{
 			mVariable = aVariable;
 		}
-		
-		internal Variable Variable
-		{
-			get { return mVariable; }
-		}
-
-    internal override IEnumerable<Variable> FreeVariables
-    {
-      get { return mInnerMatrix.FreeVariables.Where( fVariable => !fVariable.Equals( mVariable ) ); }
-    }
 
     internal override IEnumerable<Tuple<UniversalGeneralization, Matrix>> ClosedPredications
     {
@@ -51,6 +41,21 @@ namespace Logic
         return NonNullPredications.Where( fPredication => fPredication.FreeVariables.Any( fVariable => fVariable == this.Variable ) )
           .Select( fPredication => Tuple.Create( this, fPredication ) ).Concat( mInnerMatrix.ClosedPredications );
       }
+    }
+
+    internal override string DOTLabel
+    {
+      get
+      {
+        return String.Format(
+          "<Universal Generalization<BR/><B><FONT FACE=\"MONOSPACE\">{0},</FONT></B>>",
+          this.mVariable );
+      }
+    }
+
+    internal override IEnumerable<Variable> FreeVariables
+    {
+      get { return mInnerMatrix.FreeVariables.Where( fVariable => !fVariable.Equals( mVariable ) ); }
     }
 
     internal override int MaxmimumNumberOfDistinguishableObjects
@@ -63,6 +68,17 @@ namespace Logic
       }
     }
 		
+		internal Variable Variable
+		{
+			get { return mVariable; }
+		}
+
+    internal override void AssignModality( Necessity aNecessity )
+    {
+      mVariable.Modality = aNecessity;
+      mInnerMatrix.AssignModality( aNecessity );
+    }
+
 		internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
 		{
       foreach ( string lKindOfObject in aPredicates.GetKindsOfObjectsIn( aKindOfWorld ) )
@@ -86,26 +102,10 @@ namespace Logic
 
     //  return mInnerMatrix.TrueIn( aInterpretation, aKindOfWorld, aPredicates );
     //}
-		
-		public override string ToString()
-		{
-			return string.Format( "({0},{1})", mVariable, mInnerMatrix );
-		}
 
-    internal override string DOTLabel
+    public override string ToString()
     {
-      get
-      {
-        return String.Format(
-          "<Universal Generalization<BR/><B><FONT FACE=\"MONOSPACE\">{0},</FONT></B>>",
-          this.mVariable );
-      }
-    }
-
-    internal override void AssignModality( Necessity aNecessity )
-    {
-      mVariable.Modality = aNecessity;
-      mInnerMatrix.AssignModality( aNecessity );
+      return string.Format( "({0},{1})", mVariable, mInnerMatrix );
     }
 	}
 }

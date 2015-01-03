@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -322,6 +322,12 @@ namespace UnitTests
     public void Test_SquareOfOppositionWithSomeNegations()
     {
       TestPropositionFile( @"..\..\..\VerificationTesting\SquareOfOppositionWithSomeNegations.txt" );
+    }
+
+    [TestMethod]
+    public void Test_HexagonOfOpposition()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\HexagonOfOpposition.txt" );
     }
 
     [TestMethod]

@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -58,21 +58,44 @@ namespace Logic
         throw new EngineException( "Too many predicates!" );
     }
 
-    public IEnumerable<uint> Interpretations
+    /// <summary>
+    /// The first bits in the encoding represent null predicates; if all bits above
+    /// these bits are zero, then the encoding represents a kind of world with
+    /// nothing in it.
+    /// </summary>
+    public uint FirstNonemptyWorld
     {
-      get
+      get { return mBitsNeededToDistinguishObjects == 0 ? 0 : 1U << NumberOfNullPredicates; }
+    }
+
+    //public IEnumerable<uint> Interpretations
+    //{
+    //  get
+    //  {
+    //    if ( mModalitiesPresent )
+    //    {
+    //      for ( uint i = LastInterpretation; i > 0; i-- )
+    //      {
+    //        yield return i;
+    //      }
+    //    }
+    //    else
+    //    {
+    //      yield return LastInterpretation;
+    //    }
+    //  }
+    //}
+
+    public IEnumerable<string> GetKindsOfObjectsIn( uint aKindOfWorld )
+    {
+      int lNumberOfCombinationsOfUnaryPredicates = NumberOfCombinationsOfUnaryPredicates;
+
+      for ( int lPredicateCombination = 0; lPredicateCombination < lNumberOfCombinationsOfUnaryPredicates; lPredicateCombination++ )
       {
-        if ( mModalitiesPresent )
-        {
-          for ( uint i = LastInterpretation; i > 0; i-- )
-          {
-            yield return i;
-          }
-        }
-        else
-        {
-          yield return LastInterpretation;
-        }
+        uint lDistinguishableInstancesOfThisPredicateCombination =
+          DistingiushableInstancesOfThisPredicateCombination( aKindOfWorld, lPredicateCombination );
+        for ( uint i = 0; i < lDistinguishableInstancesOfThisPredicateCombination; i++ )
+          yield return BuildUnaryPredicateCombination( lPredicateCombination, i );
       }
     }
     
@@ -101,14 +124,19 @@ namespace Logic
       }
     }
 
-    /// <summary>
-    /// The first bits in the encoding represent null predicates; if all bits above
-    /// these bits are zero, then the encoding represents a kind of world with
-    /// nothing in it.
-    /// </summary>
-    public uint FirstNonemptyWorld
+    public uint LastInterpretation
     {
-      get { return mBitsNeededToDistinguishObjects == 0 ? 0 : 1U << NumberOfNullPredicates; }
+      get { return mBitsNeeded == BitsAvailable ? 0xFFFFFFFF : ( 1U << (int) mBitsNeeded ) - 1U; }
+    }
+
+    public uint LastKindOfWorld
+    {
+      get { return mBitsNeeded == BitsAvailable ? 0xFFFFFFFF : ( 1U << (int) mBitsNeededToDistinguishWorlds ) - 1U; }
+    }
+
+    public uint FirstInterpretation
+    {
+      get { return mModalitiesPresent ? 1U : LastInterpretation; }
     }
 
     public bool TrueIn( NullPredicate aPredicate, uint aKindOfWorld )
@@ -121,36 +149,38 @@ namespace Logic
 
       throw new EngineException( "Null predicate {0}. not found in proposition.", aPredicate );
     }
-    
-    public IEnumerable<string> GetKindsOfObjectsIn( uint aKindOfWorld )
+
+    /// <summary>
+    /// Calculate the number of bits needed to enumerate aNumber different things.
+    /// </summary>
+    /// <param name="aNumber">the number of different that are to be enumerated</param>
+    /// <returns>the number of bits needed to enumerate aNumber different things</returns>
+    private static int BitsNeededToEnumerate( int aNumber )
     {
-		  int lNumberOfCombinationsOfUnaryPredicates = NumberOfCombinationsOfUnaryPredicates;
-		  
-		  for ( int lPredicateCombination = 0; lPredicateCombination < lNumberOfCombinationsOfUnaryPredicates; lPredicateCombination++ )
-			{
-        uint lDistinguishableInstancesOfThisPredicateCombination =
-          DistingiushableInstancesOfThisPredicateCombination( aKindOfWorld, lPredicateCombination );
-        for ( uint i = 0; i < lDistinguishableInstancesOfThisPredicateCombination; i++ )
-				  yield return BuildUnaryPredicateCombination( lPredicateCombination, i );
-			}
-		}
-    
+      int i;
+      aNumber--;
+
+      for ( i = 0; aNumber > 0; aNumber >>= 1, i++ ) ;
+
+      return i;
+    }
+
     private string BuildUnaryPredicateCombination( int aKindOfObject, uint aInstanceNumber )
     {
       char[] lPredicateCombination = new char[ 6 ];
       int lIndex = 0;
-      
+
       foreach ( UnaryPredicate lPredicate in mUnaryPredicates )
       {
         if ( ( aKindOfObject & 1 ) != 0 )
           lPredicateCombination[ lIndex++ ] = lPredicate.Letter;
-        
+
         aKindOfObject >>= 1;
       }
 
       // Add a character that correspondS to the instance number to the string.  The character
       // must not be a capital letter.
-      lPredicateCombination[ lIndex ] = (char)(aInstanceNumber + 32);
+      lPredicateCombination[ lIndex ] = (char) ( aInstanceNumber + 32 );
 
       return new String( lPredicateCombination, 0, lIndex + 1 );
     }
@@ -166,54 +196,24 @@ namespace Logic
       return ( aKindOfWorld >> ( mBitsNeededToDistinguishObjects * aKindOfObject + NumberOfNullPredicates ) ) & lBitMask;
 		}
 
-    private bool VerifiesPredicate( uint aKindOfWorld, int aPredicate )
-    {
-      return ( ( aKindOfWorld >> aPredicate ) & 1U ) == 1U;
-    }
-
-    internal uint LastInterpretation
-    {
-      get { return mBitsNeeded == BitsAvailable ? 0xFFFFFFFF : ( 1U << (int) mBitsNeeded ) - 1U; }
-    }
-
-    internal uint FirstInterpretation
-    {
-      get { return mModalitiesPresent ? 1U : LastInterpretation; }
-    }
-
-    internal uint LastKindOfWorld
-    {
-      get { return mBitsNeeded == BitsAvailable ? 0xFFFFFFFF : ( 1U << (int) mBitsNeededToDistinguishWorlds ) - 1U; }
-    }
-    
-    private int NumberOfUnaryPredicates
-    {
-      get { return mUnaryPredicates.Length; }
-    }
-
-    internal int NumberOfNullPredicates
-    {
-      get { return mNullPredicates.Length; }
-    }
-    
     private int NumberOfCombinationsOfUnaryPredicates
     {
       get { return 1 << NumberOfUnaryPredicates; }
     }
 
-    /// <summary>
-    /// Calculate the number of bits needed to enumerate aNumber different things.
-    /// </summary>
-    /// <param name="aNumber">the number of different that are to be enumerated</param>
-    /// <returns>the number of bits needed to enumerate aNumber different things</returns>
-    private static int BitsNeededToEnumerate( int aNumber )
+    private int NumberOfNullPredicates
     {
-      int i;
-      aNumber--;
+      get { return mNullPredicates.Length; }
+    }
 
-      for ( i = 0; aNumber > 0; aNumber >>= 1, i++ );
+    private int NumberOfUnaryPredicates
+    {
+      get { return mUnaryPredicates.Length; }
+    }
 
-      return i;
+    private bool VerifiesPredicate( uint aKindOfWorld, int aPredicate )
+    {
+      return ( ( aKindOfWorld >> aPredicate ) & 1U ) == 1U;
     }
   }
 }

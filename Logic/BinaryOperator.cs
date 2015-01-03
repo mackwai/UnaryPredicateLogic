@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,26 +22,56 @@ using System.Linq;
 namespace Logic
 {
   /// <summary>
-  /// a binary operator that represent a function of the truth values of two propositions
+  /// a binary operator that represents a function of the truth values of two matrices
   /// </summary>
   internal abstract class BinaryOperator : Matrix
 	{
 	  private readonly Matrix mLeft;
     private readonly Matrix mRight;
-		
-		protected Matrix Left
-		{
-		  get { return mLeft; }
-		}
-		
-		protected Matrix Right
-		{
-		  get { return mRight; }
-		}
+
+    internal BinaryOperator( Matrix aLeft, Matrix aRight )
+    {
+      this.mLeft = aLeft;
+      this.mRight = aRight;
+    }
+
+    protected Matrix Left
+    {
+      get { return mLeft; }
+    }
+
+    protected Matrix Right
+    {
+      get { return mRight; }
+    }
+
+    internal override IEnumerable<Tuple<UniversalGeneralization, Matrix>> ClosedPredications
+    {
+      get { return Left.ClosedPredications.Union( Right.ClosedPredications ); }
+    }
     
     protected abstract string Connector
     {
       get;
+    }
+
+    internal override IEnumerable<Tuple<Matrix, Matrix>> DirectDependencies
+    {
+      get
+      {
+        yield return Tuple.Create( this as Matrix, Left );
+        yield return Tuple.Create( this as Matrix, Right );
+
+        foreach ( Tuple<Matrix, Matrix> lPair in Left.DirectDependencies )
+        {
+          yield return lPair;
+        }
+
+        foreach ( Tuple<Matrix, Matrix> lPair in Right.DirectDependencies )
+        {
+          yield return lPair;
+        }
+      }
     }
 
     internal override IEnumerable<Variable> FreeVariables
@@ -69,9 +99,27 @@ namespace Logic
       get { return Left.ContainsModalities || Right.ContainsModalities; }
     }
 
-    public override bool Propositional
+    public override bool IsPropositional
     {
-      get { return mLeft.Propositional && mRight.Propositional; }
+      get { return mLeft.IsPropositional && mRight.IsPropositional; }
+    }
+
+    internal override IEnumerable<Matrix> Matrices
+    {
+      get
+      {
+        yield return this;
+
+        foreach ( Matrix lMatrix in Left.Matrices )
+        {
+          yield return lMatrix;
+        }
+
+        foreach ( Matrix lMatrix in Right.Matrices )
+        {
+          yield return lMatrix;
+        }
+      }
     }
 
     internal override int MaxmimumNumberOfDistinguishableObjects
@@ -93,79 +141,31 @@ namespace Logic
           Right.MaxmimumNumberOfModalitiesInIdentifications );
       }
     }
-    
-    internal BinaryOperator( Matrix aLeft, Matrix aRight )
-		{
-		  this.mLeft = aLeft;
-		  this.mRight = aRight;
-		}
-    
-    public override string ToString()
-    {
-      return string.Format( "({0}{1}{2})", Left, Connector, Right );
-    }
-    
-    internal override IEnumerable<UnaryPredicate> UnaryPredicates()
-    {
-      return Left.UnaryPredicates().Union( Right.UnaryPredicates() );
-    }
-
-    internal override IEnumerable<NullPredicate> NullPredicates()
-    {
-      return Left.NullPredicates().Union( Right.NullPredicates() );
-    }
 
     internal override IEnumerable<Matrix> NonNullPredications
     {
       get { return Left.NonNullPredications.Union( Right.NonNullPredications ); }
     }
 
-    internal override IEnumerable<Matrix> Matrices
+    internal override IEnumerable<NullPredicate> NullPredicates
     {
-      get
-      {
-        yield return this;
-
-        foreach ( Matrix lMatrix in Left.Matrices )
-        {
-          yield return lMatrix;
-        }
-
-        foreach ( Matrix lMatrix in Right.Matrices )
-        {
-          yield return lMatrix;
-        }
-      }
+      get { return Left.NullPredicates.Union( Right.NullPredicates ); }
     }
 
-    internal override IEnumerable<Tuple<UniversalGeneralization, Matrix>> ClosedPredications
+    internal override IEnumerable<UnaryPredicate> UnaryPredicates
     {
-      get { return Left.ClosedPredications.Union( Right.ClosedPredications ); }
-    }
-
-    internal override IEnumerable<Tuple<Matrix, Matrix>> DirectDependencies
-    {
-      get
-      {
-        yield return Tuple.Create( this as Matrix, Left );
-        yield return Tuple.Create( this as Matrix, Right );
-
-        foreach ( Tuple<Matrix, Matrix> lPair in Left.DirectDependencies )
-        {
-          yield return lPair;
-        }
-
-        foreach ( Tuple<Matrix, Matrix> lPair in Right.DirectDependencies )
-        {
-          yield return lPair;
-        }
-      }
+      get { return Left.UnaryPredicates.Union( Right.UnaryPredicates ); }
     }
 
     internal override void AssignModality( Necessity aNecessity )
     {
       Left.AssignModality( aNecessity );
       Right.AssignModality( aNecessity );
+    }
+
+    public override string ToString()
+    {
+      return string.Format( "({0}{1}{2})", Left, Connector, Right );
     }
 	}
 }

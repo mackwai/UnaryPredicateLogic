@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -31,50 +31,15 @@ namespace Logic
     {
       mInnerMatrix = aInnerMatrix;
     }
-    
-    internal override IEnumerable<UnaryPredicate> UnaryPredicates()
-    {
-      return mInnerMatrix.UnaryPredicates();
-    }
 
-    internal override IEnumerable<NullPredicate> NullPredicates()
+    internal override IEnumerable<Tuple<UniversalGeneralization, Matrix>> ClosedPredications
     {
-      return mInnerMatrix.NullPredicates();
-    }
-
-    internal override IEnumerable<Variable> FreeVariables
-    {
-      get { return mInnerMatrix.FreeVariables; }
-    }
-
-    internal override IEnumerable<Necessity> FreeModalities
-    {
-      get { return mInnerMatrix.FreeModalities; }
-    }
-
-    internal override IEnumerable<Variable> IdentifiedVariables
-    {
-      get { return mInnerMatrix.IdentifiedVariables; }
-    }
-
-    internal override IEnumerable<Necessity> ModalitiesInIdentifications
-    {
-      get { return mInnerMatrix.ModalitiesInIdentifications; }
+      get { return mInnerMatrix.ClosedPredications; }
     }
 
     internal override bool ContainsModalities
     {
       get { return mInnerMatrix.ContainsModalities; }
-    }
-
-    internal override IEnumerable<Matrix> NonNullPredications
-    {
-      get { return mInnerMatrix.NonNullPredications; }
-    }
-
-    internal override IEnumerable<Tuple<UniversalGeneralization, Matrix>> ClosedPredications
-    {
-      get { return mInnerMatrix.ClosedPredications; }
     }
 
     internal override IEnumerable<Tuple<Matrix, Matrix>> DirectDependencies
@@ -87,6 +52,21 @@ namespace Logic
           yield return lPair;
         }
       }
+    }
+
+    internal override IEnumerable<Necessity> FreeModalities
+    {
+      get { return mInnerMatrix.FreeModalities; }
+    }
+
+    internal override IEnumerable<Variable> FreeVariables
+    {
+      get { return mInnerMatrix.FreeVariables; }
+    }
+
+    internal override IEnumerable<Variable> IdentifiedVariables
+    {
+      get { return mInnerMatrix.IdentifiedVariables; }
     }
 
     internal override IEnumerable<Matrix> Matrices
@@ -109,6 +89,26 @@ namespace Logic
     internal override int MaxmimumNumberOfModalitiesInIdentifications
     {
       get { return mInnerMatrix.MaxmimumNumberOfModalitiesInIdentifications; }
+    }
+
+    internal override IEnumerable<Necessity> ModalitiesInIdentifications
+    {
+      get { return mInnerMatrix.ModalitiesInIdentifications; }
+    }
+
+    internal override IEnumerable<Matrix> NonNullPredications
+    {
+      get { return mInnerMatrix.NonNullPredications; }
+    }
+
+    internal override IEnumerable<NullPredicate> NullPredicates
+    {
+      get { return mInnerMatrix.NullPredicates; }
+    }
+    
+    internal override IEnumerable<UnaryPredicate> UnaryPredicates
+    {
+      get { return mInnerMatrix.UnaryPredicates; }
     }
   }
 }

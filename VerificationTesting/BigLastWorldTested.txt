@@ -34,4 +34,4 @@
 3x,~Ax&~Bx&Cx&~Dx&~Ex
 3x,~Ax&~Bx&~Cx&~Dx&~Ex
 
-// Expected Result: MerelyPossible
+// Expected Result: Contingent

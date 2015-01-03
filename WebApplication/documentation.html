@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   somerby.net/mack/logic
-  Copyright (C) 2014 MacKenzie Cumings
+  Copyright (C) 2015 MacKenzie Cumings
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -56,11 +56,12 @@
 <ul class="bulletted">
   <li><a href="#language_logical_operators">Unary and binary logical operators</a></li>
   <li><a href="#language_variable">Variables</a></li>
-  <li>Predicates for <a href="#language_unary_predicate">one variable</a> (properties) and <a href="#language_nullary_predicate">zero variables</a> (propositions)</li>
+  <li>Predicates on <a href="#language_unary_predicate">one variable</a> (properties) and <a href="#language_nullary_predicate">zero variables</a> (propositions)</li>
   <li><a href="#language_grouping">Grouping</a></li>
   <li><a href="#language_universal_generalization">Universal generalizations</a> and <a href="#language_existential_quantification">existential quantifications</a></li>
   <li><a href="#language_identity">Identity</li>
   <li><a href="#language_modal_operators">The modal operators for necessity and possibility</a></li>
+  <li><a href="#language_two_term_propositions">Two-term Propositions</a></li>
 </ul>
 
 <h4 id="language_logical_operators">Logical Operators</h4>
@@ -69,13 +70,13 @@
 
 <table>
   <tr><th>Operator</th><th>Symbol</th><th>Description</th></tr>
-  <tr><td>negation</td><td><span class="symbolic">~</span></td><td>Logical NOT</td></tr>
-  <tr><td>conjunction</td><td><span class="symbolic">&amp;</span></td><td>Logical AND</td></tr>
-  <tr><td>disjunction</td><td><span class="symbolic">|</span></td><td>Logical OR</td></tr>
-  <tr><td>material conditional</td><td><span class="symbolic">-&gt;</span></td><td>
-  <tr><td>biconditional</td><td><span class="symbolic">&lt;=&gt;</span></td><td>Logical equivalence</td></tr>
-  <tr><td>joint denial</td><td><span class="symbolic">!</span></td><td>Logical NOR</td></tr>
-  <tr><td>exclusive disjunction</td><td><span class="symbolic">^</span></td><td>Logical XOR</td></tr>
+  <tr><td>negation</td>             <td><span class="symbolic">~</span></td>        <td>Logical NOT</td></tr>
+  <tr><td>conjunction</td>          <td><span class="symbolic">&amp;</span></td>    <td>Logical AND</td></tr>
+  <tr><td>disjunction</td>          <td><span class="symbolic">|</span></td>        <td>Logical OR</td></tr>
+  <tr><td>material conditional</td> <td><span class="symbolic">-&gt;</span></td>    <td></td></tr>
+  <tr><td>biconditional</td>        <td><span class="symbolic">&lt;=&gt;</span></td><td>Logical equivalence</td></tr>
+  <tr><td>joint denial</td>         <td><span class="symbolic">!</span></td>        <td>Logical NOR</td></tr>
+  <tr><td>exclusive disjunction</td><td><span class="symbolic">^</span></td>        <td>Logical XOR</td></tr>
 </table>
 
 <p>The binary logical operators all have the same precedence and are left associative.  For example,</p>
@@ -103,11 +104,11 @@
 
 <pre class="symbolic">3x,3y, Px|Py</pre>
 
-<h4 id="language_nullary_predicate">Predicates of Zero Variables</h4>
+<h4 id="language_nullary_predicate">Predicates on Zero Variables</h4>
 
 <p>A predicate of zero variables, which can be thought of as representing a contingent, true/false proposition, is represented by a single capital letter.</p>
 
-<h4 id="language_unary_predicate">Predicates of One Variable</h4>
+<h4 id="language_unary_predicate">Predicates on One Variable</h4>
 
 <p>A predication on one variable, which can be thought of the assertion that an object has some property, is represented by a single capital letter (the predicate) followed by a single lowercase letter (the variable).  You can use the same capital letter as a predicate over one variable and a predicate over zero variables in the same expression and the software will treat them as distinct predicates, for example</p>
 
@@ -168,6 +169,22 @@
 <h4 id="language_modal_operators">Modal Operators</h4>
 
 <p>The software recognizes two modal operators, "<span class="symbolic">[]</span>" for necessity and "<span class="symbolic">&lt;&gt;</span>" for possibility.  They are right-associative and have the same precedence as negation.</p>
+
+<h4 id="language_two_term_propositions">Two-term Propositions</h4>
+
+<p>The software recognizes the two-term propositions of what is variously called <a href="http://en.wikipedia.org/wiki/Term_logic" target="_blank">"term", "Aristotelian" or "traditional" logic</a>.  It effectively treats them as shorthand for statements of unary predicate logic.  In order to make the traditional <a href="http://en.wikipedia.org/wiki/Square_of_opposition" target="_blank">Square of Opposition</a> hold true, the A-form proposition is given existential import and the O-form proposition is denied existential import, per what was argued by <a href="http://plato.stanford.edu/entries/square/" target="_blank">Terence Parsons</a>.  <!-- It also recognizes the U-form and Y-form of the <a href="http://en.wikipedia.org/wiki/Logical_hexagon">Hexagon of Opposition</a>  --></p>
+
+<table>
+  <tr><th>Symbol</th><th>Proposition</th><th>Definition</th></tr>
+  <tr><td><span class="symbolic">SaP</span></td><td>All S are P</td>                      <td><span class="symbolic">(x,Sx-&gt;Px)&amp;(3x,Sx)</span></td></tr>
+  <tr><td><span class="symbolic">SeP</span></td><td>No S are P</td>                       <td><span class="symbolic">x,Sx-&gt;~Px</span></td></tr>
+  <tr><td><span class="symbolic">SiP</span></td><td>Some S is P</td>                      <td><span class="symbolic">3x,Sx&amp;Px</span></td></tr>
+  <tr><td><span class="symbolic">SoP</span></td><td>Not all S are P</td>                  <td><span class="symbolic">(3x,Sx&amp;~Px)|(~3x,Sx)</span></td></tr>
+<!--  <tr><td><span class="symbolic">SuP</span></td><td>Either all S are P or no S are P </td><td><span class="symbolic">(x,Sx-&gt;Px)|(x,Sx-&gt;~Px)</span></td></tr>
+  <tr><td><span class="symbolic">SyP</span></td><td>Some S are P and some S are not P</td><td><span class="symbolic">(3x,Sx&amp;Px)&amp;(3x,Sx&amp;~Px)</span></td></tr> -->
+</table>
+
+<p>Either term in a proposition can be negated by adding the "<span class="symbolic">~</span>" symbol, for instance, "<span class="symbolic">~Aa~B</span>" will be interpreted as "all non-A are non-B".  A "<span class="symbolic">~</span>" at the front of the expression attaches to the first term and not to the whole expression, so "<span class="symbolic">~Aa~B</span>" is interpreted the same way as "<span class="symbolic">(~Aa~B)</span>" and not the same as "<span class="symbolic">~(Aa~B)</span>".</p>
 
 <h3>Valid Expressions</h3>
 

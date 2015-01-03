@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,23 +22,23 @@ namespace Logic
   /// </summary>
   internal class Equivalence : BinaryOperator
   {
+    internal Equivalence( Matrix aLeft, Matrix aRight ) : base( aLeft, aRight )
+    {
+    }
+
     protected override string Connector
     {
       get { return "<=>"; }
     }
 
-    internal Equivalence( Matrix aLeft, Matrix aRight ) : base( aLeft, aRight )
+    internal override string DOTLabel
     {
+      get { return "<Equivalence<BR/><B><FONT FACE=\"MONOSPACE\">&lt;=&gt;</FONT></B>>"; }
     }
     
     internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
     {
       return Left.TrueIn( aInterpretation, aKindOfWorld, aPredicates ) == Right.TrueIn( aInterpretation, aKindOfWorld, aPredicates );
-    }
-
-    internal override string DOTLabel
-    {
-      get { return "<Equivalence<BR/><B><FONT FACE=\"MONOSPACE\">&lt;=&gt;</FONT></B>>"; }
     }
   }
 }

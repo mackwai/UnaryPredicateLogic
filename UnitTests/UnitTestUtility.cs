@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2014 MacKenzie Cumings
+// Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ namespace UnitTests
     {
       if ( aText.Contains( "Expected Result: Necessary" ) )
         return Alethicity.Necessary;
-      else if ( aText.Contains( "Expected Result: MerelyPossible" ) )
+      else if ( aText.Contains( "Expected Result: Contingent" ) )
         return Alethicity.Contingent;
       else if ( aText.Contains( "Expected Result: Impossible" ) )
         return Alethicity.Impossible;
