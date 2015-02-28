@@ -15,6 +15,9 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Logic
 {
   /// <summary>
@@ -39,6 +42,16 @@ namespace Logic
     internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
     {
       return Left.TrueIn( aInterpretation, aKindOfWorld, aPredicates ) && Right.TrueIn( aInterpretation, aKindOfWorld, aPredicates );
+    }
+
+    internal override IEnumerable<Matrix> Conjuncts
+    {
+      get { return Left.Conjuncts.Concat( Right.Conjuncts ); }
+    }
+
+    internal override Matrix Substitute( Variable aVariable, Variable aReplacement )
+    {
+      return new Conjunction( Left.Substitute( aVariable, aReplacement ), Right.Substitute( aVariable, aReplacement ) );
     }
   }
 }

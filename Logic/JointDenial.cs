@@ -40,6 +40,11 @@ namespace Logic
 		internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
 		{
       return !Left.TrueIn( aInterpretation, aKindOfWorld, aPredicates ) && !Right.TrueIn( aInterpretation, aKindOfWorld, aPredicates );
-		}    
+		}
+
+    internal override Matrix Substitute( Variable aVariable, Variable aReplacement )
+    {
+      return new JointDenial( Left.Substitute( aVariable, aReplacement ), Right.Substitute( aVariable, aReplacement ) );
+    }
 	}
 }

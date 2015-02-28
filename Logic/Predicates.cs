@@ -88,14 +88,23 @@ namespace Logic
 
     public IEnumerable<string> GetKindsOfObjectsIn( uint aKindOfWorld )
     {
-      int lNumberOfCombinationsOfUnaryPredicates = NumberOfCombinationsOfUnaryPredicates;
-
-      for ( int lPredicateCombination = 0; lPredicateCombination < lNumberOfCombinationsOfUnaryPredicates; lPredicateCombination++ )
+      if ( NumberOfUnaryPredicates == 0 && mBitsNeededToDistinguishObjects == 0 )
       {
-        uint lDistinguishableInstancesOfThisPredicateCombination =
-          DistingiushableInstancesOfThisPredicateCombination( aKindOfWorld, lPredicateCombination );
-        for ( uint i = 0; i < lDistinguishableInstancesOfThisPredicateCombination; i++ )
-          yield return BuildUnaryPredicateCombination( lPredicateCombination, i );
+        // This is needed in order to cause the body of the loop in UnviversalGeneralization.TrueIn to execute
+        // once when the proposition being decided contains no unary predicates.
+        yield return "";
+      }
+      //else
+      {
+        int lNumberOfCombinationsOfUnaryPredicates = NumberOfCombinationsOfUnaryPredicates;
+
+        for ( int lPredicateCombination = 0; lPredicateCombination < lNumberOfCombinationsOfUnaryPredicates; lPredicateCombination++ )
+        {
+          uint lDistinguishableInstancesOfThisPredicateCombination =
+            DistinguishableInstancesOfThisPredicateCombination( aKindOfWorld, lPredicateCombination );
+          for ( uint i = 0; i < lDistinguishableInstancesOfThisPredicateCombination; i++ )
+            yield return BuildUnaryPredicateCombination( lPredicateCombination, i );
+        }
       }
     }
     
@@ -185,7 +194,7 @@ namespace Logic
       return new String( lPredicateCombination, 0, lIndex + 1 );
     }
     
-    private uint DistingiushableInstancesOfThisPredicateCombination( uint aKindOfWorld, int aKindOfObject )
+    private uint DistinguishableInstancesOfThisPredicateCombination( uint aKindOfWorld, int aKindOfObject )
 		{
 #if SALTARELLE
       uint lBitMask = (uint) ( ( 1 << mBitsNeededToDistinguishObjects ) - 1 );

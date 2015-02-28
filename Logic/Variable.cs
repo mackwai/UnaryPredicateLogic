@@ -87,5 +87,10 @@ namespace Logic
     {
       return mLetter.ToString();
     }
+
+    internal Variable Substitute( Variable aVariable, Variable aReplacement )
+    {
+      return this.Equals( aVariable ) ? aReplacement : aVariable;
+    }
   }
 }

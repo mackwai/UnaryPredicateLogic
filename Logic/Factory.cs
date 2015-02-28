@@ -176,6 +176,20 @@ namespace Logic
     }
 
     /// <summary>
+    /// Definite Description
+    /// </summary>
+    /// <param name="aVariable">the variable representing the one object for which the matrix is being asserted</param>
+    /// <param name="aInnerMatrix">the matrix that is being asserted</param>
+    /// <returns>an existential quantifier</returns>
+    public static Matrix ThereIsOne( Variable aVariable, Matrix aInnerMatrix )
+    {
+      Variable lVariable = Factory.Variable( 'a' );
+      Matrix lSecondAssertion = aInnerMatrix.Substitute( aVariable, lVariable );
+
+      return ThereExists( aVariable, And( aInnerMatrix, ForAll( lVariable, OnlyIf( lSecondAssertion, Identification( aVariable, lVariable ) ) ) ) );
+    }
+
+    /// <summary>
     /// Create an assertion of logical necessity.
     /// </summary>
     /// <param name="aInnerMatrix">the matrix being asserted for all nonempty worlds</param>

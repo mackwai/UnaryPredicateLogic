@@ -40,7 +40,7 @@
 
 <p>The software is written in C#, then translated into JavaScript with <a href="http://www.saltarelle-compiler.com/" target="_blank">Saltarelle</a>, which is awesome.  The source code is on <a href="https://github.com/mackwai/UnaryPredicateLogic" target="_blank">GitHub</a>.  <a href="https://github.com/mdaines/viz.js/">Viz.js</a> is used to generate diagrams.  The truth table feature is adapted from <a href="https://github.com/mrieppel/TruthTableGenerator" target="_blank">code</a> written by Michael Rieppel.</p>
 
-<p>There are three sections in this documentation.  The <a href="#the_language">first</a> describes the symbolic language that the software recognizes.  The <a href ="#the_algorithm">second</a> explains the algorithm the software follows to decide statements.  The <a href="#future_work">third</a> describes some future work that could or should be done for the software.</p>
+<p>There are three sections in this documentation.  The <a href="#the_language">first</a> describes the symbolic language that the software recognizes.  The <a href ="#the_algorithm">second</a> explains the algorithm the software follows to decide statements.</p>
 
 <h2 id="instructions">Instructions</h2>
 
@@ -96,13 +96,13 @@
 <pre class="symbolic">(~P) &amp; (~Q)</pre>
 
 <h4 id="language_variable">Variables</h4>
-<p>Variables are single lowercase letters that represent some object.  Variables can be bound by a universal generalization or an existential quantification, or left free, but the software will implicitly bind any free variable it finds in an expression with an existential quantification.  For example, if you give the software this:<p>
+<p>Variables are single lowercase letters that represent some object.  Each variable <!--can-->must be bound by a universal generalization or an existential quantification. <!--, or left free, but the software will implicitly bind any free variable it finds in an expression with an existential quantification.  For example, if you give the software this:<p>
 
 <pre class="symbolic">Px|Py</pre>
 
 <p>The software will treat it as if it were</p>
 
-<pre class="symbolic">3x,3y, Px|Py</pre>
+<pre class="symbolic">3x,3y, Px|Py</pre>-->
 
 <h4 id="language_nullary_predicate">Predicates on Zero Variables</h4>
 
@@ -392,7 +392,7 @@ Ms       // Socrates is mortal.
 
 <!--<p>Interestingly, if a proposition contains only nullary predicates and logical connectives and no modalities, unary predicates, or universal generalizations, the software is virtually the same as the <a href="http://en.wikipedia.org/wiki/Truth_table">truth table</a> method for deciding a propositional expression.</p>-->
 
-<p>Either a world has a certain kind of object in it or it doesn't.  If a proposition contains unary predicates and in-world identifications but no nullary predicates, the kinds of worlds it can distinguish are defined in terms of the <a href="#kind_of_object">kinds of objects</a> present or absent in a world.  If the software defines <em>o</em> kinds of objects for such a proposition, then it defines 2<sup><em>o</em></sup>-1 kinds of worlds for that proposition.  One is subtracted from the total number of combinations because the empty world is excluded from evaluation.  The software effectively assumes that there is no such thing as an empty world.  If it didn't, the software would decide that <span class="symbolic">x,Ax&amp;~Ax</span> is possible.  Maybe it should.  Deciding what to do with empty worlds is <a href="#future_work">future work</a>.</p>
+<p>Either a world has a certain kind of object in it or it doesn't.  If a proposition contains unary predicates and in-world identifications but no nullary predicates, the kinds of worlds it can distinguish are defined in terms of the <a href="#kind_of_object">kinds of objects</a> present or absent in a world.  If the software defines <em>o</em> kinds of objects for such a proposition, then it defines 2<sup><em>o</em></sup>-1 kinds of worlds for that proposition.  One is subtracted from the total number of combinations because the empty world is excluded from evaluation.  The software effectively assumes that there is no such thing as an empty world.  If it didn't, the software would decide that <span class="symbolic">x,Ax&amp;~Ax</span> is possible.  Maybe it should.
 
 <p>If a proposition contains nullary predicates and either unary predicates or in-world identifications, the software must define a kind of world for each combination of nullary predicates verified and combinations of kinds of objects present.  This is just the Cartesian product of the two, so there are up to 2<sup><em>n</em></sup>(2<sup><em>o</em></sup>-1) kinds of worlds that must be evaluated.</p>
 
@@ -411,7 +411,7 @@ Ms       // Socrates is mortal.
   <li>or 1 if there are unary predications in the proposition but no identifications.  The intuition is that the software has to try out all possibilities of two objects being identical or not identical if and only if they are ever compared for identity within a proposition.</li>
 </ul>
   
-<p>I don't have proof for this assumption, but it seems to work.  Proving this assumption is <a href="#future_work">future work</a>.</p>
+<p>I don't have proof for this assumption, but it seems to work.  If you doubt it, then don't trust the decisions the software gives for statement that contain identifications.  I won't be hurt if you do.</p>
 
 <p>Altogether, if there are <em>u</em> unary predicates in a proposition and <em>i</em> is the previously mentioned maximum, then up to <em>i</em>2<sup><em>u</em></sup> kinds of objects must be evaluated.</p>
 
@@ -481,17 +481,9 @@ Ms       // Socrates is mortal.
   <tr><td>0</td><td>3</td><td>15</td></tr>
 </table>
 
-<h3 id="future_work">Future Work</h3>
+<h3>Contact</h3>
 
-<ul>
-  <li>The validity of the <a href="#kind_of_object">method</a> the software uses to evaluate propositions that contain identifications needs to be proven.</li>
-  <li>The decision algorithm described in this documentation might need to be proven more rigorously than is what done in this document.</li>
-  <li>The software needs to be verified thoroughly.  I've tested it quite a bit and ensured it gives the correct result for all propositions which I've tried, but software that claims to decide propositions must be 100% correct and proven correct in order to be useful.</li>
-</ul>
-
-<h3 id="feedback">Feedback</h3>
-
-<p>Thanks to Google Analytics, I can see that this site gets returning visitors.  So, dear logicians, I know you're out there.  I want your feedback.  You can contact me at <span id="a"><span id="sgnimuc" class="backwards">g@sgnimuc.eiznekcam</span>mail.com</span> or add a comment to <a href="http://mackwai.blogspot.com/2014/11/feedback-for-somerbynetmacklogic.html" target="_blank">this blog post</a>.</p>
+<p>You can contact me (the developer of this application) by emailing me at <span id="a"><span id="sgnimuc" class="backwards">g@sgnimuc.eiznekcam</span>mail.com</span> or by adding a comment to <a href="http://mackwai.blogspot.com/2014/11/feedback-for-somerbynetmacklogic.html" target="_blank">this blog post</a>.  I'm willing to answer questions or provide help on using the software.</p>
 
 <p>You would be doing me a favor if you were to notify me of<p>
 
@@ -505,14 +497,12 @@ Ms       // Socrates is mortal.
 <p>Also,</p>
 
 <ul>
-  <li>If you find this web app useful, I'm curious to know what you are using it for &mdash; even if it's just to play around with symbolic logic.</li>
+  <li>If you find this web app useful, I'm curious to know what you are using it for.</li>
   <li>If there is any part of the user interface you find confusing, tell me and I'll try to improve it.</li>
   <li>If you have ideas for new features, feel free to suggest them.  I'm open to expanding this web app's functionality, so long as it is in keeping with the Possible Worlds-based approach that the software is using to decide propositions.</li>
 </ul>
 
-<p>Thanks in advance.</p>
-
-<p><i>Se Lei &egrave; in Sud Italia, sono particolarmente interessato a quello che Lei pensa. Io non parlo italiano, ma se mi scrive in italiano, far&ograve; del mio meglio per interpretarlo.  Grazie.</i></p>
+<p id="feedback">Thanks in advance.</p>
 
 </div>
 

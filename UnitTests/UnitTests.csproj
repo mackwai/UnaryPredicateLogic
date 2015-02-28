@@ -73,6 +73,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ConsoleApplicationTesting.cs" />
     <Compile Include="ParseTesting.cs" />
     <Compile Include="BitsNeeded.cs" />
     <Compile Include="PropertyTesting.cs" />

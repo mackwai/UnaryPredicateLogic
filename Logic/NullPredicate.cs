@@ -83,10 +83,14 @@ namespace Logic
       return aPredicates.TrueIn( this, aKindOfWorld );
     }
 
+    internal override Matrix Substitute( Variable aVariable, Variable aReplacement )
+    {
+      return this;
+    }
+
     public override string ToString()
     {
       return mDescription;
     }
-    
   }
 }

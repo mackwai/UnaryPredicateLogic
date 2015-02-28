@@ -25,7 +25,7 @@ namespace Logic
   /// <summary>
   /// possible alethic modalities
   /// </summary>
-  public enum Alethicity { Impossible, Contingent, Necessary };
+  public enum Alethicity { Necessary, Contingent, Impossible };
 
   /// <summary>
   /// A logical structure which is either true or false and may or may not contain free variables.  The term "matrix" is borrowed
@@ -83,13 +83,27 @@ namespace Logic
       get { return false; }
     }
 
-    /// <summary>
-    /// true if this matrix is necessarily true, false otherwise
-    /// </summary>
-    public bool Valid
+    private static Matrix Bind( IEnumerable<Variable> aVariables, Matrix aMatrix, Func<Variable, Matrix, Matrix> aQuantify )
     {
-      get { return this.Decide() == Alethicity.Necessary; }
-    }   
+      Matrix lResult = aMatrix;
+
+      foreach ( Variable lVariable in aVariables )
+      {
+        lResult = aQuantify( lVariable, lResult );
+      }
+
+      return lResult;
+    }
+
+    private Alethicity DecideForFreeVariables()
+    {
+      if ( Bind( FreeVariables, this, Factory.ForAll ).Decide() == Alethicity.Necessary )
+        return Alethicity.Necessary;
+      else if ( Bind( FreeVariables, this, Factory.ThereExists ).Decide() == Alethicity.Impossible )
+        return Alethicity.Impossible;
+      else
+        return Alethicity.Contingent;
+    }
 
     /// <summary>
     /// Decide this matrix as a proposition.  Throw an exception if it contains free variables.  Use up to
@@ -99,6 +113,7 @@ namespace Logic
     public Alethicity Decide()
     {
       if ( this.FreeVariables.Any() )
+        //return DecideForFreeVariables();
         throw new EngineException( "This proposition can't be decided; it contains free variables." );
 
       Predicates lPredicates = new Predicates(
@@ -124,7 +139,7 @@ namespace Logic
       try
       {
 #endif
-        if ( ContainsModalities )
+        if ( ContainsModalities  )
         {
 #if PARALLELIZE
           System.Threading.Tasks.Parallel.For(
@@ -276,6 +291,13 @@ namespace Logic
       return lExclusions;
     }
 
-    internal abstract bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicateDictionary );    
+    internal abstract bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicateDictionary );
+    
+    internal virtual IEnumerable<Matrix> Conjuncts
+    {
+      get { yield return this; }
+    }
+
+    internal abstract Matrix Substitute( Variable aVariable, Variable aReplacement );
 	}
 }

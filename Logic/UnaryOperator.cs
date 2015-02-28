@@ -110,5 +110,20 @@ namespace Logic
     {
       get { return mInnerMatrix.UnaryPredicates; }
     }
+
+    public override bool Equals( object obj )
+    {
+      UnaryOperator that = obj as UnaryOperator;
+
+      if ( that == null )
+        return false;
+
+      return this.GetType().Equals( obj.GetType() ) && mInnerMatrix.Equals( that.mInnerMatrix );
+    }
+
+    public override int GetHashCode()
+    {
+      return base.GetHashCode();
+    }
   }
 }

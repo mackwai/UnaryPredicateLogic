@@ -103,9 +103,29 @@ namespace Logic
     //  return mInnerMatrix.TrueIn( aInterpretation, aKindOfWorld, aPredicates );
     //}
 
+    internal override Matrix Substitute( Variable aVariable, Variable aReplacement )
+    {
+      return new UniversalGeneralization( mVariable.Substitute( aVariable, aReplacement ), mInnerMatrix.Substitute( aVariable, aReplacement ) );
+    }
+
     public override string ToString()
     {
       return string.Format( "({0},{1})", mVariable, mInnerMatrix );
+    }
+
+    public override bool Equals( object obj )
+    {
+      UniversalGeneralization that = obj as UniversalGeneralization;
+
+      if ( that == null )
+        return false;
+
+      return this.mVariable.Equals( that.mVariable ) && base.Equals( obj );
+    }
+
+    public override int GetHashCode()
+    {
+      return base.GetHashCode();
     }
 	}
 }

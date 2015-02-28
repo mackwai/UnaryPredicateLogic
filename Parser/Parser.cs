@@ -32,8 +32,8 @@ namespace Logic
     /// Parse a file containing a list of statements or a logical argument.  Ignore comments and whitespace.
     /// Interpret each line as a statement; conjoin the statements into one statement.  If one line contains
     /// a binary operator, conjoin all statements before it and make them the left side of the operation and
-    /// conjoin all statements after it and make them the right side of the operation.  Bind all free
-    /// variables in existential quantifiers.  Throw a ParseError if the text can't be parsed.
+    /// conjoin all statements after it and make them the right side of the operation.  Throw a ParseError
+    /// if the text can't be parsed.
     /// </summary>
     /// <param name="aFileContents">lines of text, as from a text file</param>
     /// <returns>a proposition</returns>
@@ -105,8 +105,8 @@ namespace Logic
     private static Regex Possibly = ExactMatch( @"<>" );
     private static Regex Necessarily = ExactMatch( @"\[\]" );
     private static Regex ParenthesizedExpression = ExactMatch( @"\(.*\)" );
-    private static Regex TwoTermProposition = ExactMatch( @"(~?)([A-Z])([aeiouy])(~?)([A-Z])" );
-    private static Regex StringPrefixedWithTwoTermProposition = new Regex( @"^~?[A-Z][aeiouy]~?[A-Z]" );
+    private static Regex TwoTermProposition = ExactMatch( @"(~?)([A-Z])([aeiouy])(~?)([A-Z])('?)" );
+    private static Regex StringPrefixedWithTwoTermProposition = new Regex( @"^~?[A-Z][aeiouy]~?[A-Z]'?" );
 
     private static bool AreUnariesFollowedByAQuantifier( IEnumerable<string> aExpressions )
     {
@@ -174,18 +174,18 @@ namespace Logic
         return aCollectedItems.AddUnboundVariable( aSymbol );
     }
 
-    private static Matrix FormTwoTermProposition( Term aSubject, Term aPredicate, char aForm )
+    private static Matrix FormTwoTermProposition( Term aSubject, Term aPredicate, char aForm, bool lModernInterpretation )
     {
       switch ( aForm )
       {
         case 'a':
-          return Factory.FormA( aSubject, aPredicate );
+          return Factory.FormA( aSubject, aPredicate, !lModernInterpretation );
         case 'e':
           return Factory.FormE( aSubject, aPredicate );
         case 'i':
           return Factory.FormI( aSubject, aPredicate );
         case 'o':
-          return Factory.FormO( aSubject, aPredicate );
+          return Factory.FormO( aSubject, aPredicate, lModernInterpretation );
         case 'u':
           return Factory.FormU( aSubject, aPredicate );
         case 'y':
@@ -289,19 +289,7 @@ namespace Logic
 
     private static Matrix Parse( string aString )
     {
-      CollectedItems lCollectedItems = new CollectedItems();
-      VariableDictionary lVariableDictionary = new VariableDictionary();
-      Matrix lParsedMatrix;
-      List<char> lFreeVariableSymbols = new List<char>();
-
-      lParsedMatrix = Parse( aString.GetSubexpressions(), lCollectedItems, lVariableDictionary );
-
-      foreach ( Variable lVariable in lCollectedItems.UnboundVariables )
-      {
-        lParsedMatrix = Factory.ThereExists( lVariable, lParsedMatrix );
-      }
-
-      return lParsedMatrix;
+      return Parse( aString.GetSubexpressions(), new CollectedItems(), new VariableDictionary() );
     }
 
     private static Matrix Parse(
@@ -447,8 +435,9 @@ namespace Logic
       Term lPredicate = Factory.AllAndOnly(
         aCollectedItems.AddUnaryPredicate( lMatch[ 5 ][ 0 ] ),
         lMatch[ 4 ].Length > 0 );
+      bool lModernInterpretation = lMatch[ 6 ].Length > 0;
 
-      return FormTwoTermProposition( lSubject, lPredicate, lMatch[ 3 ][ 0 ] );
+      return FormTwoTermProposition( lSubject, lPredicate, lMatch[ 3 ][ 0 ], lModernInterpretation );
     }
     
     private static Matrix ParseUnaryOperatorOnTail(

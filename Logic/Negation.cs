@@ -47,6 +47,11 @@ namespace Logic
       return !mInnerMatrix.TrueIn( aInterpretation, aKindOfWorld, aPredicates );
     }
 
+    internal override Matrix Substitute( Variable aVariable, Variable aReplacement )
+    {
+      return new Negation( mInnerMatrix.Substitute( aVariable, aReplacement ) );
+    }
+
     public override string ToString()
     {
       return string.Format( "~{0}", mInnerMatrix );

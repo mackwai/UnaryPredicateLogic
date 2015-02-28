@@ -93,5 +93,10 @@ namespace Logic
 	  {
 	    return string.Format( "[]{0}", mInnerMatrix );
 	  }
+
+    internal override Matrix Substitute( Variable aVariable, Variable aReplacement )
+    {
+      return new Necessity( mInnerMatrix.Substitute( aVariable, aReplacement ) );
+    }
   }
 }

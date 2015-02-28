@@ -167,6 +167,18 @@ namespace Logic
     {
       return string.Format( "({0}{1}{2})", Left, Connector, Right );
     }
+
+    public override bool Equals( object obj )
+    {
+      BinaryOperator that = obj as BinaryOperator;
+
+      return this.Left.Equals( that.Left ) && this.Right.Equals( that.Right );
+    }
+
+    public override int GetHashCode()
+    {
+      return Left.GetHashCode() ^ Right.GetHashCode();
+    }
 	}
 }
 

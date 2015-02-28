@@ -40,5 +40,10 @@ namespace Logic
     {
       return Left.TrueIn( aInterpretation, aKindOfWorld, aPredicates ) == Right.TrueIn( aInterpretation, aKindOfWorld, aPredicates );
     }
+
+    internal override Matrix Substitute( Variable aVariable, Variable aReplacement )
+    {
+      return new Equivalence( Left.Substitute( aVariable, aReplacement ), Right.Substitute( aVariable, aReplacement ) );
+    }
   }
 }

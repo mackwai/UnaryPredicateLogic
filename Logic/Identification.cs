@@ -43,7 +43,8 @@ namespace Logic
       Identification that = obj as Identification;
 
       if ( that == null )
-        throw new EngineException( "Identification compared to an object that is not an Identification." );
+        return false;
+        //throw new EngineException( "Identification compared to an object that is not an Identification." );
 
       return ( this.Left.Equals( that.Left ) && this.Right.Equals( that.Right ) )
         || ( this.Left.Equals( that.Right ) && this.Right.Equals( that.Left ) );
@@ -125,6 +126,11 @@ namespace Logic
           "<Identification<BR/><B><FONT FACE=\"MONOSPACE\">{0}</FONT></B>>",
           this.ToString() );
       }
+    }
+
+    internal override Matrix Substitute( Variable aVariable, Variable aReplacement )
+    {
+      return new Identification( Left.Substitute( aVariable, aReplacement ), Right.Substitute( aVariable, aReplacement ) );
     }
   }
 }

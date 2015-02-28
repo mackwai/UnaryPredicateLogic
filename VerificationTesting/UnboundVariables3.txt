@@ -1,0 +1,9 @@
+Q <=> ((~Ta&~Tb&Tc)|(~Ta&Tb&~Tc)|(Ta&~Tb&~Tc))
+Ta <=> Q
+Tb <=> ~Q
+Tc <=> (Ta <=> Tb)
+~(a=b)
+~(b=c)
+~(c=a)
+
+// Expected Result: Contingent

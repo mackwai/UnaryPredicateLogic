@@ -88,12 +88,18 @@ namespace Logic
       return mVariable.InstantiatedKindOfObject.IndexOf( mPredicate.ToString() ) >= 0;
     }
 
+    internal override Matrix Substitute( Variable aVariable, Variable aReplacement )
+    {
+      return new UnaryPredication( mPredicate, mVariable.Substitute( aVariable, aReplacement ) );
+    }
+
     public override bool Equals( object obj )
     {
       UnaryPredication that = obj as UnaryPredication;
 
       if ( that == null )
-        throw new EngineException( "Object of type {0} compared to a {1}", obj.GetType(), this.GetType() );
+        return false;
+        //throw new EngineException( "Object of type {0} compared to a {1}", obj.GetType(), this.GetType() );
 
       return this.mPredicate.Equals( that.mPredicate ) && this.mVariable.Equals( that.mVariable );
     }

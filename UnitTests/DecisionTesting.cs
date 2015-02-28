@@ -162,6 +162,48 @@ namespace UnitTests
     }
 
     [TestMethod]
+    public void Test_UnboundVariables1()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\UnboundVariables1.txt" );
+    }
+
+    [TestMethod]
+    public void Test_UnboundVariables2()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\UnboundVariables2.txt" );
+    }
+
+    [TestMethod]
+    public void Test_UnboundVariables3()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\UnboundVariables3.txt" );
+    }
+
+    [TestMethod]
+    public void Test_UnboundVariables4()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\UnboundVariables4.txt" );
+    }
+
+    [TestMethod]
+    public void Test_UnboundVariables5()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\UnboundVariables5.txt" );
+    }
+
+    [TestMethod]
+    public void Test_ProblemCaseTrivialExistentialQuantification()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\ProblemCaseTrivialExistentialQuantification.txt" );
+    }
+
+    [TestMethod]
+    public void Test_ProblemCaseTrivialUniversalGeneralization()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\ProblemCaseTrivialUniversalGeneralization.txt" );
+    }
+
+    [TestMethod]
     public void Test_Hurley213()
     {
       TestPropositionFile( @"..\..\..\VerificationTesting\Hurley213.txt" );
@@ -310,6 +352,30 @@ namespace UnitTests
     public void Test_OTerm()
     {
       TestPropositionFile( @"..\..\..\VerificationTesting\OTerm.txt" );
+    }
+
+    [TestMethod]
+    public void Test_ModernATerm()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\ModernATerm.txt" );
+    }
+
+    [TestMethod]
+    public void Test_ModernITerm()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\ModernITerm.txt" );
+    }
+
+    [TestMethod]
+    public void Test_ModernETerm()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\ModernETerm.txt" );
+    }
+
+    [TestMethod]
+    public void Test_ModernOTerm()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\ModernOTerm.txt" );
     }
 
     [TestMethod]
