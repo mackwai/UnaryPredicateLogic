@@ -34,6 +34,11 @@ namespace Logic
   /// </summary>
 	public abstract class Matrix : NamedObject
 	{
+    public int Complexity
+    {
+      get { return (int) CollectPredicates().BitsNeeded; }
+    }
+
     /// <summary>
     /// DOT code for a graph diagram of this matrix
     /// </summary>
@@ -83,45 +88,42 @@ namespace Logic
       get { return false; }
     }
 
-    private static Matrix Bind( IEnumerable<Variable> aVariables, Matrix aMatrix, Func<Variable, Matrix, Matrix> aQuantify )
-    {
-      Matrix lResult = aMatrix;
-
-      foreach ( Variable lVariable in aVariables )
-      {
-        lResult = aQuantify( lVariable, lResult );
-      }
-
-      return lResult;
-    }
-
     private Alethicity DecideForFreeVariables()
     {
-      if ( Bind( FreeVariables, this, Factory.ForAll ).Decide() == Alethicity.Necessary )
+      if ( Factory.Bind( FreeVariables, this, Factory.ForAll ).Decide() == Alethicity.Necessary )
         return Alethicity.Necessary;
-      else if ( Bind( FreeVariables, this, Factory.ThereExists ).Decide() == Alethicity.Impossible )
+      else if ( Factory.Bind( FreeVariables, this, Factory.ThereExists ).Decide() == Alethicity.Impossible )
         return Alethicity.Impossible;
       else
         return Alethicity.Contingent;
     }
 
-    /// <summary>
-    /// Decide this matrix as a proposition.  Throw an exception if it contains free variables.  Use up to
-    /// System.Environment.ProcessorCount threads to make the decision.
-    /// </summary>
-    /// <returns>whether this proposition is necessary, contingent or impossible</returns>
-    public Alethicity Decide()
+    private Predicates CollectPredicates()
     {
-      if ( this.FreeVariables.Any() )
-        //return DecideForFreeVariables();
-        throw new EngineException( "This proposition can't be decided; it contains free variables." );
-
-      Predicates lPredicates = new Predicates(
+      return new Predicates(
         NullPredicates,
         UnaryPredicates,
         MaxmimumNumberOfDistinguishableObjects,
         ContainsModalities,
         MaxmimumNumberOfModalitiesInIdentifications );
+    }
+
+    /// <summary>
+    /// Decide this matrix as a proposition.  Throw an exception if it contains both free variables and modal operators.
+    /// Use up to System.Environment.ProcessorCount threads to make the decision.
+    /// </summary>
+    /// <returns>whether this proposition is necessary, contingent or impossible</returns>
+    public Alethicity Decide()
+    {
+      if ( this.FreeVariables.Any() )
+      {
+        if ( ContainsModalities )
+          throw new EngineException( "This proposition can't be decided; it contains both constants and modal operators." );
+        else
+          return DecideForFreeVariables();
+      }
+
+      Predicates lPredicates = CollectPredicates();
 
       bool lNotImpossible = false;
       bool lNotNecessary = false;

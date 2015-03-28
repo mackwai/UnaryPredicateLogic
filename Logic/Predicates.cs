@@ -94,7 +94,7 @@ namespace Logic
         // once when the proposition being decided contains no unary predicates.
         yield return "";
       }
-      //else
+      else
       {
         int lNumberOfCombinationsOfUnaryPredicates = NumberOfCombinationsOfUnaryPredicates;
 
@@ -131,6 +131,11 @@ namespace Logic
           yield return i;
         }
       }
+    }
+
+    public ulong BitsNeeded
+    {
+      get { return mBitsNeeded; }
     }
 
     public uint LastInterpretation

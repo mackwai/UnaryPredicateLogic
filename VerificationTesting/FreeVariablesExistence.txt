@@ -1,0 +1,7 @@
+// Being the value of a free variable shouldn't imply existence.
+(3x,x=g) -> Lg
+3y,Lx
+->
+3x,x=g
+
+// Expected Result: Contingent

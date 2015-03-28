@@ -407,5 +407,32 @@ namespace UnitTests
     {
       TestPropositionFile( @"..\..\..\VerificationTesting\ProblemCaseExistence.txt" );
     }
+
+    [TestMethod]
+    public void Test_FreeVariablesExistence()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\FreeVariablesExistence.txt" );
+    }
+
+    [TestMethod]
+    public void Test_FreeVariables()
+    {
+      TestPropositionIs( Logic.Alethicity.Contingent, @"x,x=y" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"3x,x=y" );
+      TestPropositionIs( Logic.Alethicity.Impossible, @"x,~x=y" );
+      TestPropositionIs( Logic.Alethicity.Contingent, @"3x,~x=y" );
+      TestPropositionIs( Logic.Alethicity.Contingent, @"x,x=y&A" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"(Ax|A)|(Ax|~A)" );
+      TestPropositionIs( Logic.Alethicity.Contingent, @"<>Ax" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"(Ax&~Ax)->(~3y,y=x)" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"(Ax&~Ax)->([]~3y,y=x)" );
+      TestPropositionIs( Logic.Alethicity.Contingent, @"Ax&By" );
+      TestPropositionIs( Logic.Alethicity.Contingent, @"Ax|By" );
+      TestPropositionIs( Logic.Alethicity.Contingent, @"Ax->By" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"(x=y&Ax)->Ay" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"Ax|~Ax" );
+      TestPropositionIs( Logic.Alethicity.Impossible, @"~Ax&Ax" );
+      TestPropositionIs( Logic.Alethicity.Contingent, @"[]Ax" );
+    }
   }
 }

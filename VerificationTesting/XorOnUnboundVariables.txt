@@ -1,6 +1,6 @@
-// Sheila is not Roman
+// Sheila is not Ramon
 ~s=r
-// Either Sheila or Roman will pick rock 'n' roll, but not both.
+// Either Sheila or Ramon will pick rock 'n' roll, but not both.
 ~(Rs<=>Rr)
 
 // Expected Result: Contingent

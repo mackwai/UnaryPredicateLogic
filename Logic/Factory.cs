@@ -15,6 +15,8 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Logic
@@ -332,6 +334,25 @@ namespace Logic
       return And(
         ThereExists( lVariable, And( aSubject.Apply( lVariable ), aPredicate.Apply( lVariable ) ) ),
         ThereExists( lVariable, And( aSubject.Apply( lVariable ), Not( aPredicate.Apply( lVariable ) ) ) ) );
+    }
+
+    /// <summary>
+    /// Bind a set of variables in a matrix with a quantifier.
+    /// </summary>
+    /// <param name="aVariables">a set of variables</param>
+    /// <param name="aMatrix">a matrix</param>
+    /// <param name="aQuantify">a function that binds a variable with a quantifier and returns the resulting Matrix</param>
+    /// <returns>a matrix</returns>
+    public static Matrix Bind( IEnumerable<Variable> aVariables, Matrix aMatrix, Func<Variable, Matrix, Matrix> aQuantify )
+    {
+      Matrix lResult = aMatrix;
+
+      foreach ( Variable lVariable in aVariables )
+      {
+        lResult = aQuantify( lVariable, lResult );
+      }
+
+      return lResult;
     }
 	}
 }

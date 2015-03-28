@@ -30,22 +30,25 @@
 
 <div id="text_column">
 
-<h3><a href="index.html">&#8666 home</a></h3>
+<h3><a href="index.html">&#8666; home</a></h3>
 
 <h1>somerby.net/mack/logic</h1>
 
 <h2 id="introduction">Introduction</h2>
 
-<p>This web application (&quot;the software&quot;) decides the validity/satisfiablity/inconsistency of certain kinds of simple statements in symbolic logic.  Statements can contain nullary predicates, unary predictates, identity, necessity and possbility.  It's something I worked on infrequently for a few years as a .NET application (see <a href="http://mackwai.blogspot.com/2010/08/monadic-predicate-logic.html" target="_blank">here</a> and <a href="http://mackwai.blogspot.com/2011/10/monadic-predicate-logic-with-some-modal.html" target="_blank">here</a>), but now I've improved it and converted into a web application.</p>
+<p>This web application (hereinafter referred to as &quot;the software&quot; or &quot;application&quot;) decides the validity/satisfiablity/inconsistency of certain kinds of simple statements in symbolic logic.</p>
 
-<p>The software is written in C#, then translated into JavaScript with <a href="http://www.saltarelle-compiler.com/" target="_blank">Saltarelle</a>, which is awesome.  The source code is on <a href="https://github.com/mackwai/UnaryPredicateLogic" target="_blank">GitHub</a>.  <a href="https://github.com/mdaines/viz.js/">Viz.js</a> is used to generate diagrams.  The truth table feature is adapted from <a href="https://github.com/mrieppel/TruthTableGenerator" target="_blank">code</a> written by Michael Rieppel.</p>
+<p>Most of the software is written in C# and translated into JavaScript with <a href="http://www.saltarelle-compiler.com/" target="_blank">Saltarelle</a>.  The source code is on <a href="https://github.com/mackwai/UnaryPredicateLogic" target="_blank">GitHub</a>.  <a href="https://github.com/mdaines/viz.js/">Viz.js</a> is used to generate diagrams.  The truth table feature is adapted from <a href="https://github.com/mrieppel/TruthTableGenerator" target="_blank">code</a> written by Michael Rieppel.</p>
 
-<p>There are three sections in this documentation.  The <a href="#the_language">first</a> describes the symbolic language that the software recognizes.  The <a href ="#the_algorithm">second</a> explains the algorithm the software follows to decide statements.</p>
+<p>There are three sections in this documentation.  The <a href="#instructions">first</a> is instructions.  The <a href="#the_language">second</a> describes the symbolic language that the software recognizes.  The <a href ="#the_algorithm">third</a> explains the algorithm that the software follows when it decides statements.</p>
 
 <h2 id="instructions">Instructions</h2>
 
 <p>To use this application, type a logical statement into the textbox on the main page, then click the "Decide" button.  If the application can decide the statement, it will.  Otherwise, it will show some kind of error message describing what went wrong.  The <a href="#the_language">language section</a> explains how to write logical statements for this application.  If you're looking for examples of such statements, click on any of the buttons under the heading entitled "Examples" and the application will fill the text box with an example statement, ready to be decided.</p>
-<p>To use this application, type a logical statement into the textbox on the main page, then click the "Decide" button.  If the application can decide the statement, it will.  Otherwise, it will show some kind of error message describing what went wrong.  The <a href="#the_language">language section</a> explains how to write logical statements for this application.  If you're looking for examples of such statements, click on any of the buttons under the heading entitled "Examples" and the application will fill the text box with an example statement, ready to be decided.</p>
+
+<p>If you click "Depict" button, the application will draw a diagram that shows how the application interprets the statement in the textbox.  This diagram is a graphical representation of the data structure that the application actually uses to decide the statement.</p>
+
+<p>If there is a valid propositional logic statement in the textbox, the "Truth Table" button will be enabled.  Clicking this button will cause the application to draw a <a href="http://en.wikipedia.org/wiki/Truth_table" target="_blank">truth table</a> for the statement.</p>
 
 <h2 id="the_language">The Language</h2>
 
@@ -56,10 +59,11 @@
 <ul class="bulletted">
   <li><a href="#language_logical_operators">Unary and binary logical operators</a></li>
   <li><a href="#language_variable">Variables</a></li>
-  <li>Predicates on <a href="#language_unary_predicate">one variable</a> (properties) and <a href="#language_nullary_predicate">zero variables</a> (propositions)</li>
-  <li><a href="#language_grouping">Grouping</a></li>
+  <li><a href="#language_constant">Constants</a></li>
+  <li>Predicates on <a href="#language_unary_predicate">one variable</a> (properties) and predicates on <a href="#language_nullary_predicate">zero variables</a> (propositions)</li>
+  <li><a href="#language_grouping">Grouping</a> with parentheses</li>
   <li><a href="#language_universal_generalization">Universal generalizations</a> and <a href="#language_existential_quantification">existential quantifications</a></li>
-  <li><a href="#language_identity">Identity</li>
+  <li><a href="#language_identity">Identity</a></li>
   <li><a href="#language_modal_operators">The modal operators for necessity and possibility</a></li>
   <li><a href="#language_two_term_propositions">Two-term Propositions</a></li>
 </ul>
@@ -73,7 +77,7 @@
   <tr><td>negation</td>             <td><span class="symbolic">~</span></td>        <td>Logical NOT</td></tr>
   <tr><td>conjunction</td>          <td><span class="symbolic">&amp;</span></td>    <td>Logical AND</td></tr>
   <tr><td>disjunction</td>          <td><span class="symbolic">|</span></td>        <td>Logical OR</td></tr>
-  <tr><td>material conditional</td> <td><span class="symbolic">-&gt;</span></td>    <td></td></tr>
+  <tr><td>material conditional</td> <td><span class="symbolic">-&gt;</span></td>    <td>if &hellip; then &hellip;</td></tr>
   <tr><td>biconditional</td>        <td><span class="symbolic">&lt;=&gt;</span></td><td>Logical equivalence</td></tr>
   <tr><td>joint denial</td>         <td><span class="symbolic">!</span></td>        <td>Logical NOR</td></tr>
   <tr><td>exclusive disjunction</td><td><span class="symbolic">^</span></td>        <td>Logical XOR</td></tr>
@@ -96,41 +100,54 @@
 <pre class="symbolic">(~P) &amp; (~Q)</pre>
 
 <h4 id="language_variable">Variables</h4>
-<p>Variables are single lowercase letters that represent some object.  Each variable <!--can-->must be bound by a universal generalization or an existential quantification. <!--, or left free, but the software will implicitly bind any free variable it finds in an expression with an existential quantification.  For example, if you give the software this:<p>
+<p>Variables are single lowercase letters that represent some object.  Each variable is bound by a quantifier.  Any single lowercase letter not bound by a quantifier will be interpreted as a <a href="#language_constant">constant</a>.</p>
 
-<pre class="symbolic">Px|Py</pre>
+<h4 id="language_constant">Constants</h4>
+<p>Constants, like <a href="#language_variable">variables</a>, are single lowercase letters that represent some fixed object.  Any single lowercase letter that is not bound by a quantifier will be interpreted as a constant.  I think that constants in a symbolic logic are strictly unnecessary.  This argument:</p>
 
-<p>The software will treat it as if it were</p>
+<pre class="symbolic">Hx-&gt;Mx // All men are mortal.
+Hs     // Socrates is a man.
+-&gt;     // Therefore
+Ms     // Socrates is mortal.</pre>
 
-<pre class="symbolic">3x,3y, Px|Py</pre>-->
+<p>could also be represented without constants as</p>
+
+<pre class="symbolic">Hx-&gt;Mx                                   // All men are mortal.
+(3x,Sx) &amp; ([]x,Sx-&gt;y,Sy-&gt;x=y) &amp; x,Sx->Hx // Socrates is a man.
+-&gt;                                       // Therefore
+x,Sx->Mx                                 // Socrates is mortal.</pre>
+
+<p>which, though more complicated, is in a way better because it makes explicit what we typically assume about Socrates, which is that he exists and he is, by definition, a unique individual.  Even so, I think constants are too convenient a feature to be omitted from the software.  The use of a constant implies that the object denoted by the constant actually exists.  This isn't the only way to interpret constants, but it's the easiest one to implement in this software.  Because of this interpretation, the software will decide that <span class="symbolic">3x,x=g</span> is necessarily true.  Possible objects (ones which may or may not exist) and impossible objects (ones which could never exist), can be represented with unary predicates.</p>
+
+<p>Since I have not yet found a satsfactory way to <a href="#decide">decide</a> statements which contain both modal operators and constants, the software rejects any statement that contains both modal operators and constants.</p>
 
 <h4 id="language_nullary_predicate">Predicates on Zero Variables</h4>
 
-<p>A predicate of zero variables, which can be thought of as representing a contingent, true/false proposition, is represented by a single capital letter.</p>
+<p>A predicate on zero variables, which can be thought of as representing a true/false proposition, is represented by a single capital letter.</p>
 
 <h4 id="language_unary_predicate">Predicates on One Variable</h4>
 
-<p>A predication on one variable, which can be thought of the assertion that an object has some property, is represented by a single capital letter (the predicate) followed by a single lowercase letter (the variable).  You can use the same capital letter as a predicate over one variable and a predicate over zero variables in the same expression and the software will treat them as distinct predicates, for example</p>
+<p>A predication on one variable, which can be thought of as the assertion that an object has some property, is represented by a single capital letter (the predicate) followed by a single lowercase letter (the variable).  You can use the same capital letter as a predicate over one variable and as a predicate over zero variables in the same statement and the software will treat them as distinct predicates, for example</p>
 
 <pre class="symbolic">x,Fx-&gt;F</pre>
 
-<p>will be decided in the same way as</p>
+<p>will be interpreted in the same way as</p>
 
 <pre class="symbolic">x,Fx-&gt;P</pre>
 
-<p>because the first &quot;<span class="symbolic">F</span>&quot; is interpreted to be a unary predicate and the second &quot;<span class="symbolic">F</span>&quot; is interpreted to be a nullary predicate.</p>
+<p>because the first &quot;<span class="symbolic">F</span>&quot; is interpreted as a unary predicate and the second &quot;<span class="symbolic">F</span>&quot; is interpreted as a nullary predicate.</p>
 
 <h4 id="grouping">Grouping</h4>
 
-<p>Expressions can be grouped together with parentheses.  They work just like they do in algebra or in other symbolic logics.</p>
+<p>Expressions can be grouped together with parentheses.  They work just like parentheses do in algebra or in other symbolic logics.</p>
 
 <h4 id="language_universal_generalization">Univeral Generalizations</h4>
 
 <p>A universal generalization is a variable followed by a comma followed by the expression the generalization applies to.  So you could type
 
-<pre class="symbolic">x,Fx</pre>
+<pre class="symbolic">x,Ax</pre>
 
-<p>to mean "everything is fine".  The generalization will apply to everything in the expression that follows the comma, up until an enclosing parenthesis or the end of the line.  So</p>
+<p>to mean "everything is awesome".  The generalization will apply to everything in the expression that follows the comma, up until an enclosing parenthesis or the end of the line of text that the generalization is on.  So</p>
 
 <pre class="symbolic">x,Fx &amp; y,Jy</pre>
 
@@ -140,7 +157,7 @@
 
 <p>and not just a generalization over <span class="symbolic">Fx</span>.  I recommend adding parentheses to make things clear, like</p>
 
-<pre class="symbolic">(x, Fx &amp; (y,Jy) )</pre>
+<pre class="symbolic">(x, Fx &amp; (y,Jy))</pre>
 
 <p>A variable is always bound to the nearest enclosing generalization, so for</p>
 
@@ -164,7 +181,7 @@
 
 <pre class="symbolic">x,y, (Fx &amp; x=y) -&gt; Fy</pre>
 
-<p>is a syntactically valid statement where "<span class="symbolic">x=y</span>" means <span class="symbolic">x</span> is the same object as <span class="symbolic">y</span>.</p>
+<p>is a statement where "<span class="symbolic">x=y</span>" means <span class="symbolic">x</span> is the same object as <span class="symbolic">y</span>.</p>
 
 <h4 id="language_modal_operators">Modal Operators</h4>
 
@@ -172,7 +189,7 @@
 
 <h4 id="language_two_term_propositions">Two-term Propositions</h4>
 
-<p>The software recognizes the two-term propositions of what is variously called <a href="http://en.wikipedia.org/wiki/Term_logic" target="_blank">"term", "Aristotelian" or "traditional" logic</a>.  It effectively treats them as shorthand for statements of unary predicate logic.  In order to make the traditional <a href="http://en.wikipedia.org/wiki/Square_of_opposition" target="_blank">Square of Opposition</a> hold true, the A-form proposition is given existential import and the O-form proposition is denied existential import, per what was argued by <a href="http://plato.stanford.edu/entries/square/" target="_blank">Terence Parsons</a>.  <!-- It also recognizes the U-form and Y-form of the <a href="http://en.wikipedia.org/wiki/Logical_hexagon">Hexagon of Opposition</a>  --></p>
+<p>The software recognizes the two-term propositions of what is variously called <a href="http://en.wikipedia.org/wiki/Term_logic" target="_blank">"term", "Aristotelian" or "traditional" logic</a>.  It treats two-term propositions as shorthand statements of unary predicate logic.  They are a capital letter representing the subject term, followed by a lower-case letter representing the proposition's form, followed by a capital letter representing the predicate term.</p>
 
 <table>
   <tr><th>Symbol</th><th>Proposition</th><th>Definition</th></tr>
@@ -180,9 +197,11 @@
   <tr><td><span class="symbolic">SeP</span></td><td>No S are P</td>                       <td><span class="symbolic">x,Sx-&gt;~Px</span></td></tr>
   <tr><td><span class="symbolic">SiP</span></td><td>Some S is P</td>                      <td><span class="symbolic">3x,Sx&amp;Px</span></td></tr>
   <tr><td><span class="symbolic">SoP</span></td><td>Not all S are P</td>                  <td><span class="symbolic">(3x,Sx&amp;~Px)|(~3x,Sx)</span></td></tr>
-<!--  <tr><td><span class="symbolic">SuP</span></td><td>Either all S are P or no S are P </td><td><span class="symbolic">(x,Sx-&gt;Px)|(x,Sx-&gt;~Px)</span></td></tr>
-  <tr><td><span class="symbolic">SyP</span></td><td>Some S are P and some S are not P</td><td><span class="symbolic">(3x,Sx&amp;Px)&amp;(3x,Sx&amp;~Px)</span></td></tr> -->
+  <tr><td><span class="symbolic">SuP</span></td><td>Either all S are P or no S are P </td><td><span class="symbolic">(x,Sx-&gt;Px)|(x,Sx-&gt;~Px)</span></td></tr>
+  <tr><td><span class="symbolic">SyP</span></td><td>Some S are P and some S are not P</td><td><span class="symbolic">(3x,Sx&amp;Px)&amp;(3x,Sx&amp;~Px)</span></td></tr>
 </table>
+
+<p>In order to make the traditional <a href="http://en.wikipedia.org/wiki/Square_of_opposition" target="_blank">Square of Opposition</a> hold true, the A-form proposition is given existential import and the O-form proposition is denied existential import, per what was argued by <a href="http://plato.stanford.edu/entries/square/" target="_blank">Terence Parsons</a>.  It also recognizes the U-form and Y-form of the <a href="http://en.wikipedia.org/wiki/Logical_hexagon">Hexagon of Opposition</a></p>
 
 <p>Either term in a proposition can be negated by adding the "<span class="symbolic">~</span>" symbol, for instance, "<span class="symbolic">~Aa~B</span>" will be interpreted as "all non-A are non-B".  A "<span class="symbolic">~</span>" at the front of the expression attaches to the first term and not to the whole expression, so "<span class="symbolic">~Aa~B</span>" is interpreted the same way as "<span class="symbolic">(~Aa~B)</span>" and not the same as "<span class="symbolic">~(Aa~B)</span>".</p>
 
@@ -199,7 +218,7 @@ Hs
 -&gt;
 Ms</pre>
 
-<p>If it's a single line, the software interprets that line as a statement and decides whether it is valid, satisfiable, or self-contradictory.  If it's multiple lines, the software joins those lines to be a single expression and decides that statement.  The software treats each line that is a statement as if it were conjoined to the other lines that are statements with a logical AND.  This enables you to spread a long statement across multiple lines. For example,</p>
+<p>If it is a single line, the software interprets that line as a statement and decides whether it is valid, satisfiable, or self-contradictory.  If it is multiple lines, the software joins those lines to be a single expression and decides that statement.  The software treats each line that is a statement as if it were conjoined to the other lines that are statements with a logical AND.  This enables you to spread a long statement across multiple lines. For example,</p>
 
 <pre class="symbolic">P-&gt;Q
 Q-&gt;R
@@ -222,7 +241,9 @@ Ms</pre>
 
 <p>This enables you to express a logical argument - one with several premises and a conclusion - in a familiar way.</p>
 
-<p>Tabs and spaces are always ignored.  You could type this:</p>
+<h4>Whitespace</h4>
+
+<p>Tabs, spaces and empty lines are always ignored.  You could type this:</p>
 
 <pre class="symbolic">((A   |B|C)-&gt;J )&lt;=&gt;x,F    x&amp;             y,Ix</pre>
 
@@ -230,39 +251,41 @@ Ms</pre>
 
 <pre class="symbolic">(  (A | B |C      )-&gt;J)&lt;=&gt;         x  ,Fx&amp;y,I     x</pre>
 
-<p>and expect the same result.  Whitespace can be used to make expressions easier to read.  You'd probably want to type this instead:</p>
+<p>and expect the same result.  Whitespace can be used to make expressions easier to read.  But would probably want to type this instead:</p>
 
 <pre class="symbolic">((A|B|C) -&gt; J ) &lt;=&gt; x, Fx &amp; y,Ix</pre>
 
+<p>because it's easier to read.</p>
+
 <h3>Comments</h3>
 
-<p>A "<span class="symbolic">//</span>" and anything following it on a line are ignored by the software.  This enables you to add helpful comments to expressions, like</p>
+<p>A "<span class="symbolic">//</span>" and anything following it on a line is ignored by the software.  This enables you to add helpful comments to expressions, like</p>
 
 <pre class="symbolic">Hx-&gt;Mx // All men are mortal.
-Hs         // Socrates is a man.
--&gt; // Therefore
-Ms  // Socrates is mortal.</pre>
+Hs     // Socrates is a man.
+-&gt;     // Therefore
+Ms     // Socrates is mortal.</pre>
 
 <h3>Criteria for the Design of the Language</h3>
 
 <p>The language this tool uses is a kind of symbolic logic.  It was designed with these criteria in mind:</p>
 
 <ul class="bulletted">
-  <li>The language should only use ASCII characters which are available on a standard English keyboard, so typing expressions in the language is easy.</li>
+  <li>The language should only use basic SCII characters which are available on a standard English keyboard, so typing expressions in the language is easy.</li>
   <li>The language should be terse in such a way that it is fast to type but not generally difficult to read.</li>
   <li>The language should enable a person to arrange expressions in such a way that they are readable.</li>
-  <li>The symbols defined int the language should have a precedent in other languages.  The symbols in this language are borrowed from conventional symbolic logic, conventional mathematical notation, and the C programming language.</li>
+  <li>The symbols defined in the language should have a precedent in other languages.  The symbols in this language are borrowed from conventional symbolic logic, conventional mathematical notation, and the C programming language.</li>
 </ul>
 
 <h2 id="the_algorithm">The Algorithm</h2>
 
-<p>When the software is <a href="#decide">decides</a> a proposition, it does not operate on symbolic statements.  It operates on a <a href="http://en.wikipedia.org/wiki/Tree_%28data_structure%29">tree</a>-like data structure that is meant to represent the logical elements of the proposition and the relationships between those elements.  In this &quot;tree&quot;, each node is an element in the proposition (a predicate, a variable, a universal generalization, etc.) and each edge is a dependency between an element and its subordinate elements (e.g. a logical AND has edges pointing to the two elements on either side of it).</p>
+<p>When the software is <a href="#decide">decides</a> a proposition, it does not operate on symbolic statements.  It operates on a <a href="http://en.wikipedia.org/wiki/Tree_%28data_structure%29">tree</a>-like data structure that is meant to represent the proposition.  In this &quot;tree&quot;, each node is an element in the proposition (a predicate, a variable, a quantifier, etc.) and each edge is a dependency between an element and its subordinate elements (e.g. a logical AND is a node with edges pointing to the two elements on either side of it).</p>
 
-<h3 id="translation">Translation</h3>
+<h3 id="parsing">Parsing</h3>
 
-<p>The first step the software takes is to parse the text given to it and attempts to convert it to a &quot;tree&quot;.  If it succeeds, the input is a well-formed statement within the software's symbolic language and the software can <a href="#decide">decide</a> the tree.  There is more than one way this parsing could be done, so the details are not important, as long as the resulting tree is correct.</p>
+<p>The first step the software takes is to read the text given to it and attempt to convert it to a &quot;tree&quot;.  If it succeeds, the text is a well-formed statement within the software's symbolic language and the software can <a href="#decide">decide</a> the tree.  There is more than one way this parsing could be done, so the details are not important, as long as the resulting tree is correct.</p>
 
-<p>The exact choice of language is used isn't important either.  So long as a language only represents logical elements that are supported by the software and the language does not allow any logical element to depend on itself, directly or indirectly (e.g. no Liar's Paradoxes), that language could replace the language that is recognized by this software and the decision algorithm would work the same way.</p>
+<p>The exact choice of language isn't important to the decision process, either.  So long as a language only represents logical elements that are supported by the software and the language does not allow any logical element to depend on itself, directly or indirectly (e.g. no Liar's Paradoxes), that language could replace the language that is recognized by this software and the decision algorithm would work the same way.</p>
 
 <p id="replacement">There are some logical elements that can be defined in terms of other logical elements.  Existential Quantification can be defined in terms of universal generalization (<span class="symbolic">[]( (3x,...) &lt;=&gt; (~x,~...) )</span>).  Possibility can be defined in terms of necessity (<span class="symbolic">[]( (&lt;&gt;...) &lt;=&gt; (~[]~...) )</span>).  Exclusive alternation can be defined in terms of equivalence (<span class="symbolic">[]( ...^... &lt;=&gt; ~(...&lt;=&gt;...) )</span>).  The software makes substitutions based on these definitions when it converts a statement to a tree.  It doesn't have to, but it does, so it ought to be mentioned that it does.
 
@@ -270,7 +293,7 @@ Ms  // Socrates is mortal.</pre>
 
 <img src="ExesInTexas.png" alt="graph of 'All my exes live in Texas.'" />
 
-<p>The elements of the statement are all there: a universal generalization, a material implication beneath it, and two predications beneath that.  The whole declares a logical relationship between being George Strait's ex and living in Texas.<!--  In our own world, this may be true, but the software doesn't know our world from any other, so it will evaulate whether or not this proposition is true in all possible worlds, some possible worlds, or no possible worlds and give us the result.--></p>
+<p>The elements of the statement are all there: a universal generalization, a material implication beneath it, and two predications beneath that.  The whole declares a logical relationship between being George Strait's ex and living in Texas.</p>
 
 <p>More complicated statements have more complicated trees.  For the syllogism</p>
 
@@ -285,22 +308,24 @@ Ms       // Socrates is mortal.
 
 <img src="Socrates.png" alt="graph of a syllogism" />
 
-<p>The argument has been converted to a single proposition; the software will decide whether or not the argument is valid by deciding whether or not this proposition is necessarily true.  The software doesn't support unbound variables, so the variable <span class="symbolic">s</span> is bound by a universal generalization.<!--  In spite of this alteration, the software seems to yield the expected results.--></p>
+<p>The argument has been converted to a single proposition; the software will decide whether or not the argument is valid by deciding whether or not this proposition is necessarily true.</p>
 
 <h3 id="decision">Decision</h3>
 
-<p>The software operates on trees like the ones described above.  For each <a href="#kind_of_world">kind of world</a>, and sometimes for each kind of world in each <a href="#interpretation">interpretation</a>, the software determines whether the proposition represented by the tree is true or false. The software works from the top down.  Each node in the tree is <a href="#evaluate">evaluated</a> by evaluating its subordinate nodes; they in turn are evaluated by evaluating their subordinate nodes.  The procedure for evaluating a node depends on what kind of logical element it represents; each logical element has its own procedure.  The following sections define procedures for each logical element.</p>
+<p>The software operates on trees like the ones described above.  To decide a proposition, for each <a href="#kind_of_world">kind of world</a>, and sometimes for each kind of world in each <a href="#interpretation">interpretation</a>, the software determines whether the proposition represented by the tree is true or false. If is is found to be true in each kind of world, it is decided to be necessary.  If it is found to be false in each kind of world, it is decided to be impossible.  If it is found to be true in some kind of world and false in another, it is decided to be contingent.  The software works from the top down.  Each node in the tree is <a href="#evaluate">evaluated</a> by evaluating its subordinate nodes; they in turn are evaluated by evaluating their subordinate nodes.  The procedure for evaluating a node depends on what kind of logical element it represents; each logical element has its own procedure.  The following sections define procedures followed for each logical element.</p>
 
-<p>If the proposition doesn't contain any <a href="#modality">modalities</a>, the proposition is decided by evaluating the tree for each kind of world.  This effectively tests the proposition in every <a href="#possible_world">possible world</a>, and therefore is sufficient to decide whether the proposition is necessarily true, possibly true, or impossible.</p>
+<p>If the proposition does not contain any <a href="#modality">modalities</a> or constants, the proposition is decided by evaluating the tree for each kind of world.  This effectively tests the proposition in every <a href="#possible_world">possible world</a>, and therefore is sufficient to decide whether the proposition is necessarily true, contingent, or impossible.</p>
 
-<p>If the proposition contains any modalities (possibility, necessity), the proposition can't simply be decided by evaluating it under every kind of world.  If this were done, it would have the effect of treating each <a href="#nullary_predicate">nullary predicate</a> as if it were a contingent proposition, and every object as a contingent object regardless of its properties.  This isn't an unreasonable way to treat predicates, but it would have the effect of making the software decide modalities in unexpected ways.  For instance, the software would decide that <span class="symbolic">[]P-&gt;~P</span> is necessarily true, since <span class="symbolic">P</span> here would be assumed always to be a contingent proposition, and therefore never necessarily true.  Instead, the software evaluates the proposition under every interpretation.  If it is true for every kind of world under every interpretation, then the proposition is necessarily true.</p>
+<p>If the proposition contains constants, the proposition is decided by deciding two other propositions.  The first proposition is formed by binding all constants in the original proposition with universal generalizations.  If this proposition is true, then the original proposition is necessarily true.  The second proposition is formed by binding all constants in the original proposition with existential quantifiers.  If this proposition is impossible, then the original proposition is impossible.  In all other cases, the original proposition is contingent.</p>
+
+<p>If the proposition contains modalities (possibility, necessity), the proposition can't simply be decided by evaluating it under every kind of world.  If this were done, it would have the effect of treating each <a href="#nullary_predicate">nullary predicate</a> as if it were a contingent proposition, and every kind of object as a contingent kind of object.  It would have the effect of making the software decide modalities in unexpected ways.  For instance, the software would decide that <span class="symbolic">[]P-&gt;~P</span> is necessarily true, since <span class="symbolic">P</span> here would be assumed always to be a contingent proposition, and therefore never necessarily true.  Instead, the software evaluates the proposition under every interpretation.  If it is true for every kind of world under every <a href="#interpretation">interpretation</a>, then the proposition is necessarily true.</p>
 
 
 <h4 id="universal_generalization">Evaluation of a Universal Generalization</h4>
 
-<p>The obvious way to <a href="#evaluate">evaluate</a> a universal generalization is to instantiate its variable with each object in the world and <a href="#evaluate">evaluate</a> each of the resulting propositions; if all instantiations are true, the generalization is true; if any are false, the generalization is false.  The problem with this approach is that a world may have an infinite number of objects in it, so evaluation may not be doable in a finite amount of time.  The software does not try to do this.  It takes a different, but similar approach.</p>
+<p>The obvious way to <a href="#evaluate">evaluate</a> a universal generalization is to instantiate its variable with each object in the world and <a href="#evaluate">evaluate</a> each of the resulting propositions; if all instantiations are true, the generalization is true; if any are false, the generalization is false.  The problem with this approach is that a world may have an infinite number of objects in it, so evaluation in a finite amount of time may not be possible.  The software does not try to do this.  It takes a different, but similar approach.</p>
 
-<p>Suppose all of the objects in a world can be grouped into a finite number of kinds.  Suppose further that these kinds are defined in such a way that, if a universal generalization is instantiated with any object of a kind, the resulting proposition is logically equivalent to the proposition that would result from an instantiation with any other object of the same kind.  <!--Put another way, if <span class="symbolic">K</span> is one such kind of object and <span class="symbolic">P</span> is the proposition that the universal generalization binds, then <span class="symbolic">a,b, K(a)&amp;K(b) -&gt; P(a)&lt;=&gt;P(b)</span>.</p>-->  If all that is true, then the universalization is <a href="#decide">decidable</a>.  And all that <em>is</em> true.  The logical elements supported by the software allow for possible worlds to be grouped this way (How this grouping is done is defined <a href="#kind_of_object">elsewhere</a>). To evaluate a universal generalization, the software instantiates the universal generalization with each <a href="#kind_of_object">kind of object</a> until all kinds of object have been tried or until one instantiation is found to be false.  If all instantiations are true, the universal generalization is true, if any are false, the universal generalization is false.</p>
+<p>Suppose all of the objects in a world can be grouped into a finite number of kinds.  Suppose further that these kinds are defined in such a way that, if a universal generalization is instantiated with any object of a kind, the resulting proposition is logically equivalent to the proposition that would result from an instantiation with any other object of the same kind.  If all that is true, then the universalization is <a href="#decide">decidable</a>.  And all that <em>is</em> true.  The logical elements supported by the software allow for possible worlds to be grouped this way (how this grouping is done is defined <a href="#kind_of_object">elsewhere</a>). To evaluate a universal generalization, the software instantiates the universal generalization with each <a href="#kind_of_object">kind of object</a> until all kinds of object have been tried or until one instantiation is found to be false.  If all instantiations are true, the universal generalization is true, if any instantiations are false, the universal generalization is false.</p>
 
 <h4>Evaluation of a Conjunction (logical AND)</h4>
 
@@ -320,35 +345,35 @@ Ms       // Socrates is mortal.
 
 <h4>Evaluation of an Equivalence</h4>
 
-<p>To evaluate an equivalence, the software evaluates both sides.  If they have the same truth value, the equivalence is true.  If they have different truth values, the equivalence is false.</p>
+<p>To evaluate an equivalence, the software evaluates both sides of the equivalence.  If they have the same truth value, the equivalence is true.  If they have different truth values, the equivalence is false.</p>
+
+<h4>Evaluation of a Joint Denial</h4>
+
+<p>To evaluate a joint denial, the software evaluates the denied propositions.  If they are both false, the joint denial is true.  If either are true, the joint denial is false.</p>
 
 <h4>Evaluation of other Logical Elements</h4>
 
 <p>The software <a href="#replacement">replaces</a> all other logical elements supported by the language with equivalent combinations of elements, and so does not need additional processes to evaluate them.</p>
 
-<h4>Evaluation of a Necessity</h4>
+<h4 id="evaluation_of_a_necessity">Evaluation of a Necessity</h4>
 
 <p>Whether or not a proposition is necessarily true is determined by evaluating the proposition in each <a href="#kind_of_world">kind of world</a> that is possible under the current <a href="#interpretation">interpretation</a> of the predicates in the proposition.  If it is true for all such <a href="#kind_of_world">kinds of worlds</a>, then it is necessarily true.  If it is false under any such kind of world, then it is not necessarily true.  Proof: If the proposition is true in all <a href="#kind_of_world">kinds of worlds</a>, then it is true in all <a href="#possible_world">possible worlds</a>, and therefore necessarily true.  If the proposition is false in any <a href="#kind_of_world">kind of world</a>, then it is false in some <a href="#possible_world">possible world</a>, and therefore not necessarily true.</p>
 
-<h4>Evaluation of a Possibility</h4>
-
-<p>Whether or not a proposition is possibly true is determined by evaluating the proposition in each <a href="#kind_of_world">kind of world</a> that is possible under the current <a href="#interpretation">interpretation</a> of the predicates in the proposition.  If it is true for any such <a href="#kind_of_world">kind of world</a>, then it is possibly true.  If it is false under all such kinds of worlds, then it is not possibly true.  Proof: If the proposition is true in any <a href="#kind_of_world">kind of world</a>, then it is true in some <a href="#possible_world">possible world</a>, and therefore possibly true.  If the proposition is false in all <a href="#kind_of_world">kinds of worlds</a>, then it is false in all <a href="#possible_world">possible worlds</a>, and therefore not possibly true.</p>
-
 <h4>Evaluation of a Predication on One Variable</h4>
 
-<p>Whenever the software evaluates a <a href="#unary_predicate">unary predication</a>, it has already instantiated the predication's variable with one <a href="#kind_of_object">kind of object</a> or another.  Proof: Since the software binds all unbound variables with <a href="#universal_generalization">universal generalizations</a>, all variables in a proposition are bound.  Since the software proceeds from the top of the tree downward, a predication on a variable is only evaluated in order to evaluate the universal generalization further up the tree that binds the variable.  Because of the process of evaluating universal generalizations, that variable has always been instantiated by the software by the time the predication is evaluated.</p>
+<p>Whenever the software evaluates a <a href="#unary_predicate">unary predication</a>, it has already instantiated the predication's variable with one <a href="#kind_of_object">kind of object</a> or another.  Proof: Since the software rejects propositions with unbound variables, and defines all quantifications in terms of universal generalizations, if a proposition is being evaluated, all variables in that proposition are bound by universal generalizations.  Since the software proceeds from the top of the tree downward, a predication on a variable is only evaluated in order to evaluate the universal generalization further up the tree that binds that variable.  Because of the process of evaluating universal generalizations, that variable has always been instantiated by the software by the time the predication is evaluated.</p>
 
-<p>The predication is true if the predicate is true for the instantiated <a href="#kind_of_object">kind of object</a>, and false if the predicate is false for that kind of object.</p>
+<p>The predication is true if the predicate is true of the instantiated <a href="#kind_of_object">kind of object</a>, and false if the predicate is not true that kind of object.</p>
 
 <h4 id="nullary_predicate">Evaluation of a Predication on No Variables (a Nullary Predicate)</h4> 
 
-<p>The <a href="#kind_of_world">kind of world</a> under which the software is currently evaluating the proposition determines whether a nullary predicate is true or false.  Which kind of world it is depends on is currently being evaluated which kind of world the nearest <a href="#modality">modality</a> above the predication in the tree.  If there is no modality above the predication, then the kind of world is chosen as a part of the overall <a href="#decision">decision</a> process.</p>
+<p>The <a href="#kind_of_world">kind of world</a> under which the software is currently evaluating the nullary predicate determines whether that nullary predicate is true or false.  Which kind of world it is depends on the nearest <a href="#evaluation_of_a_necessity">necessity</a> above the predication in the tree.  If there is no necessity above the predication, then the kind of world is chosen as a part of the overall <a href="#decision">decision</a> process.</p>
 
 <h4>Evaluation of an Identification</h4>
 
-<p>Whenever the software evaluates an identification, it has already instantiated each of the identification's variables with one <a href="#kind_of_object">kind of object</a> or another.  Proof: Since the software binds all unbound variables with <a href="#universal_generalization">universal generalizations</a>, all variables in a proposition are bound.  Since the software proceeds from the top of the tree downward, a identification of two variables is only evaluated in order to evaluate the universal generalizations that binds the variables, and, because of the process of evaluating universal generalizations, that variable has always been instantiated by the software by the time the predication is evaluated.</p>
+<p>Whenever the software evaluates an identification, it has already instantiated each of the identification's variables with one <a href="#kind_of_object">kind of object</a> or another.  Proof: Since the software rejects propositions with unbound variables, and defines all quantifications in terms of universal generalizations, if a proposition is being evaluated, all variables in that proposition are bound by universal generalizations.  Since the software proceeds from the top of the tree downward, an identification of two variables is only evaluated in order to evaluate the universal generalizations further up the tree that bind those variables.  Because of the process of evaluating universal generalizations, those variables have always been instantiated by the software by the time the predication is evaluated.</p>
 
-<p>The identification is true if its variables have been instantiated with the same kind of object, and false if they have been instantiated with two different kinds of object.  The software assumes that transworld identity of indisceribles is impossible; it always considers two objects to be different kinds of objects if they are from two different kinds of universes.  A Proof that transworld identity of indisceribles is impossible can be found <a href="http://mackwai.blogspot.com/2014/08/transworld-identity-of-indiscserables.html" target="_blank">here</a>.</p>
+<p>The identification is true if its variables have been instantiated with the same kind of object, and false if they have been instantiated with two different kinds of object.  The software assumes that transworld identity of indiscernibles is impossible; it always considers two objects to be different kinds of objects if they are from two different kinds of universes.  A proof that transworld identity of indiscernibles is impossible can be found <a href="http://mackwai.blogspot.com/2014/08/transworld-identity-of-indiscserables.html" target="_blank">here</a>.</p>
 
 <h3>Definitions</h3>
 
@@ -358,7 +383,7 @@ Ms       // Socrates is mortal.
 
 <h4 id="decide">Decide</h4>
 
-<p>When the software <em>decides</em> a proposition, it determines if it is valid (necessarily true), possible (satisfiable), or self-contradictory (not satisfiable).</p>
+<p>When the software <em>decides</em> a proposition, it determines if it is necessarily true (valid), contingent (satisfiable but not valid), or impossible (not satisfiable).</p>
 
 <h4 id="modality">Modality</h4>
 
@@ -366,31 +391,35 @@ Ms       // Socrates is mortal.
 
 <h4 id="unary_predicate">Unary Predicate</h4>
 
-<p>A unary predicate is a predicate over one variable; the term "monadic predicate" is synonymous, but I've chosen to use the term "unary predicate" for two reasons: in most programming languages, operators that have one operand (e.g. negation, bit inversion) are called "unary operators".  In functional programming, especially in the language Haskell, "monadic" is a significant term, which relates to the <a href="http://en.wikipedia.org/wiki/Monad_%28category_theory%29">monads</a> of category theory and not to predicates on one variable.  So the meaning of "unary predicate" is more obvious to me than "monadic predicate".</p>
+<p>A unary predicate is a predicate over one variable; the term "monadic predicate" is synonymous, but I've chosen to use the term "unary predicate" for three reasons:</p>
 
-<p>In logic, a Unary predicate is about the same thing as a property.  In this documentation, the two are used interchangeably, except that an object "verifies" or "falsifies" a unary predicate whereas it "has" or "does not have" a property.</p>
+<ol>
+  <li>In most programming languages, operators that have one operand (e.g. negation, bit inversion) are called "unary operators".</li>
+  <li>In functional programming, especially in the language Haskell, "monadic" is a significant term, which relates to the <a href="http://en.wikipedia.org/wiki/Monad_%28category_theory%29">monads</a> of category theory and not to predicates on one variable.</li>
+  <li>The words "unary" and "predicate" both have their roots in Latin.  The word "monadic" has its roots in Greek.  So calling it a "monadic predicate" mixes linguistic roots, but calling it a "unary predicate" does not.</li>
+</ol>
+
+<p>A Unary predicate is about the same thing as a property.  In this documentation, the two are used interchangeably, except that a unary predicate "is true of" an object or "is not true of" an boejct, whereas an object "has" or "does not have" a property.</p>
 
 <p>It may be important to note that "predicate" and "predication" are two different things.  A <em>predicate</em> is a proposition, property, or relation; a <em>predication</em> is the application of a predicate to some number of variables.</p>
 
 <h4>Nullary Predicate</h4>
 
-<p>Nullary predicates are the same as the "propositions" in <a href="http://en.wikipedia.org/wiki/Propositional_calculus">propositional calculus</a>; they are simply true or false, irrespective of any object.  They can be thought of as predicates over zero variables - predicates over nothing - or everything, depending on how you look at it.  Hence the term "nullary predicate".</p>
+<p>Nullary predicates are the same as the "propositions" in <a href="http://en.wikipedia.org/wiki/Propositional_calculus">propositional calculus</a>; they are simply true or false within a possible world.  They can be thought of as predicates over zero variables - predicates over nothing - or everything, depending on how you look at it.  Hence the term "nullary predicate".</p>
 
 <h4>Proposition</h4>
 
-<p>In this documentation, the word "proposition" is used three different ways, one to mean a <a href="#nullary_predicate">nullary predicate</a>, another to mean any idea that must be true or false, and another to mean a data structure <a href="#translation">constructed by the software</a> that captures some of the logical content 
+<p>In this documentation, the word "proposition" is used three different ways, one to mean a <a href="#nullary_predicate">nullary predicate</a>, another to mean any idea that must be true or false, and another to mean a data structure <a href="#parsing">constructed by the software</a> that captures some of the logical content of the idea it is supposed to represent.</p>
 
 <h4 id="possible_world">Possible World</h4>
 
-<p>The term chosen by philosophers to denote any way the universe might be, or might have been had it not been what it is.</p>
+<p>The term chosen by philosophers to denote any way the universe might be, or might have been, had it not been what it is.</p>
 
 <h4 id="kind_of_world">Kinds of Worlds</h4>
 
 <p>To decide a proposition or evaluate a <a href="#modality">modality</a>, all <a href="#possible_world">possible worlds</a> must be grouped into a finite number of kinds of worlds.  The following paragraphs describes how this is done.</p>
 
-<p>A nullary predicate is either true or false in a possible world.  A first-order proposition has only a finite number of nullary predicates in it, so with respect to the nullary predicates in a proposition, possible worlds can be grouped into kinds based on which of these nullary predicates are true within a world and which are false.  There are as many kinds of worlds as there are combinations of nullary predicates that can be selected from the nullary predicates in the proposition.  If a proposition contains <em>n</em> nullary predicates, then there are 2<sup><em>n</em></sup> kinds of worlds to evaluate.</p>
-
-<!--<p>Interestingly, if a proposition contains only nullary predicates and logical connectives and no modalities, unary predicates, or universal generalizations, the software is virtually the same as the <a href="http://en.wikipedia.org/wiki/Truth_table">truth table</a> method for deciding a propositional expression.</p>-->
+<p>A nullary predicate is either true or false in a possible world.  A first-order proposition has only a finite number of nullary predicates in it, so with respect to the nullary predicates in a proposition, possible worlds can be grouped into kinds based on which of these nullary predicates are true within a world and which are false.  For a proposition which contains nullary predicates and no other kind of predicates, there are as many kinds of worlds as there are combinations of nullary predicates that can be selected from the nullary predicates in the proposition.  If a proposition contains <em>n</em> nullary predicates, then there are 2<sup><em>n</em></sup> kinds of worlds to evaluate.</p>
 
 <p>Either a world has a certain kind of object in it or it doesn't.  If a proposition contains unary predicates and in-world identifications but no nullary predicates, the kinds of worlds it can distinguish are defined in terms of the <a href="#kind_of_object">kinds of objects</a> present or absent in a world.  If the software defines <em>o</em> kinds of objects for such a proposition, then it defines 2<sup><em>o</em></sup>-1 kinds of worlds for that proposition.  One is subtracted from the total number of combinations because the empty world is excluded from evaluation.  The software effectively assumes that there is no such thing as an empty world.  If it didn't, the software would decide that <span class="symbolic">x,Ax&amp;~Ax</span> is possible.  Maybe it should.
 
@@ -402,16 +431,9 @@ Ms       // Socrates is mortal.
 
 <p>To evaluate a <a href="#universal_generalization">universal generalization</a>, all objects in the world must be grouped into a finite number of <em>kinds of objects</em>.  The following paragraphs describes how this is done.</p>
 
-<p>If a proposition contains no relations (e.g. identifications, binary predicates), and a finite number of properties, then it cannot distinguish between one object and another, if both objects have the same properties.  For example, <span class="symbolic">Xw-&gt;Tw</span> is false if <span class="symbolic">w</span> is instantiated with any of an umlimited number of objects that do not have the property <span class="symbolic">T</span> but have the property <span class="symbolic">X</span>, regardless of what other properties those objects might have.  So for such a proposition, objects can be grouped into kinds based on which of the proposition's unary predicates they verify and falsify.  There will be 2<sup><em>u</em></sup> of these kinds, one for each combination of unary predicates that may be chosen from <em>u</em> unary predicates.</p>
+<p>If a proposition contains no relations (e.g. identifications, binary predicates), and a finite number of properties, then it cannot distinguish between one object and another, if both of these objects have the same properties.  For example, <span class="symbolic">Xw-&gt;Tw</span> is false if <span class="symbolic">w</span> is instantiated with any of an umlimited number of objects that do not have the property <span class="symbolic">T</span> but have the property <span class="symbolic">X</span>, regardless of what other properties those objects might have.  So for such a proposition, objects can be grouped into kinds based on which of the proposition's unary predicates they verify and falsify.  There will be 2<sup><em>u</em></sup> of these kinds, one for each combination of unary predicates that may be chosen from <em>u</em> unary predicates.</p>
 
-<p>If a proposition contains identifications, grouping objects by kinds is more complicated.  Two objects in a proposition may have the same properties that are mentioned in the proposition and yet not be identical, so defining kinds by properties alone is not enough.  For identifications, it is assumed that it is sufficient to evaluate each combination of 0 to <em>i</em> of each predicate combination, where</p>
-
-<ul>
-  <li><em>i</em> is the maximum number of distinct free variables involved in identifications for any matrix bound by a universal generalization within the proposition,</li>
-  <li>or 1 if there are unary predications in the proposition but no identifications.  The intuition is that the software has to try out all possibilities of two objects being identical or not identical if and only if they are ever compared for identity within a proposition.</li>
-</ul>
-  
-<p>I don't have proof for this assumption, but it seems to work.  If you doubt it, then don't trust the decisions the software gives for statement that contain identifications.  I won't be hurt if you do.</p>
+<p>If a proposition contains identifications, grouping objects by kinds is more complicated.  Two objects in a proposition may have the same properties that are mentioned in the proposition and yet not be identical, so defining kinds by properties alone is not enough.  For identifications, it is assumed that it is sufficient to evaluate each combination of 0 to <em>i</em> of each predicate combination, where <em>i</em> is the maximum number of distinct free variables involved in identifications for any matrix bound by a universal generalization within the proposition.  I don't have proof for this assumption, but it seems to work.</p>
 
 <p>Altogether, if there are <em>u</em> unary predicates in a proposition and <em>i</em> is the previously mentioned maximum, then up to <em>i</em>2<sup><em>u</em></sup> kinds of objects must be evaluated.</p>
 
@@ -422,10 +444,10 @@ Ms       // Socrates is mortal.
 
 <ul class="bulletted">
   <li>All nullary predicates are contingent and do not necessarily have any logical relationship with each other.</li>
-  <li>All combinations of properties are possible, e.g. <span class="symbolic">3x,Px&amp;Qx</span> is always possible, and so <span class="symbolic">P</span> and <span class="symbolic">Q</span> must not be interpreted as "awesome" and "not awesome", respectively.</li>
+  <li>All combinations of properties are possible, e.g. <span class="symbolic">3x,Px&amp;Qx</span> is always possible, so <span class="symbolic">P</span> and <span class="symbolic">Q</span> cannot be interpreted as "awesome" and "not awesome", respectively.</li>
 </ul>
 
-<p>This works for propositions that do not contain modalities, but it will not work for propositions that contain modalities.  For propositions that contain modalities, the software must evaluate the proposition under these assumptions, but it must also evaluate the proposition under every other possible set of assumptions about the relationships of predicates to each other and to the properties of objects in a world.  The software does this by defining <em>interpretations</em>.  An <em>interpretation</em> is a set of <a href="#kind_of_world">kinds of worlds</a>; it contains every kind of world that is possible under a given interpretation of the predicates in the proposition, and no other kind of worlds.  To evaluate a proposition under every possible interpretation, the software simply evaluates the proposition under every nonempty subset of the kinds of worlds that it defines for the proposition.  So, if there are <em>u</em> kinds of worlds for a proposition, then there are 2<sup><em>u</em>-1</sup> interpretations that must be evaluated.</p>
+<p>This works for propositions that do not contain modalities, but it will not work for propositions that contain modalities.  For propositions that contain modalities, the software must evaluate the proposition under these assumptions, but it must also evaluate the proposition under every other possible set of assumptions about the relationships of nullary predicates to each other and to the kinds of objects in a world.  The software does this by defining <em>interpretations</em>.  An <em>interpretation</em> is a set of <a href="#kind_of_world">kinds of worlds</a>; it contains every kind of world that is possible under a given interpretation of the predicates in the proposition, and no other kind of worlds.  To evaluate a proposition under every possible interpretation, the software simply evaluates the proposition under every nonempty subset of the kinds of worlds that it defines for the proposition.  So, if there are <em>u</em> kinds of worlds for a proposition, then there are 2<sup><em>u</em>-1</sup> interpretations that must be evaluated.</p>
 
 
 <h2>The Software</h2>
@@ -434,7 +456,7 @@ Ms       // Socrates is mortal.
 
 <p>As can be seen by combining the formulas given in the sections on <a href="#kind_of_object">kinds of objects</a>, <a href="#kind_of_world">kinds of worlds</a>, and <a href="#interpretation">interpretations</a>, in order to decide a proposition with no modalities, the software must evaluate the proposition in up to <span style="font-size: medium;">2<sup><em>n</em></sup>&nbsp;&times;&nbsp;Max(0,&nbsp;2<sup><em>i</em>2<sup><em>u</em></sup></sup>&nbsp;-&nbsp;1)</span> kinds of worlds, where <em>n</em> is the number of distinct nullary predicates in the proposition, <em>u</em> is the number of distinct unary predicates in the proposition, and <em>i</em> is the number of objects with the same set of properties that might be distinguished from another by the proposition.  In order to decide a proposition with modalities, the software must evaluate the proposition in up to <span style="font-size: large;">2<sup>2<sup><em>n</em></sup>&nbsp;&times;&nbsp;Max(0,&nbsp;2<sup><em>i</em>2<sup><em>u</em></sup></sup>&nbsp;-&nbsp;1)&nbsp;&times;&nbsp;<em>t</em></sup></span> interpretations, where <em>t</em> is the number of possible worlds that might be distinguished by transworld identifications in the proposition.  This means that the algorithm does not scale well; its run time is exponential or super-exponential in relation to the complexity of the proposition being decided.  This does not, however, prevent the software from performing fast enough when deciding propositions with small values for <em>n</em>, <em>u</em> and <em>i</em>.</p>
 
-<p>The software actually defines <em>i&#772;</em>2<sup><em>u</em></sup> kinds of objects, where <em>i&#772;</em> is <em>i</em> rounded up to the nearest power of 2.  It is not necessary for <em>i</em> to be rounded up in order for the algorithm to be correct, but it makes it easier to encode kinds of objects as binary numbers.  Also to keep binary encoding simple, it does define empty worlds, but it skips over them when evaluating propositions.  The software actually encodes kinds of worlds and interpretations as 32-bit binary numbers.  This enables the software to go fast, but does put a hard limit on the complexity of propositions it can decide; <span style="font-size: medium;"><em>n</em><em>&nbsp;+&nbsp;i&#772;</em>2<sup><em>u</em></sup>&nbsp;&le;&nbsp;32</span> for non-modal propisitions and  <span style="font-size: medium;"><em>t</em>2<sup><em>n</em>&nbsp;+&nbsp;<em>i&#772;</em>2<sup><em>u</em></sup></sup> &le; 32</span> for modal propositions.</p>
+<p>The software actually defines <em>i&#772;</em>2<sup><em>u</em></sup> kinds of objects, where <em>i&#772;</em> is <em>i</em> rounded up to the nearest power of 2.  It is not necessary for <em>i</em> to be rounded up in order for the algorithm to be correct, but it makes it easier to encode kinds of objects as binary numbers.  Also to keep binary encoding simple, it does define empty worlds, but it skips over them when evaluating propositions.  The software actually encodes kinds of worlds and interpretations as 32-bit binary numbers.  This enables the software to go fast, but does put a hard limit on the complexity of propositions it can decide; <span style="font-size: medium;"><em>n</em><em>&nbsp;+&nbsp;i&#772;</em>2<sup><em>u</em></sup>&nbsp;&le;&nbsp;32</span> for non-modal propositions and  <span style="font-size: medium;"><em>t</em>2<sup><em>n</em>&nbsp;+&nbsp;<em>i&#772;</em>2<sup><em>u</em></sup></sup> &le; 32</span> for modal propositions.</p>
 
 <p>The following tables list the largest combined values of <em>n</em>, <em>u</em>, <em>i</em> and <em>t</em> that the software supports.</p>
 
@@ -489,20 +511,19 @@ Ms       // Socrates is mortal.
 
 <ul>
   <li>bugs or errors in the software,</li>
-  <li>incorrect decisions made by the software,</li>
-  <li>typos in the documentation, or</li>
+  <li>incorrect decisions made by the software, or</li>
   <li>unclear or or incorrect statements in the documentation.</li>
 </ul>
 
 <p>Also,</p>
 
 <ul>
-  <li>If you find this web app useful, I'm curious to know what you are using it for.</li>
+  <li>If you find this application useful, I'm curious to know what you are using it for.</li>
   <li>If there is any part of the user interface you find confusing, tell me and I'll try to improve it.</li>
-  <li>If you have ideas for new features, feel free to suggest them.  I'm open to expanding this web app's functionality, so long as it is in keeping with the Possible Worlds-based approach that the software is using to decide propositions.</li>
+  <li>If you have ideas for new features, feel free to suggest them.  I'm open to expanding this application's functionality, so long as it is in keeping with the Possible Worlds-based approach that the software is using to decide propositions.</li>
 </ul>
 
-<p id="feedback">Thanks in advance.</p>
+<p id="feedback">Thanks.</p>
 
 </div>
 

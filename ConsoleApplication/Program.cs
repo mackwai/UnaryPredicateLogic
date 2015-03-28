@@ -25,6 +25,13 @@ namespace Logic
 {
   class Program
   {
+    private enum QueryType
+    {
+      Alethicity,
+      Validity,
+      Complexity
+    };
+
     static Program()
     {
       EmbeddedResourceLoader.InstallAssemblyResolution();
@@ -43,16 +50,23 @@ namespace Logic
       return lLines.ToArray();
     }
 
-    static string[] ReadStdinUntilQuestionMark()
+    static string[] ReadStdinUntilQuestionMark( out QueryType aQueryType )
     {
       List<string> lLines = new List<string>();
       string lLine = Console.In.ReadLine();
+      aQueryType = QueryType.Alethicity;
 
       while ( lLine != null )
       {
-        //if ( Regex.IsMatch( lLine, "((?<!.*//.*)\\?" ) )
-        if ( lLine.Trim() ==  "?" )
+        if ( Regex.IsMatch( lLine, @"\?\s*$" ) )
+        {
+          if ( Regex.IsMatch( lLine, @"\s*s(entence)?\?\s*$", RegexOptions.IgnoreCase ) )
+            aQueryType = QueryType.Validity;
+          else if ( Regex.IsMatch( lLine, @"\s*c(omplexity)?\?\s*$", RegexOptions.IgnoreCase ) )
+            aQueryType = QueryType.Complexity;
+
           break;
+        }
 
         lLines.Add( lLine );
 
@@ -113,19 +127,43 @@ namespace Logic
 
     private static void AnswerQueries()
     {
-      string[] lLines = ReadStdinUntilQuestionMark();
+      QueryType lQueryType;
+      string[] lLines = ReadStdinUntilQuestionMark( out lQueryType );
       while ( lLines != null )
       {
         try
         {
-          Console.WriteLine( Parser.Parse( lLines ).Decide().ToString() );
+          Matrix lProposition = Parser.Parse( lLines );
+          switch ( lQueryType )
+          {
+            case QueryType.Alethicity:
+              Console.WriteLine( lProposition.Decide().ToString() );
+              break;
+            case QueryType.Complexity:
+              Console.WriteLine( lProposition.Complexity.ToString() );
+              break;
+            case QueryType.Validity:
+              Console.WriteLine( "Valid" );
+              break;
+          }
         }
         catch ( Exception lException )
         {
           Console.Error.WriteLine( lException.Message );
-          Console.WriteLine( "Error" );
+          switch ( lQueryType )
+          {
+            case QueryType.Alethicity:
+              Console.WriteLine( "Error" );
+              break;
+            case QueryType.Complexity:
+              Console.WriteLine( "-1" );
+              break;
+            case QueryType.Validity:
+              Console.WriteLine( "Invalid" );
+              break;
+          }
         }
-        lLines = ReadStdinUntilQuestionMark();
+        lLines = ReadStdinUntilQuestionMark( out lQueryType );
       }
     }
 
