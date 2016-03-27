@@ -65,7 +65,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <PlatformTarget>x86</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
-    <DefineConstants>TRACE;PARALLELIZE</DefineConstants>
+    <DefineConstants>TRACE;PARALLELIZE, SHOW_COUNTEREXAMPLE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <Prefer32Bit>false</Prefer32Bit>
@@ -89,7 +89,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BinaryPredicate.cs" />
+    <Compile Include="BinaryPredication.cs" />
+    <Compile Include="ModalCounterexample.cs" />
+    <Compile Include="Counterexample.cs" />
     <Compile Include="Identification.cs" />
+    <Compile Include="KindOfWorld.cs" />
     <Compile Include="NamedObject.cs" />
     <Compile Include="NullPredicate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -113,6 +118,7 @@
     <Compile Include="UnaryOperator.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="Variable.cs" />
+    <Compile Include="KindOfObject.cs" />
   </ItemGroup>
   <ItemGroup />
 </Project>

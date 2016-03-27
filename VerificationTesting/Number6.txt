@@ -1,0 +1,3 @@
+3A -> 3w, 3x,3y, ~x=y & ~x=w & ~y=w & Aw & Ax & Ay & (z, Az -> (w=z| x=z | y=z))
+
+// Expected Result: Necessary

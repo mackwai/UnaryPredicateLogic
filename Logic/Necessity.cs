@@ -88,6 +88,11 @@ namespace Logic
           .All( fWorld => mInnerMatrix.TrueIn( aInterpetation, fWorld, aPredicates ) );
       }
     }
+
+    internal override string Prover9InputHelper( Dictionary<char, string> aTranslatedVariableNames )
+    {
+      throw new EngineException( "Prover9 does not support modal logic." );
+    }
 	  
 	  public override string ToString()
 	  {

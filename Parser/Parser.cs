@@ -90,7 +90,10 @@ namespace Logic
       }
     }
 
+    private static Regex The = ExactMatch( @"1[a-z]," );
     private static Regex ThereExists = ExactMatch( @"3[a-z]," );
+    private static Regex ThereAreThisManyOfThese = ExactMatch( @"\d+[A-Z]" );
+    private static Regex ThisManyOfTheseAreTrue = ExactMatch( @"(\d+)([A-Z]{2,})" );
     private static Regex ForAll = ExactMatch( @"[a-z]," );
     private static Regex And = ExactMatch( @"&" );
     private static Regex Or = ExactMatch( @"\|" );
@@ -99,21 +102,29 @@ namespace Logic
     private static Regex Not = ExactMatch( @"~" );
     private static Regex Nor = ExactMatch( @"!" );
     private static Regex Xor = ExactMatch( @"\^" );
+    private static Regex NecessarilyOnlyIf = ExactMatch( @"-<" );
     private static Regex Is = ExactMatch( @"[A-Z][a-z]" );
     private static Regex IsTheSameAs = ExactMatch( @"[a-z]=[a-z]" );
+    private static Regex Are = ExactMatch( @"[a-z][A-Z][a-z]" );
     private static Regex TrueThat = ExactMatch( @"[A-Z]" );
     private static Regex Possibly = ExactMatch( @"<>" );
     private static Regex Necessarily = ExactMatch( @"\[\]" );
     private static Regex ParenthesizedExpression = ExactMatch( @"\(.*\)" );
     private static Regex TwoTermProposition = ExactMatch( @"(~?)([A-Z])([aeiouy])(~?)([A-Z])('?)" );
     private static Regex StringPrefixedWithTwoTermProposition = new Regex( @"^~?[A-Z][aeiouy]~?[A-Z]'?" );
+    private static Regex StringPrefixedWithThisMany = new Regex( @"^\d+[A-Z]+" );
 
     private static bool AreUnariesFollowedByAQuantifier( IEnumerable<string> aExpressions )
     {
-      if ( IsUnaryOperator( aExpressions.First() ) )
-        return aExpressions.SkipWhile( fToken => IsUnaryOperator( fToken ) ).First().IsQuantifier();
-      else
+      if ( !IsUnaryOperator( aExpressions.First() ) )
         return false;
+
+      IEnumerable<string> lExpressionsFollowingUnaryOperators = aExpressions.SkipWhile( fToken => IsUnaryOperator( fToken ) );
+
+      if ( lExpressionsFollowingUnaryOperators.Count() == 0 )
+        return false;
+
+      return lExpressionsFollowingUnaryOperators.First().IsQuantifier();
     }
 
     private static string Conjoin( IEnumerable<string> aExpressions )
@@ -136,10 +147,19 @@ namespace Logic
         RegexMatch lMatchStringPrefixedWithTwoTermProposition =
           StringPrefixedWithTwoTermProposition.Exec( aString.Substring( lStartingPoint ) );
 
+        RegexMatch lMatchThisMany =
+          StringPrefixedWithThisMany.Exec( aString.Substring( lStartingPoint ) );
+
         if ( lMatchStringPrefixedWithTwoTermProposition != null )
         {
           lSubexpressions.Add( lMatchStringPrefixedWithTwoTermProposition[ 0 ] );
           lStartingPoint += lMatchStringPrefixedWithTwoTermProposition[ 0 ].Length;
+          i = lStartingPoint;
+        }
+        else if ( lMatchThisMany != null )
+        {
+          lSubexpressions.Add( lMatchThisMany[ 0 ] );
+          lStartingPoint += lMatchThisMany[ 0 ].Length;
           i = lStartingPoint;
         }
         // Always interpret a capital letter followed by a lowercase letter as a predication over one variable, unless it is part of
@@ -197,10 +217,10 @@ namespace Logic
 
     private static char GetSymbolForVariable( string aQuantifier )
     {
-      if ( aQuantifier.Matches( ThereExists ) )
-        return aQuantifier[ 1 ];
-      else if ( aQuantifier.Matches( ForAll ) )
+      if ( aQuantifier.Matches( ForAll ) )
         return aQuantifier[ 0 ];
+      else if ( aQuantifier.Matches( ThereExists ) || aQuantifier.Matches( The ) )
+        return aQuantifier[ 1 ];
       else
         // The program should never reach this point.
         throw new Exception();
@@ -237,14 +257,28 @@ namespace Logic
       return aRegularExpressions.Any( fRegex => aString.Matches( fRegex ) );
     }
 
+    private static int PrecedenceOfBinaryOperator( this string aString )
+    {
+      if ( aString.IsAnyOf( And, Nor ) )
+        return 0;
+      else if ( aString.IsAnyOf( Or ) )
+        return 1;
+      else if ( aString.IsAnyOf( OnlyIf, NecessarilyOnlyIf ) )
+        return 2;
+      else if ( aString.IsAnyOf( IfAndOnlyIf, Xor ) )
+        return 3;
+      else
+        throw new Exception();
+    }
+
     private static bool IsBinaryOperator( this string aString )
     {
-      return aString.IsAnyOf( And, Or, IfAndOnlyIf, OnlyIf, Nor, Xor );
+      return aString.IsAnyOf( And, Or, IfAndOnlyIf, OnlyIf, Nor, Xor, NecessarilyOnlyIf );
     }
 
     private static bool IsQuantifier( this string aString )
     {
-      return aString.IsAnyOf( ForAll, ThereExists );
+      return aString.IsAnyOf( ForAll, ThereExists, The );
     }
 
     private static bool IsToken( this string aString )
@@ -254,17 +288,22 @@ namespace Logic
         Or,
         IfAndOnlyIf,
         ThereExists,
+        ThisManyOfTheseAreTrue,
+        ThereAreThisManyOfThese,
         OnlyIf,
         Not,
         Nor,
         Xor,
         Is,
         IsTheSameAs,
+        Are,
         TrueThat,
         ForAll,
         Possibly,
         Necessarily,
-        TwoTermProposition );
+        NecessarilyOnlyIf,
+        TwoTermProposition,
+        The );
     }
 
     private static bool IsParenthesizedGroup( this string aString )
@@ -325,13 +364,23 @@ namespace Logic
       VariableDictionary aBoundVariables )
     {
       int lNumberOfTokensBeforeBinaryOperator = -1;
+      int lHighestPrecedenceFound = -1;
       for ( int i = 0; i < aTokens.Length; i++ )
       {
         if ( aTokens[ i ].IsBinaryOperator() )
-          lNumberOfTokensBeforeBinaryOperator = i;
+        {
+          int lPrecedence = aTokens[ i ].PrecedenceOfBinaryOperator();
+          if ( lPrecedence >= lHighestPrecedenceFound )
+          {
+            lHighestPrecedenceFound = lPrecedence;
+            lNumberOfTokensBeforeBinaryOperator = i;
+          }
+        }
+
         if ( aTokens[ i ].IsQuantifier() )
           break;
       }
+
       string[] lTokensBeforeLastBinaryOperator = aTokens.Subarray( 0, lNumberOfTokensBeforeBinaryOperator );
       string[] lTokensAfterLastBinaryOperator = aTokens.Subarray(
         lNumberOfTokensBeforeBinaryOperator + 1,
@@ -362,6 +411,9 @@ namespace Logic
       if ( lLastBinaryOperator.Matches( Xor ) )
         return Factory.Xor( lLeft, lRight );
 
+      if ( lLastBinaryOperator.Matches( NecessarilyOnlyIf ) )
+        return Factory.NecessarilyOnlyIf( lLeft, lRight );
+
       // The program should never reach this point.
       throw new Exception();
     }
@@ -385,6 +437,9 @@ namespace Logic
       if ( aQuantifier.Matches( ThereExists ) )
         return Factory.ThereExists( lVariable, lBody );
 
+      if ( aQuantifier.Matches( The ) )
+        return Factory.The( lVariable, lBody );
+
       // The program should never reach this point.
       throw new Exception();
     }
@@ -404,6 +459,14 @@ namespace Logic
           FindVariable( aExpression[ 1 ], aBoundVariables, aCollectedItems ) );
       }
 
+      if ( aExpression.Matches( Are ) )
+      {
+        return aCollectedItems.AddBinaryPredication(
+          aCollectedItems.AddBinaryPredicate( aExpression[ 1 ] ),
+          FindVariable( aExpression[ 0 ], aBoundVariables, aCollectedItems ),
+          FindVariable( aExpression[ 2 ], aBoundVariables, aCollectedItems ) );
+      }
+
       if ( aExpression.Matches( TrueThat ) )
         return aCollectedItems.AddNullPredicate( aExpression[ 0 ] );
 
@@ -412,6 +475,24 @@ namespace Logic
         return aCollectedItems.AddIdentification(
           FindVariable( aExpression[ 0 ], aBoundVariables, aCollectedItems ),
           FindVariable( aExpression[ 2 ], aBoundVariables, aCollectedItems ) );
+      }
+
+      if ( aExpression.Matches( ThereAreThisManyOfThese ) )
+      {
+        return Factory.ThereAreThisManyOfThese(
+          UInt32.Parse( aExpression.Substring( 0, aExpression.Length - 1 ) ),
+          aCollectedItems.AddUnaryPredicate( aExpression[ aExpression.Length - 1 ] ) );
+      }
+
+      if ( aExpression.Matches( ThisManyOfTheseAreTrue ) )
+      {
+        List<Matrix> lPredicates = new List<Matrix>();
+        RegexMatch lMatch = ThisManyOfTheseAreTrue.Exec( aExpression );
+        for ( int i = 0; i < lMatch[ 2 ].Length; i++ )
+        {
+          lPredicates.Add( aCollectedItems.AddNullPredicate( lMatch[ 2 ][ i ] ) );
+        }
+        return Factory.ThisManyOfTheseAreTrue( UInt32.Parse( lMatch[ 1 ] ), lPredicates );
       }
 
       if ( aExpression.Matches( ParenthesizedExpression ) )

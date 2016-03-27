@@ -34,6 +34,15 @@ namespace Logic
 	  {
 	    return new Variable( aLetter );
 	  }
+
+    /// <summary>
+    /// Create a Binary predicate.
+    /// </summary>
+    /// <param name="aLetter">A capital letter that stands for the predicate</param>
+    public static BinaryPredicate BinaryPredicate( char aLetter )
+    {
+      return new BinaryPredicate( aLetter );
+    }
 	  
 	  /// <summary>
 	  /// Create a unary predicate.
@@ -65,12 +74,24 @@ namespace Logic
 	  }
 
     /// <summary>
+    /// Create a predication on two variables.
+    /// </summary>
+    /// <param name="aPredicate">a predicate</param>
+    /// <param name="aVariable">a variable</param>
+    /// <param name="aVariable">another variable</param>
+    /// <returns>a new predication</returns>
+    public static Matrix Predication( BinaryPredicate aPredicate, Variable aVariable1, Variable aVariable2 )
+    {
+      return new BinaryPredication( aPredicate, aVariable1, aVariable2 );
+    }
+
+    /// <summary>
     /// Create an identification of two variables.
     /// </summary>
     /// <param name="aLeft">a variable</param>
     /// <param name="aRight">another variable</param>
     /// <returns>a new identification</returns>
-    public static Matrix Identification( Variable aLeft, Variable aRight )
+    public static Matrix TheSame( Variable aLeft, Variable aRight )
     {
       return new Identification( aLeft, aRight );
     }
@@ -132,6 +153,22 @@ namespace Logic
     }
 
     /// <summary>
+    /// D2 and D6
+    /// </summary>
+    /// <param name="aConjuncts">matrices to be conjoined</param>
+    public static Matrix And( IEnumerable<Matrix> aConjuncts )
+    {
+      try
+      {
+        return aConjuncts.Aggregate( ( fConjunction, fNext ) => And( fConjunction, fNext ) );
+      }
+      catch ( InvalidOperationException )
+      {
+        throw new EngineException( "Can't conjoin an empty list of matrices." );
+      }
+    }
+
+    /// <summary>
     /// D3 and D7
     /// </summary>
     public static Matrix Or( Matrix aLeft, Matrix aRight, params Matrix[] aOthers )
@@ -142,6 +179,22 @@ namespace Logic
         return new Disjunction( aLeft, aRight );
       else
         return Or( Or( aLeft, aRight ), aOthers.Head(), aOthers.Tail() );
+    }
+
+    /// <summary>
+    /// D3 and D7
+    /// </summary>
+    /// <param name="aConjuncts">matrices to be disjoined</param>
+    public static Matrix Or( IEnumerable<Matrix> aDisjuncts )
+    {
+      try
+      {
+        return aDisjuncts.Aggregate( ( fDisjunction, fNext ) => Or( fDisjunction, fNext ) );
+      }
+      catch ( InvalidOperationException )
+      {
+        throw new EngineException( "Can't disjoin an empty list of matrices." );
+      }
     }
 
     /// <summary>
@@ -182,13 +235,14 @@ namespace Logic
     /// </summary>
     /// <param name="aVariable">the variable representing the one object for which the matrix is being asserted</param>
     /// <param name="aInnerMatrix">the matrix that is being asserted</param>
-    /// <returns>an existential quantifier</returns>
-    public static Matrix ThereIsOne( Variable aVariable, Matrix aInnerMatrix )
+    /// <returns>an definite description</returns>
+    public static Matrix The( Variable aVariable, Matrix aInnerMatrix )
     {
-      Variable lVariable = Factory.Variable( 'a' );
-      Matrix lSecondAssertion = aInnerMatrix.Substitute( aVariable, lVariable );
-
-      return ThereExists( aVariable, And( aInnerMatrix, ForAll( lVariable, OnlyIf( lSecondAssertion, Identification( aVariable, lVariable ) ) ) ) );
+      char lSymbol = aVariable.ToString()[0];
+      char lNext = lSymbol;
+      lNext++;
+      Variable lGamma = Variable( (lSymbol == 'z') ? 'a' : lNext );
+      return ThereExists( lGamma, ForAll( aVariable, IfAndOnlyIf( TheSame( aVariable, lGamma ), aInnerMatrix ) ) );
     }
 
     /// <summary>
@@ -337,6 +391,16 @@ namespace Logic
     }
 
     /// <summary>
+    /// Strict Implication
+    /// </summary>
+    /// <param name="aAntecedent">the antecedent of the conditional</param>
+    /// <param name="aConsequent">the consequent of the conditional</param>
+    public static Matrix NecessarilyOnlyIf( Matrix aAntecedent, Matrix aConsequent )
+    {
+      return Necessarily( OnlyIf( aAntecedent, aConsequent ) );
+    }
+
+    /// <summary>
     /// Bind a set of variables in a matrix with a quantifier.
     /// </summary>
     /// <param name="aVariables">a set of variables</param>
@@ -354,5 +418,146 @@ namespace Logic
 
       return lResult;
     }
-	}
+
+    private static Variable[] MakeNVariables( uint aNumber )
+    {
+      char lChar = 'a';
+      List<Variable> lVariables = new List<Variable>();
+      for ( int i = 0; i < aNumber; i++ )
+      {
+        lVariables.Add( Variable( lChar ) );
+        if ( lChar == 'z' )
+          lChar = 'a';
+        else
+          lChar++;
+      }
+      return lVariables.ToArray();
+    }
+
+    /// <summary>
+    /// D11
+    /// </summary>
+    /// <param name="aLeft">a variable</param>
+    /// <param name="aRight">another variable</param>
+    /// <returns>a matrix asserting that the two variables are instantiated with distinct objects</returns>
+    public static Matrix NotTheSame( Variable aLeft, Variable aRight )
+    {
+      return Not( TheSame( aLeft, aRight ) );
+    }
+
+    private static Matrix AreDistinct( IEnumerable<Variable> aVariables )
+    {
+      Tuple<Variable,Variable>[] lPairs = Utility.Pairs( aVariables ).ToArray();
+      Matrix lMatrix = NotTheSame( lPairs.First().Item1, lPairs.First().Item2 );
+      foreach ( Tuple<Variable,Variable> lPair in lPairs.Skip(1) )
+      {
+        lMatrix = And( lMatrix, NotTheSame( lPair.Item1, lPair.Item2 ) );
+      }
+      return lMatrix;
+    }
+
+    private static Matrix AllAre( IEnumerable<Variable> aVariables, UnaryPredicate aPredicate )
+    {
+      Matrix lMatrix = Predication( aPredicate, aVariables.First() );
+      foreach ( Variable lVariable in aVariables.Skip( 1 ) )
+      {
+        lMatrix = And( lMatrix, Predication( aPredicate, lVariable ) );
+      }
+      return lMatrix;
+    }
+
+    private static Matrix Disjoin( IEnumerable<Matrix> aMatrices )
+    {
+      Matrix lResult = aMatrices.First();
+      foreach ( Matrix lMatrix in aMatrices.Skip(1) )
+      {
+        lResult = Or( lResult, lMatrix );
+      }
+      return lResult;
+    }
+
+    public static Matrix ThereAreThisManyOfThese( uint aNumber, UnaryPredicate aPredicate )
+    {
+      Variable[] lVariables = MakeNVariables( Math.Max( aNumber, 1 ) );
+      switch ( aNumber )
+      {
+        case 0:
+          return ForAll( lVariables[ 0 ], Not( Predication( aPredicate, lVariables[ 0 ] ) ) );
+        case 1:
+          return The( lVariables[ 0 ], Predication( aPredicate, lVariables[ 0 ] ) );
+        default:
+          Variable lVariable = Variable( 'x' );
+          return Bind(
+            lVariables,
+            And(
+              AllAre( lVariables, aPredicate ),
+              AreDistinct( lVariables ),
+              ForAll( lVariable, OnlyIf( Predication( aPredicate, lVariable ), Disjoin( lVariables.Select( fVariable => TheSame( lVariable, fVariable ) ) ) ) ) ),
+            ThereExists );
+      }
+    }
+
+    /// <summary>
+    /// Select all subsets of indices of a given size from the indices in an array.
+    /// </summary>
+    /// <param name="aNumber">the size the subsets</param>
+    /// <param name="aTotal">the number of items in the array</param>
+    /// <returns></returns>
+    private static IEnumerable<IEnumerable<int>> Choose( uint aNumber, int aTotal )
+    {
+      //int aSizeOfPowerSet = 2 << aTotal;
+      //for ( int i = 0; i < aSizeOfPowerSet; i++ )
+      //{
+      //  List<int> lIndices = new List<int>();
+
+      //}
+      if ( aNumber == 0 )
+      {
+        return new IEnumerable<int>[] { new int[] { } };
+      }
+      else if ( aNumber >= aTotal )
+      {
+        return new IEnumerable<int>[] { Enumerable.Range( 0, aTotal ) };
+      }
+      else
+      {
+        return Choose( aNumber, aTotal - 1 ).Concat( Choose( aNumber - 1, aTotal - 1 ).Select( fChoice => fChoice.Concat( new int[] { aTotal - 1 } ) ) );
+      }
+    }
+
+    private static Matrix Combine( IEnumerable<int> aIndicesOfNegatedMatrices, Matrix[] aMatrices )
+    {
+      Matrix[] lMatrices = aMatrices.Clone() as Matrix[];
+      foreach ( int i in aIndicesOfNegatedMatrices )
+      {
+        lMatrices[ i ] = Not( lMatrices[ i ] );
+      }
+      return And( lMatrices );
+    }
+
+    /// <summary>
+    /// Creates a Matrix equivalent to the proposition that a specified number of matrices in a
+    /// list of matrices are true and the rest are false.
+    /// </summary>
+    /// <param name="aNumber">the number of null predictates</param>
+    /// <param name="aMatrices">the list of null predicates</param>
+    /// <returns>a Matrix equivalent to the proposition that a specified number of null predicates in a
+    /// list of null predicates are true and the rest are false</returns>
+    public static Matrix ThisManyOfTheseAreTrue( uint aNumber, IEnumerable<Matrix> aMatrices )
+    {
+      Matrix[] lMatrices = aMatrices.ToArray();
+
+      if ( lMatrices.Length < aNumber )
+      {
+        throw new EngineException(
+          @"{0} of the predicate(s) {1} can't be true because there are only {2} of them.",
+          aNumber,
+          string.Join( ", ", (object[]) lMatrices ),
+          lMatrices.Length );
+      }
+
+      return Or( Choose( (uint) lMatrices.Length - aNumber, lMatrices.Length ).Select(
+        fIndicesOfNegatedPredicates => Combine( fIndicesOfNegatedPredicates, lMatrices ) ) );
+    }
+  }
 }

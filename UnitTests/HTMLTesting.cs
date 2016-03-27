@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2015 MacKenzie Cumings
+// Copyright (C) 2016 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,40 +15,26 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-namespace Logic
+using System;
+using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+using Logic;
+
+namespace UnitTests
 {
-  /// <summary>
-  /// a predicate over one variable
-  /// </summary>
-  public class UnaryPredicate
+  [TestClass]
+  public class HTMLTesting
   {
-    internal UnaryPredicate( char aLetter )
+    [TestMethod]
+    public void TestMethod1()
     {
-      Letter = aLetter;
-    }
-
-    public char Letter { get; private set; }
-        
-    public override bool Equals( object obj )
-    {
-      if ( obj is UnaryPredicate )
-      {
-        UnaryPredicate that = obj as UnaryPredicate;
-
-        return this.Letter == that.Letter;
-      }
-
-      throw new EngineException( "UnaryPredicate compared to non-UnaryPredicate." );
-    }
-    
-    public override int GetHashCode()
-    {
-      return Letter.GetHashCode();
-    }
-
-    public override string ToString()
-    {
-      return Letter.ToString();
+      File.WriteAllText(
+        "test.html",
+        "<!DOCTYPE html>\n<html><head><meta charset=\"UTF-8\" /><link rel=\"stylesheet\" type=\"text/css\" href=\"../../../WebApplication/style.css\" /></head><body>"
+        + HTMLMaker.MakeHTML( Parser.Parse( new string[] { "~(P&Q&<>~(P|Q)&<>(P&~Q)&<>x,Gx&<>~x,Gx)" } ).FindCounterexample() )
+        + "</body></html>" );
+      System.Diagnostics.Process.Start( "test.html" );
     }
   }
 }

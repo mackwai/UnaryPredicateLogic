@@ -55,6 +55,11 @@ namespace Logic
       get;
     }
 
+    protected virtual string Prover9Connector
+    {
+      get { return Connector; }
+    }
+
     internal override IEnumerable<Tuple<Matrix, Matrix>> DirectDependencies
     {
       get
@@ -163,9 +168,18 @@ namespace Logic
       Right.AssignModality( aNecessity );
     }
 
+    internal override string Prover9InputHelper( Dictionary<char, string> aTranslatedVariableNames )
+    {
+      return string.Format(
+        @"({0}{1}{2})",
+        Left.Prover9InputHelper( aTranslatedVariableNames ),
+        Prover9Connector,
+        Right.Prover9InputHelper( aTranslatedVariableNames ) );
+    }
+
     public override string ToString()
     {
-      return string.Format( "({0}{1}{2})", Left, Connector, Right );
+      return string.Format( @"({0}{1}{2})", Left, Connector, Right );
     }
 
     public override bool Equals( object obj )

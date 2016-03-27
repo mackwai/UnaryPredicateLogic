@@ -1,4 +1,4 @@
-// somerby.net/mack/logic
+﻿// somerby.net/mack/logic
 // Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
@@ -19,18 +19,17 @@ using System.Collections.Generic;
 
 namespace Logic
 {
-  /// <summary>
-  /// a predication on one variable
-  /// </summary>
-  internal class UnaryPredication : Matrix
+  internal class BinaryPredication : Matrix
   {
-    private Variable mVariable;
-    private UnaryPredicate mPredicate;
-    
-    internal UnaryPredication( UnaryPredicate aPredicate, Variable aVariable )
+    private Variable mVariable1;
+    private Variable mVariable2;
+    private BinaryPredicate mPredicate;
+
+    internal BinaryPredication( BinaryPredicate aPredicate, Variable aVariable1, Variable aVariable2 )
     {
       mPredicate = aPredicate;
-      mVariable = aVariable;
+      mVariable1 = aVariable1;
+      mVariable2 = aVariable2;
     }
 
     internal override string DOTLabel
@@ -38,19 +37,33 @@ namespace Logic
       get
       {
         return string.Format(
-          "<Unary Predication<BR/><B><FONT FACE=\"MONOSPACE\">{0}</FONT></B>>",
+          "<Binary Predication<BR/><B><FONT FACE=\"MONOSPACE\">{0}</FONT></B>>",
           this );
       }
     }
 
     internal override IEnumerable<Necessity> FreeModalities
     {
-      get { yield return mVariable.Modality; }
+      get
+      {
+        yield return mVariable1.Modality;
+
+        if ( (mVariable1.Modality == null) != (mVariable2.Modality == null) )
+          yield return mVariable2.Modality;
+        else if ( mVariable1.Modality != null && mVariable2.Modality != null && !mVariable1.Modality.Equals( mVariable2.Modality ) )
+          yield return mVariable2.Modality;
+      }
     }
 
     internal override IEnumerable<Variable> FreeVariables
     {
-      get { yield return mVariable; }
+      get
+      {
+        yield return mVariable1;
+
+        if ( !mVariable2.Equals( mVariable1 ) )
+          yield return mVariable2;
+      }
     }
 
     internal override IEnumerable<Variable> IdentifiedVariables
@@ -60,7 +73,7 @@ namespace Logic
 
     internal override int MaxmimumNumberOfDistinguishableObjects
     {
-      get { return 1; }
+      get { return 2; }
     }
 
     internal override int MaxmimumNumberOfModalitiesInIdentifications
@@ -80,46 +93,50 @@ namespace Logic
 
     internal override IEnumerable<UnaryPredicate> UnaryPredicates
     {
-      get { yield return mPredicate; }
+      get { yield break; }
     }
-    
+
     internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
     {
-      return mVariable.InstantiatedKindOfObject.IndexOf( mPredicate.ToString() ) >= 0;
+      throw new EngineException( "Can't decide a proposition that contains binary predicates." );
     }
 
     internal override Matrix Substitute( Variable aVariable, Variable aReplacement )
     {
-      return new UnaryPredication( mPredicate, mVariable.Substitute( aVariable, aReplacement ) );
+      return new BinaryPredication(
+        mPredicate, mVariable1.Substitute( aVariable, aReplacement ),
+        mVariable2.Substitute( aVariable, aReplacement ) );
     }
 
     public override bool Equals( object obj )
     {
-      UnaryPredication that = obj as UnaryPredication;
+      BinaryPredication that = obj as BinaryPredication;
 
       if ( that == null )
         return false;
-        //throw new EngineException( "Object of type {0} compared to a {1}", obj.GetType(), this.GetType() );
 
-      return this.mPredicate.Equals( that.mPredicate ) && this.mVariable.Equals( that.mVariable );
+      return this.mPredicate.Equals( that.mPredicate )
+        && this.mVariable1.Equals( that.mVariable1 )
+        && this.mVariable2.Equals( that.mVariable2 );
     }
 
     public override int GetHashCode()
     {
-      return mPredicate.GetHashCode() ^ mVariable.GetHashCode();
+      return mPredicate.GetHashCode() ^ mVariable1.GetHashCode() ^ mVariable2.GetHashCode();
     }
 
     internal override string Prover9InputHelper( Dictionary<char, string> aTranslatedVariableNames )
     {
       return string.Format(
-        "{0}1({1})",
+        "{1}2({0},{2})",
+        aTranslatedVariableNames[ mVariable1.ToString()[ 0 ] ],
         mPredicate,
-        aTranslatedVariableNames[ mVariable.ToString()[ 0 ] ] );
+        aTranslatedVariableNames[ mVariable2.ToString()[ 0 ] ] );
     }
 
     public override string ToString()
     {
-      return string.Format( "{0}{1}", mPredicate, mVariable );
+      return string.Format( "{0}{1}{2}", mVariable1, mPredicate, mVariable2 );
     }
   }
 }

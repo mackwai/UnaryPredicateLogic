@@ -15,6 +15,8 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+using System.Collections.Generic;
+
 namespace Logic
 {
   /// <summary>
@@ -45,6 +47,14 @@ namespace Logic
     internal override Matrix Substitute( Variable aVariable, Variable aReplacement )
     {
       return new MaterialConditional( Left.Substitute( aVariable, aReplacement ), Right.Substitute( aVariable, aReplacement ) );
+    }
+
+    internal override string Prover9InputHelper1( Dictionary<char, string> aTranslatedVariableNames )
+    {
+      return string.Format(
+        "formulas(assumptions).\n{0}end_of_list.\n\nformulas(goals).\n{1}end_of_list.\n",
+        this.Left.MakeProver9Formulas( aTranslatedVariableNames ),
+        this.Right.MakeProver9Formulas( aTranslatedVariableNames ) );
     }
   }
 }

@@ -64,5 +64,17 @@ namespace WindowsFormsApplication
     {
       labelResult.Text = "";
     }
+
+    private void btnProver9Input_Click( object sender, EventArgs e )
+    {
+      try
+      {
+        MessageBox.Show( Logic.Parser.Parse( TextBox.Lines ).Prover9Input );
+      }
+      catch ( Exception lException )
+      {
+        labelResult.Text = lException.Message;
+      }
+    }
   }
 }

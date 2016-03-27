@@ -39,6 +39,18 @@ namespace UnitTests
         aStatement );
     }
 
+    private static void TestEngineExceptionThrown( string aStatement )
+    {
+      try
+      {
+        UnitTestUtility.GetDecision( aStatement );
+        Assert.Fail( "Exception not thrown when deciding \"{0}\"", aStatement );
+      }
+      catch ( Logic.EngineException )
+      {
+      }
+    }
+
     private static void TestPropositionIsNot( Logic.Alethicity aAlethicity, string aStatement )
     {
       Assert.AreNotEqual(
@@ -409,6 +421,12 @@ namespace UnitTests
     }
 
     [TestMethod]
+    public void Test_UniversalNecessaryExistence()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\UniversalNecessaryExistence.txt" );
+    }
+
+    [TestMethod]
     public void Test_FreeVariablesExistence()
     {
       TestPropositionFile( @"..\..\..\VerificationTesting\FreeVariablesExistence.txt" );
@@ -433,6 +451,84 @@ namespace UnitTests
       TestPropositionIs( Logic.Alethicity.Necessary, @"Ax|~Ax" );
       TestPropositionIs( Logic.Alethicity.Impossible, @"~Ax&Ax" );
       TestPropositionIs( Logic.Alethicity.Contingent, @"[]Ax" );
+    }
+
+    [TestMethod]
+    public void Test_OrderOfOperations()
+    {
+      TestPropositionIs( Logic.Alethicity.Necessary, @"(A|B&C)<=>(A|(B&C))" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"(A->B&C)<=>(A->(B&C))" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"(A<=>B->C)<=>(A<=>(B->C))" );
+
+      TestPropositionIs( Logic.Alethicity.Necessary, @"(A|B!C)<=>(A|(B!C))" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"(A-<B|C)<=>(A-<(B|C))" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"(A^B-<C)<=>(A^(B-<C))" );
+
+      TestPropositionIs( Logic.Alethicity.Contingent, @"(A!B&C)<=>(A!(B&C))" );
+      TestPropositionIs( Logic.Alethicity.Contingent, @"(A-<B->C)<=>(A-<(B->C))" );
+
+      TestPropositionIs( Logic.Alethicity.Necessary, @"(A!B&C)<=>((A!B)&C)" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"(A->B-<C)<=>((A->B)-<C)" );
+    }
+
+    [TestMethod]
+    public void Test_NumberedPropositions()
+    {
+      TestPropositionIs( Logic.Alethicity.Necessary, @"0AB	<=>	(~A&~B)" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"1AB	<=>	((~A&B)|(A&~B))" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"2AB	<=>	(A&B)" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"0ABC	<=>	((~A&~B)&~C)" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"1ABC	<=>	((((~A&~B)&C)|((~A&B)&~C))|((A&~B)&~C))" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"2ABC	<=>	((((~A&B)&C)|((A&~B)&C))|((A&B)&~C))" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"3ABC	<=>	((A&B)&C)" );
+    }
+
+  [TestMethod]
+    public void Test_Number1()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\Number1.txt" );
+    }
+
+    [TestMethod]
+    public void Test_Number2()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\Number2.txt" );
+    }
+
+    [TestMethod]
+    public void Test_Number3()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\Number3.txt" );
+    }
+
+    [TestMethod]
+    public void Test_Number4()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\Number4.txt" );
+    }
+
+    [TestMethod]
+    public void Test_Number5()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\Number5.txt" );
+    }
+
+    [TestMethod]
+    public void Test_Number6()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\Number6.txt" );
+    }
+
+    [TestMethod]
+    public void Test_Number7()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\Number7.txt" );
+    }
+
+    [TestMethod]
+    public void Test_ExceptionThrownBecauseOfBinaryPredication()
+    {
+      TestEngineExceptionThrown( @"xRy" );
     }
   }
 }

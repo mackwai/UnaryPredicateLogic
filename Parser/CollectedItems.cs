@@ -24,6 +24,7 @@ namespace Logic
   /// </summary>
   internal class CollectedItems
   {
+    private Dictionary<char, BinaryPredicate> mBinaryPredicates;
     private Dictionary<char, UnaryPredicate> mUnaryPredicates;
     private Dictionary<char, NullPredicate> mNullPredicates;
     private Dictionary<Matrix, Matrix> mPredications;
@@ -32,6 +33,7 @@ namespace Logic
 
     public CollectedItems()
     {
+      mBinaryPredicates = new Dictionary<char, BinaryPredicate>();
       mUnaryPredicates = new Dictionary<char, UnaryPredicate>();
       mNullPredicates = new Dictionary<char, NullPredicate>();
       mPredications = new Dictionary<Matrix, Matrix>();
@@ -41,7 +43,7 @@ namespace Logic
 
     public Matrix AddIdentification( Variable aLeftVariable, Variable aRightVariable )
     {
-      Matrix lIdentification = Factory.Identification( aLeftVariable, aRightVariable );
+      Matrix lIdentification = Factory.TheSame( aLeftVariable, aRightVariable );
       if ( mIdentifications.ContainsKey( lIdentification ) )
       {
         return mIdentifications[ lIdentification ];
@@ -86,9 +88,40 @@ namespace Logic
       }
     }
 
+    public BinaryPredicate AddBinaryPredicate( char aSymbol )
+    {
+      if ( mBinaryPredicates.ContainsKey( aSymbol ) )
+      {
+        return mBinaryPredicates[ aSymbol ];
+      }
+      else
+      {
+        BinaryPredicate aPredicate = Factory.BinaryPredicate( aSymbol );
+
+        mBinaryPredicates.Add( aSymbol, aPredicate );
+
+        return aPredicate;
+      }
+    }
+
     public Matrix AddUnaryPredication( UnaryPredicate aPredicate, Variable aVariable )
     {
       Matrix lPredication = Factory.Predication( aPredicate, aVariable );
+      if ( mPredications.ContainsKey( lPredication ) )
+      {
+        return mPredications[ lPredication ];
+      }
+      else
+      {
+        mPredications.Add( lPredication, lPredication );
+
+        return lPredication;
+      }
+    }
+
+    public Matrix AddBinaryPredication( BinaryPredicate aPredicate, Variable aVariable1, Variable aVariable2 )
+    {
+      Matrix lPredication = Factory.Predication( aPredicate, aVariable1, aVariable2 );
       if ( mPredications.ContainsKey( lPredication ) )
       {
         return mPredications[ lPredication ];

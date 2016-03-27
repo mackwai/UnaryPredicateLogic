@@ -64,8 +64,17 @@
     <Compile Include="..\Logic\BinaryOperator.cs">
       <Link>BinaryOperator.cs</Link>
     </Compile>
+    <Compile Include="..\Logic\BinaryPredicate.cs">
+      <Link>BinaryPredicate.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\BinaryPredication.cs">
+      <Link>BinaryPredication.cs</Link>
+    </Compile>
     <Compile Include="..\Logic\Conjunction.cs">
       <Link>Conjunction.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\Counterexample.cs">
+      <Link>Counterexample.cs</Link>
     </Compile>
     <Compile Include="..\Logic\Disjunction.cs">
       <Link>Disjunction.cs</Link>
@@ -85,11 +94,20 @@
     <Compile Include="..\Logic\JointDenial.cs">
       <Link>JointDenial.cs</Link>
     </Compile>
+    <Compile Include="..\Logic\KindOfObject.cs">
+      <Link>KindOfObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\KindOfWorld.cs">
+      <Link>KindOfWorld.cs</Link>
+    </Compile>
     <Compile Include="..\Logic\MaterialConditional.cs">
       <Link>MaterialConditional.cs</Link>
     </Compile>
     <Compile Include="..\Logic\Matrix.cs">
       <Link>Matrix.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\ModalCounterexample.cs">
+      <Link>ModalCounterexample.cs</Link>
     </Compile>
     <Compile Include="..\Logic\NamedObject.cs">
       <Link>NamedObject.cs</Link>

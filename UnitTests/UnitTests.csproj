@@ -73,10 +73,15 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\Saltarelle\HTMLMaker.cs">
+      <Link>HTMLMaker.cs</Link>
+    </Compile>
     <Compile Include="ConsoleApplicationTesting.cs" />
+    <Compile Include="CounterexampleTesting.cs" />
     <Compile Include="ParseTesting.cs" />
     <Compile Include="BitsNeeded.cs" />
     <Compile Include="PropertyTesting.cs" />
+    <Compile Include="HTMLTesting.cs" />
     <Compile Include="UnitTestUtility.cs" />
     <Compile Include="DecisionTesting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

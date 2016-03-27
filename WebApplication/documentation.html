@@ -40,15 +40,15 @@
 
 <p>Most of the software is written in C# and translated into JavaScript with <a href="http://www.saltarelle-compiler.com/" target="_blank">Saltarelle</a>.  The source code is on <a href="https://github.com/mackwai/UnaryPredicateLogic" target="_blank">GitHub</a>.  <a href="https://github.com/mdaines/viz.js/">Viz.js</a> is used to generate diagrams.  The truth table feature is adapted from <a href="https://github.com/mrieppel/TruthTableGenerator" target="_blank">code</a> written by Michael Rieppel.</p>
 
-<p>There are three sections in this documentation.  The <a href="#instructions">first</a> is instructions.  The <a href="#the_language">second</a> describes the symbolic language that the software recognizes.  The <a href ="#the_algorithm">third</a> explains the algorithm that the software follows when it decides statements.</p>
-
 <h2 id="instructions">Instructions</h2>
 
-<p>To use this application, type a logical statement into the textbox on the main page, then click the "Decide" button.  If the application can decide the statement, it will.  Otherwise, it will show some kind of error message describing what went wrong.  The <a href="#the_language">language section</a> explains how to write logical statements for this application.  If you're looking for examples of such statements, click on any of the buttons under the heading entitled "Examples" and the application will fill the text box with an example statement, ready to be decided.</p>
+<p>To use this application, type a logical statement into the textbox on the main page, then click the "Decide" button.  If the application can decide the statement, it will.  Otherwise, it will show some kind of error message describing what went wrong.  The <a href="#the_language">language section</a> explains how to write logical statements for this application.  If you're looking for examples of statements, click on any of the buttons under the heading entitled "Examples" and the application will fill the text box with an example statement, ready to be decided.</p>
 
 <p>If you click "Depict" button, the application will draw a diagram that shows how the application interprets the statement in the textbox.  This diagram is a graphical representation of the data structure that the application actually uses to decide the statement.</p>
 
-<p>If there is a valid propositional logic statement in the textbox, the "Truth Table" button will be enabled.  Clicking this button will cause the application to draw a <a href="http://en.wikipedia.org/wiki/Truth_table" target="_blank">truth table</a> for the statement.</p>
+<p>If there is a syntactically valid propositional logic statement in the textbox, the "Truth Table" button will be enabled.  Clicking this button will cause the application to draw a <a href="http://en.wikipedia.org/wiki/Truth_table" target="_blank">truth table</a> for the statement.</p>
+
+<p>Clicking the "Counterexample" button will cause the application to attempt to find a kind of world where the statement is false.  If it succeeds, it will show a description of that kind of world.</p>
 
 <h2 id="the_language">The Language</h2>
 
@@ -62,10 +62,11 @@
   <li><a href="#language_constant">Constants</a></li>
   <li>Predicates on <a href="#language_unary_predicate">one variable</a> (properties) and predicates on <a href="#language_nullary_predicate">zero variables</a> (propositions)</li>
   <li><a href="#language_grouping">Grouping</a> with parentheses</li>
-  <li><a href="#language_universal_generalization">Universal generalizations</a> and <a href="#language_existential_quantification">existential quantifications</a></li>
+  <li><a href="#language_universal_generalization">Universal generalizations</a>, <a href="#language_existential_quantification">existential quantifications</a> and <a href="#language_definite_description">definite descriptions</a></li>
   <li><a href="#language_identity">Identity</a></li>
   <li><a href="#language_modal_operators">The modal operators for necessity and possibility</a></li>
   <li><a href="#language_two_term_propositions">Two-term Propositions</a></li>
+  <li><a href="#language_assertions_of_number">Some simple assertions of number</a></li>
 </ul>
 
 <h4 id="language_logical_operators">Logical Operators</h4>
@@ -81,15 +82,26 @@
   <tr><td>biconditional</td>        <td><span class="symbolic">&lt;=&gt;</span></td><td>Logical equivalence</td></tr>
   <tr><td>joint denial</td>         <td><span class="symbolic">!</span></td>        <td>Logical NOR</td></tr>
   <tr><td>exclusive disjunction</td><td><span class="symbolic">^</span></td>        <td>Logical XOR</td></tr>
+  <tr><td>strict implication</td><td><span class="symbolic">-&lt;</span></td>        <td>necessarily if &hellip; then &hellip;</td></tr>
 </table>
 
-<p>The binary logical operators all have the same precedence and are left associative.  For example,</p>
+<p>The binary logical operators all are left-associative and have the following precedences:</p>
+
+<table>
+  <tr><th>Precedence</th><th>Operators</th></tr>
+  <tr><td>highest</td>  <td><span class="symbolic">&amp;</span>, <span class="symbolic">!</span></td></tr>
+  <tr><td>&hellip;</td> <td><span class="symbolic">|</span></td></tr>
+  <tr><td>&hellip;</td> <td><span class="symbolic">-&gt;</span>, <span class="symbolic">-&lt;</span></td></tr>
+  <tr><td>lowest</td>   <td><span class="symbolic">&lt;=&gt;</span>, <span class="symbolic">^</span></td></tr>
+</table>
+
+<p>For example,</p>
 
 <pre class="symbolic">A|B&amp;C-&gt;D</pre>
 
 <p>is interpreted the same way as</p>
 
-<pre class="symbolic">(((A|B)&amp;C)-&gt;D</pre>
+<pre class="symbolic">(A|(B&amp;C))-&gt;D</pre>
 
 <p>Negation is right-associative and has higher precedence than any of the binary operators, so</p>
 
@@ -168,12 +180,19 @@ x,Sx->Mx                                 // Socrates is mortal.</pre>
 
 <h4 id="language_existential_quantification">Existential Quantifications</h4>
 
-<p>An existential quantification is a "<span class="symbolic">3</span>" followed by a variable followed by a comma followed by the expression the quantification applies to.  For example,</p>
+<p>An existential quantification is a "<span class="symbolic">3</span>" followed by a variable followed by a comma followed by the expression that the quantification applies to.  For example,</p>
 
 <pre class="symbolic">3x, Fx &amp; Bx</pre>
 
 <p>Could mean "There is a fountain filled with blood".  The same rules for applicability and binding of variables that apply to universal generalizations also apply to existential quantifications.</p>
 
+<h4 id="language_definite_description">Definite Description</h4>
+
+<p>A definite description is a "<span class="symbolic">1</span>" followed by a variable followed by a comma followed by an expression that is supposed to describe exactly one object.  For example,</p>
+
+<pre class="symbolic">1x,Rx</pre>
+
+<p>Could mean "there is only one Roy Orbison"</p>
 
 <h4 id="language_identity">Identity</h4>
 
@@ -201,9 +220,27 @@ x,Sx->Mx                                 // Socrates is mortal.</pre>
   <tr><td><span class="symbolic">SyP</span></td><td>Some S are P and some S are not P</td><td><span class="symbolic">(3x,Sx&amp;Px)&amp;(3x,Sx&amp;~Px)</span></td></tr>
 </table>
 
-<p>In order to make the traditional <a href="http://en.wikipedia.org/wiki/Square_of_opposition" target="_blank">Square of Opposition</a> hold true, the A-form proposition is given existential import and the O-form proposition is denied existential import, per what was argued by <a href="http://plato.stanford.edu/entries/square/" target="_blank">Terence Parsons</a>.  It also recognizes the U-form and Y-form of the <a href="http://en.wikipedia.org/wiki/Logical_hexagon">Hexagon of Opposition</a></p>
+<p>In order to make the traditional <a href="http://en.wikipedia.org/wiki/Square_of_opposition" target="_blank">Square of Opposition</a> hold true, the A-form proposition is given existential import and the O-form proposition is denied existential import, per what was argued by <a href="http://plato.stanford.edu/entries/square/" target="_blank">Terence Parsons</a>.  It also recognizes the U-form and Y-form of the <a href="http://en.wikipedia.org/wiki/Logical_hexagon">Hexagon of Opposition</a>.</p>
 
 <p>Either term in a proposition can be negated by adding the "<span class="symbolic">~</span>" symbol, for instance, "<span class="symbolic">~Aa~B</span>" will be interpreted as "all non-A are non-B".  A "<span class="symbolic">~</span>" at the front of the expression attaches to the first term and not to the whole expression, so "<span class="symbolic">~Aa~B</span>" is interpreted the same way as "<span class="symbolic">(~Aa~B)</span>" and not the same as "<span class="symbolic">~(Aa~B)</span>".</p>
+
+<h4 id="language_assertions_of_number">Assertions of Number</h4>
+
+<p>The language includes a means to make some simple assertions of number.  I added them to the language just for convenience; they sometimes help when codifying the logic in certain logic puzzles.  They don't belong to any symbolic logic that I know of.</p>
+
+<p>A nonnegative integer <em>n</em> followed by a single capital letter <em>P</em>is an assertion that exactly <em>n</em> objects have the property <em>P</em>.
+
+<p>A nonnegative integer <em>n</em> followed by more than one capital letter <em>P, Q, &hellip;</em> is an assertion that exactly <em>n</em>  of the propositions <em>P, Q, &hellip;</em> are true.
+
+<table>
+  <tr><th>Example</th><th>Meaning</th></tr>
+  <tr><td><span class="symbolic">0P</span></td><td>No objects are P</td></tr>
+  <tr><td><span class="symbolic">1P</span></td><td>Exactly 1 object is P</td></tr>
+  <tr><td><span class="symbolic">2P</span></td><td>Exactly 2 objects are P</td></tr>
+  <tr><td><span class="symbolic">0PQR</span></td><td>None of P, Q and R are true</td></tr>
+  <tr><td><span class="symbolic">1PQR</span></td><td>Only one of P, Q and R is true</td></tr>
+  <tr><td><span class="symbolic">2PQR</span></td><td>Exactly 2 of P, Q and R are true</td></tr>
+</table>
 
 <h3>Valid Expressions</h3>
 
@@ -287,7 +324,16 @@ Ms     // Socrates is mortal.</pre>
 
 <p>The exact choice of language isn't important to the decision process, either.  So long as a language only represents logical elements that are supported by the software and the language does not allow any logical element to depend on itself, directly or indirectly (e.g. no Liar's Paradoxes), that language could replace the language that is recognized by this software and the decision algorithm would work the same way.</p>
 
-<p id="replacement">There are some logical elements that can be defined in terms of other logical elements.  Existential Quantification can be defined in terms of universal generalization (<span class="symbolic">[]( (3x,...) &lt;=&gt; (~x,~...) )</span>).  Possibility can be defined in terms of necessity (<span class="symbolic">[]( (&lt;&gt;...) &lt;=&gt; (~[]~...) )</span>).  Exclusive alternation can be defined in terms of equivalence (<span class="symbolic">[]( ...^... &lt;=&gt; ~(...&lt;=&gt;...) )</span>).  The software makes substitutions based on these definitions when it converts a statement to a tree.  It doesn't have to, but it does, so it ought to be mentioned that it does.
+<p id="replacement">For certain elements which can be defined in terms of other elements, the software makes substitutions:</p>
+
+<table id="substitutions">
+  <caption>Substitutions</caption>
+  <tr><th></th><th>Element</th><th>Replacement</th></tr>
+  <tr><td><span class="symbolic">3x,...</span></td><td>existential quantification</td><td><span class="symbolic">(~x,~...)</span></td></tr>
+  <tr><td><span class="symbolic">1x,...</span></td><td>definite description</td><td><span class="symbolic">(3y,x, x=y &lt;=&gt; ...)</span></td></tr>
+  <tr><td><span class="symbolic">&lt;&gt;...</span></td><td>possibility</td><td><span class="symbolic">(~[]~...)</span></td></tr>
+  <tr><td><span class="symbolic">...^...</span></td><td>exclusive disjunction</td><td><span class="symbolic">~(...&lt;=&gt;...)</span></td></tr>
+</table>
 
 <p>It might be helpful to show some symbolic statements and what their corresponding trees look like.  For the statement <span class="symbolic">w,Xw-&gt;Tw</span>, which might be interpreted as "all my exes live in Texas", the software creates a tree like this:</p>
 
@@ -450,29 +496,74 @@ Ms       // Socrates is mortal.
 <p>This works for propositions that do not contain modalities, but it will not work for propositions that contain modalities.  For propositions that contain modalities, the software must evaluate the proposition under these assumptions, but it must also evaluate the proposition under every other possible set of assumptions about the relationships of nullary predicates to each other and to the kinds of objects in a world.  The software does this by defining <em>interpretations</em>.  An <em>interpretation</em> is a set of <a href="#kind_of_world">kinds of worlds</a>; it contains every kind of world that is possible under a given interpretation of the predicates in the proposition, and no other kind of worlds.  To evaluate a proposition under every possible interpretation, the software simply evaluates the proposition under every nonempty subset of the kinds of worlds that it defines for the proposition.  So, if there are <em>u</em> kinds of worlds for a proposition, then there are 2<sup><em>u</em>-1</sup> interpretations that must be evaluated.</p>
 
 
-<h2>The Software</h2>
+<h2>Notes</h2>
+
+<h3>Semantics of Quantified Modal Logic</h3>
+
+<h4>Transworld Identity</h4>
+
+<p>It seems common in discussions of quantified modal logic to assume that two objects in two different possible worlds can be identical in some way; they are considered to be the same object.
+In all quantified modal logics I have encountered, the equality operator ("<span class="symbolic">=</span>") means this kind of identity.
+<!--As I have argued elsewhere, this identity or sameness cannot be an identity of indiscernibles.-->
+I developed this software's handling of quantified modal logic without knowing that this kind of identity was what was normally used in quantified modal logics, and consequently made "<span class="symbolic">=</span>" indicate the one kind of identity that I knew was well-defined: identity of indiscernibles.
+This makes the software's quantitified modal unusual, but I hope not useless.
+It is possible to represent customary identity in the software's language.
+Consider what it means for two objects in two different worlds to be the same object.
+If I say "If I hadn't felt so sick on Monday, I would have gone to work", I'm talking about two possible worlds: the actual world and a counterfactual world where I went to work on Monday, but I am talking about one person who exists in both worlds.
+But what is it that makes them the same?
+My first guess would be that they share a property in common &mdash; that of being me &mdash; and they each is the only object in its respective world that has that property, but it isn't that simple.
+In some other world, George Washington might not have been the first president of the United States of America.
+If we started writing an alternative history about the USA as it would have been if George Washington had nver been president, we would probably consider the non-presidental George Washington to be the same person as the actual George Washington, but we would not consider whomever else we chose to be the first president to be the same person as the actual first president of the USA, even thought they are the sole possessors of the property of being the first president of the USA in their respective worlds.
+Why?
+That's an interesting question, but for the immediate purposes of writing it as a symbolic statement, it doesn't need an answer.</p>
+
+<p>To capture this notion of identity which is customarily used in modal logic in this language, we would choose a predicate to represent the property that the two objects are supposed to share in common, assert that no more than one object in a world can have that property, and then assert that both objects have that property.  For example:</p>
+
+<pre class="symbolic">// In any world, there can only be one first predsident of the USA.
+[]x,y, Px&Py -> x=y
+
+// George Washington was the first president of the USA.
+x,Gx -> Px
+
+// George Washington might not have been the first president of the USA.
+<>3x,Gx&~Px
+</pre>
+
+<p>Unfortunately, the software does not support propositions of this complexity, so this representation of transworld identity is moot.
+
+<h4>Instantiation of Object inside of Modal Expressions</h4>
+
+<p>Quantifiers are always evaluated within a Kind of World.  They only range over the objects which exist in that Kind of World. I'm not sure if I should call it "actualist", but the idea is at least similar to the idea in Rod Girle's <a href="http://www.amazon.com/Possible-Worlds-Rod-Girle/dp/0773526684"><em>Possible Worlds</em></a>.  So any time a variable is instantiated with a kind of object, the kind of world that it exists in is fixed.  This entails that "<span class="symbolic">x, Px -&gt; []Px</span>" is necessarily true.  If you wanted to express the proposition <em>if anything is P, then it is necessarily P</em>, you could use the formulation of transworld identity described above:</p>
+
+<pre class="symbolic">// Choose R arbitrarily.
+[]x,y, Rx&Ry -> x=y // In any world, there is no more than one R.
+
+x, Rx & (Px -> []y, Ry -> Py)
+</pre>
+
+<p>Unfortunately, this expression involves too many interpretations and the software will reject it.  </p>
+
 
 <h3>Run-Time Efficiency and Limitations</h3>
 
-<p>As can be seen by combining the formulas given in the sections on <a href="#kind_of_object">kinds of objects</a>, <a href="#kind_of_world">kinds of worlds</a>, and <a href="#interpretation">interpretations</a>, in order to decide a proposition with no modalities, the software must evaluate the proposition in up to <span style="font-size: medium;">2<sup><em>n</em></sup>&nbsp;&times;&nbsp;Max(0,&nbsp;2<sup><em>i</em>2<sup><em>u</em></sup></sup>&nbsp;-&nbsp;1)</span> kinds of worlds, where <em>n</em> is the number of distinct nullary predicates in the proposition, <em>u</em> is the number of distinct unary predicates in the proposition, and <em>i</em> is the number of objects with the same set of properties that might be distinguished from another by the proposition.  In order to decide a proposition with modalities, the software must evaluate the proposition in up to <span style="font-size: large;">2<sup>2<sup><em>n</em></sup>&nbsp;&times;&nbsp;Max(0,&nbsp;2<sup><em>i</em>2<sup><em>u</em></sup></sup>&nbsp;-&nbsp;1)&nbsp;&times;&nbsp;<em>t</em></sup></span> interpretations, where <em>t</em> is the number of possible worlds that might be distinguished by transworld identifications in the proposition.  This means that the algorithm does not scale well; its run time is exponential or super-exponential in relation to the complexity of the proposition being decided.  This does not, however, prevent the software from performing fast enough when deciding propositions with small values for <em>n</em>, <em>u</em> and <em>i</em>.</p>
+<p>As can be seen by combining the formulas given in the sections on <a href="#kind_of_object">kinds of objects</a>, <a href="#kind_of_world">kinds of worlds</a>, and <a href="#interpretation">interpretations</a>, to decide a proposition with no modalities, the software must evaluate the proposition in up to <span style="font-size: medium;">2<sup><em>n</em></sup>&nbsp;&times;&nbsp;Max(0,&nbsp;2<sup><em>i</em>2<sup><em>u</em></sup></sup>&nbsp;-&nbsp;1)</span> kinds of worlds, where <em>n</em> is the number of distinct nullary predicates in the proposition, <em>u</em> is the number of distinct unary predicates in the proposition, and <em>i</em> is the number of objects with the same set of properties that might be distinguished from another by the proposition.  To decide a proposition with modalities, the software must evaluate the proposition in up to <span style="font-size: large;">2<sup>2<sup><em>n</em></sup>&nbsp;&times;&nbsp;Max(0,&nbsp;2<sup><em>i</em>2<sup><em>u</em></sup></sup>&nbsp;-&nbsp;1)</sup></span> interpretations.  This means that the algorithm does not scale well; its run time is exponential or super-exponential in relation to the complexity of the proposition being decided.  This does not, however, prevent the software from performing fast enough when deciding propositions with small values for <em>n</em>, <em>u</em> and <em>i</em>.</p>
 
-<p>The software actually defines <em>i&#772;</em>2<sup><em>u</em></sup> kinds of objects, where <em>i&#772;</em> is <em>i</em> rounded up to the nearest power of 2.  It is not necessary for <em>i</em> to be rounded up in order for the algorithm to be correct, but it makes it easier to encode kinds of objects as binary numbers.  Also to keep binary encoding simple, it does define empty worlds, but it skips over them when evaluating propositions.  The software actually encodes kinds of worlds and interpretations as 32-bit binary numbers.  This enables the software to go fast, but does put a hard limit on the complexity of propositions it can decide; <span style="font-size: medium;"><em>n</em><em>&nbsp;+&nbsp;i&#772;</em>2<sup><em>u</em></sup>&nbsp;&le;&nbsp;32</span> for non-modal propositions and  <span style="font-size: medium;"><em>t</em>2<sup><em>n</em>&nbsp;+&nbsp;<em>i&#772;</em>2<sup><em>u</em></sup></sup> &le; 32</span> for modal propositions.</p>
+<p>The software actually defines <em>i&#772;</em>2<sup><em>u</em></sup> kinds of objects, where <em>i&#772;</em> is <em>i</em> rounded up to the nearest power of 2.  It is not necessary for <em>i</em> to be rounded up in order for the algorithm to be correct, but it makes it easier to encode kinds of objects as binary numbers.  Also to keep binary encoding simple, it does define empty worlds, but it skips over them when evaluating propositions.  The software actually encodes kinds of worlds and interpretations as 32-bit binary numbers.  This enables the software to go fast, but does put a hard limit on the complexity of propositions it can decide; <span style="font-size: medium;"><em>n</em><em>&nbsp;+&nbsp;i&#772;</em>2<sup><em>u</em></sup>&nbsp;&le;&nbsp;32</span> for non-modal propositions and  <span style="font-size: medium;">2<sup><em>n</em>&nbsp;+&nbsp;<em>i&#772;</em>2<sup><em>u</em></sup></sup> &le; 32</span> for modal propositions.</p>
 
-<p>The following tables list the largest combined values of <em>n</em>, <em>u</em>, <em>i</em> and <em>t</em> that the software supports.</p>
+<p>The following tables list the largest combined values of <em>n</em>, <em>u</em> and <em>i</em> that the software supports.</p>
 
 <table id="maxima_for_modal_propositions">
   <caption>Maxima for Modal Propositions</caption>
-  <tr><th>n</th><th>u</th><th>i</th><th>t</th></tr>
-  <tr><td>5</td><td>0</td><td>0</td><td>0</td></tr>
-  <tr><td>4</td><td>0</td><td>1</td><td>1</td></tr>
-  <tr><td>3</td><td>1</td><td>1</td><td>1</td></tr>
-  <tr><td>3</td><td>0</td><td>3</td><td>2</td></tr>
-  <tr><td>2</td><td>0</td><td>7</td><td>2</td></tr>
-  <tr><td>1</td><td>2</td><td>1</td><td>1</td></tr>
-  <tr><td>1</td><td>1</td><td>3</td><td>2</td></tr>
-  <tr><td>1</td><td>0</td><td>15</td><td>2</td></tr>
-  <tr><td>0</td><td>0</td><td>17</td><td>2</td></tr>
-  <tr><td>0</td><td>0</td><td>3</td><td>3</td></tr>
+  <tr><th>n</th><th>u</th><th>i</th></tr>
+  <tr><td>5</td><td>0</td><td>0</td></tr>
+  <tr><td>4</td><td>0</td><td>1</td></tr>
+  <tr><td>3</td><td>1</td><td>1</td></tr>
+  <tr><td>3</td><td>0</td><td>3</td></tr>
+  <tr><td>2</td><td>0</td><td>7</td></tr>
+  <tr><td>1</td><td>2</td><td>1</td></tr>
+  <tr><td>1</td><td>1</td><td>3</td></tr>
+  <tr><td>1</td><td>0</td><td>15</td></tr>
+  <tr><td>0</td><td>0</td><td>17</td></tr>
 </table>
 
 <table id="maxima_for_non_modal_propositions">
@@ -526,17 +617,6 @@ Ms       // Socrates is mortal.
 <p id="feedback">Thanks.</p>
 
 </div>
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-56050397-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
 
 <script type="text/javascript">
 function ReverseString(s)

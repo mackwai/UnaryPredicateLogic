@@ -38,6 +38,11 @@ namespace Logic
       }
     }
 
+    internal override string Prover9InputHelper( Dictionary<char, string> aTranslatedVariableNames )
+    {
+      return string.Format( "{0}0", this );
+    }
+
     internal override IEnumerable<Variable> FreeVariables
     {
       get { yield break; }

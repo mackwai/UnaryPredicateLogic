@@ -77,6 +77,13 @@ namespace Logic
       aBuilder.AppendLine( string.Format( aFormat, aParams ) );
     }
 
+#if SALTARELLE
+    public static void AppendFormat( this StringBuilder aBuilder, string aFormat, params object[] aParams )
+    {
+      aBuilder.Append( string.Format( aFormat, aParams ) );
+    }
+#endif
+
     public static string TextForDecision( Alethicity lDecision )
     {
       switch ( lDecision )
@@ -117,6 +124,23 @@ namespace Logic
     public static sbyte[] CreateSByteArray( int aNumberOfElements )
     {
       return new sbyte[ aNumberOfElements ];
+    }
+
+    public static IEnumerable<Tuple<TType,TType>> Pairs<TType>( IEnumerable<TType> aList )
+    {
+      TType[] lArray = aList.ToArray();
+      for ( int i = 0; i < lArray.Length - 1; i++ )
+      {
+        for ( int j = i + 1; j < lArray.Length; j++ )
+        {
+          yield return new Tuple<TType,TType>( lArray[i], lArray[j] );
+        }
+      }
+    }
+
+    public static IEnumerable<T> Concat<T>( this IEnumerable<T> aEnumerable, T aItem )
+    {
+      return aEnumerable.Concat( new T[] { aItem } );
     }
   }
 }

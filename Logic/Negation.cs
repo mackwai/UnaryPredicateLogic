@@ -15,6 +15,8 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+using System.Collections.Generic;
+
 namespace Logic
 {
   /// <summary>
@@ -50,6 +52,11 @@ namespace Logic
     internal override Matrix Substitute( Variable aVariable, Variable aReplacement )
     {
       return new Negation( mInnerMatrix.Substitute( aVariable, aReplacement ) );
+    }
+
+    internal override string Prover9InputHelper( Dictionary<char, string> aTranslatedVariableNames )
+    {
+      return string.Format( "-{0}", mInnerMatrix.Prover9InputHelper( aTranslatedVariableNames ) );
     }
 
     public override string ToString()

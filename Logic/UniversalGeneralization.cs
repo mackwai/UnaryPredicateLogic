@@ -105,7 +105,22 @@ namespace Logic
 
     internal override Matrix Substitute( Variable aVariable, Variable aReplacement )
     {
-      return new UniversalGeneralization( mVariable.Substitute( aVariable, aReplacement ), mInnerMatrix.Substitute( aVariable, aReplacement ) );
+      return new UniversalGeneralization(
+        mVariable.Substitute( aVariable, aReplacement ),
+        mInnerMatrix.Substitute( aVariable, aReplacement ) );
+    }
+
+    internal override string Prover9InputHelper( Dictionary<char, string> aTranslatedVariableNames )
+    {
+      char lLetter = Variable.ToString()[0];
+      aTranslatedVariableNames[ lLetter ] = lLetter < 'u' || lLetter > 'z'
+        ? "v" + Variable.ToString()
+        : Variable.ToString();
+
+      return string.Format(
+        "( all {0} {1} )",
+        aTranslatedVariableNames[ lLetter ],
+        mInnerMatrix.Prover9InputHelper( aTranslatedVariableNames ) );
     }
 
     public override string ToString()

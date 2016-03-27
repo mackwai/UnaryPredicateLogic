@@ -23,11 +23,6 @@ using System.Text;
 namespace Logic
 {
   /// <summary>
-  /// possible alethic modalities
-  /// </summary>
-  public enum Alethicity { Necessary, Contingent, Impossible };
-
-  /// <summary>
   /// A logical structure which is either true or false and may or may not contain free variables.  The term "matrix" is borrowed
   /// from Quine's book, <i>Mathematical Logic</i>, though he defines it as a string of symbols that signifies some proposition.
   /// In this program, a matrix is a data structure.  
@@ -37,55 +32,6 @@ namespace Logic
     public int Complexity
     {
       get { return (int) CollectPredicates().BitsNeeded; }
-    }
-
-    /// <summary>
-    /// DOT code for a graph diagram of this matrix
-    /// </summary>
-    public virtual string GraphvizDOT
-    {
-      get
-      {
-        StringBuilder lDOT = new StringBuilder();
-        lDOT.AddLine( "digraph Proposition_{0} {{", this.Name );
-        lDOT.AddLine( "ordering=out;bgcolor=\"#FFFFFF80\"" );
-        foreach ( Matrix lMatrix in this.Matrices.Distinct( new ReferenceComparer() ) )
-        {
-          lDOT.AddLine(
-            "{0} [label={1},shape=rectangle,fontsize=10,style=filled,fillcolor=\"white\",margin=\"0.11,0.00\"];",
-            lMatrix.Name,
-            lMatrix.DOTLabel );
-        }
-        foreach ( Tuple<Matrix, Matrix> lPair in DirectDependencies )
-        {
-          lDOT.AddLine(
-            "{0}->{1}",
-            lPair.Item1.Name,
-            lPair.Item2.Name );
-        }
-        foreach ( Tuple<UniversalGeneralization, Matrix> lPair in ClosedPredications )
-        {
-          lDOT.AddLine(
-            "{0}->{1} [style=dashed]",
-            lPair.Item1.Name,
-            lPair.Item2.Name );
-        }
-
-        lDOT.AddLine( "}}" );
-
-        return lDOT.ToString();
-        //return string.Format( "digraph Proposition{0}" );
-        //return "digraph Proposition {1 [label=<Universal Generalization<BR/><B><FONT FACE=\"MONOSPACE\">x,</FONT></B>>];2 [label=<Predication<BR/><B><FONT FACE=\"MONOSPACE\">Px</FONT></B>>];1->2;1->2 [style=dashed]}";
-      }
-    }
-
-    /// <summary>
-    /// True if this matrix contains only nullary predicates and logical operators, false otherwise.  If it does, then
-    /// it is a proposition in Propositional Logic, and a truth table can be generated for it.
-    /// </summary>
-    public virtual bool IsPropositional
-    {
-      get { return false; }
     }
 
     private Alethicity DecideForFreeVariables()
@@ -106,6 +52,68 @@ namespace Logic
         MaxmimumNumberOfDistinguishableObjects,
         ContainsModalities,
         MaxmimumNumberOfModalitiesInIdentifications );
+    }
+
+    private bool HasCounterexample( uint aInterpretation, Predicates aPredicates )
+    {
+      foreach ( uint lKindOfWorld in aPredicates.KindsOfWorlds( aInterpretation ) )
+      {
+        if ( !this.TrueIn( aInterpretation, lKindOfWorld, aPredicates ) )
+          return true;
+      }
+
+      return false;
+    }
+
+    public Counterexample FindCounterexample()
+    {
+      if ( this.FreeVariables.Any() )
+        return Factory.Bind( FreeVariables, this, Factory.ForAll ).FindCounterexample();
+
+      Predicates lPredicates = CollectPredicates();
+      if ( this.ContainsModalities )
+      {
+#if COMPLEX_COUNTEREXAMPLE
+        uint lFirstInterpretation = lPredicates.FirstInterpretation;
+        for ( uint lInterpretation = lPredicates.LastInterpretation; lInterpretation >= lFirstInterpretation; lInterpretation-- )
+#else
+        uint lLastInterpretation = lPredicates.LastInterpretation;
+        for ( uint lInterpretation = lPredicates.FirstInterpretation; lInterpretation <= lLastInterpretation; lInterpretation++ )
+#endif
+        {
+          if ( HasCounterexample( lInterpretation, lPredicates ) )
+          {
+            List<KindOfWorld> lCounterexamples = new List<KindOfWorld>();
+            List<KindOfWorld> lNonCounterexamples = new List<KindOfWorld>();
+            foreach ( uint lKindOfWorld in lPredicates.KindsOfWorlds( lInterpretation ) )
+            {
+              if ( this.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
+                lNonCounterexamples.Add( lPredicates.DecodeKindOfWorldNumber( lKindOfWorld ) );
+              else
+                lCounterexamples.Add( lPredicates.DecodeKindOfWorldNumber( lKindOfWorld ) );   
+            }
+            return new ModalCounterexample( lCounterexamples, lNonCounterexamples );
+          }
+        }
+      }
+      else
+      {
+        uint lInterpretation = lPredicates.FirstInterpretation;
+#if COMPLEX_COUNTEREXAMPLE
+        uint lFirstKindOfWorld = lPredicates.FirstNonemptyWorld;
+        for ( uint lKindOfWorld = lPredicates.LastKindOfWorld; lKindOfWorld >= lFirstKindOfWorld; lKindOfWorld-- )
+#else
+        uint lLastKindOfWorld = lPredicates.LastKindOfWorld;
+        for ( uint lKindOfWorld = lPredicates.FirstNonemptyWorld; lKindOfWorld <= lLastKindOfWorld; lKindOfWorld++ )
+#endif   
+        {
+          if ( !this.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
+            return lPredicates.DecodeKindOfWorldNumber( lKindOfWorld );
+        }
+      }
+
+      // No counterexample exists; the proposition is necessarily true.
+      return null;
     }
 
     /// <summary>
@@ -156,12 +164,8 @@ namespace Logic
           for ( uint lInterpretation = lPredicates.FirstInterpretation; lInterpretation <= lLastInterpretation; lInterpretation++ )
           {
 #endif
-            for ( uint lKindOfWorld = lPredicates.FirstNonemptyWorld; lKindOfWorld <= lLastKindOfWorld; lKindOfWorld++ )
+            foreach ( uint lKindOfWorld in lPredicates.KindsOfWorlds( lInterpretation ) )
             {
-              // Don't consider a kind of world if the current interpretation does not allow for it.
-              if ( ( ( 1U << (int) lKindOfWorld ) & lInterpretation ) == 0 )
-                continue;
-
               if ( this.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
                 lNotImpossible = true;
               else
@@ -198,7 +202,7 @@ namespace Logic
             if ( this.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
               lNotImpossible = true;
             else
-              lNotNecessary = true;
+              lNotNecessary = true;  
 
             // End the decision once it has been determined that the proposition is neither necessary nor impossible.
             // Further evaluation will not change the outcome.
@@ -240,6 +244,83 @@ namespace Logic
     }
 
     internal abstract string DOTLabel { get; }
+
+    /// <summary>
+    /// DOT code for a graph diagram of this matrix
+    /// </summary>
+    public string GraphvizDOT
+    {
+      get
+      {
+        StringBuilder lDOT = new StringBuilder();
+        lDOT.AddLine( "digraph Proposition_{0} {{", this.Name );
+        lDOT.AddLine( "ordering=out;bgcolor=\"#FFFFFF80\"" );
+        foreach ( Matrix lMatrix in this.Matrices.Distinct( new ReferenceComparer() ) )
+        {
+          lDOT.AddLine(
+            "{0} [label={1},shape=rectangle,fontsize=10,style=filled,fillcolor=\"white\",margin=\"0.11,0.00\"];",
+            lMatrix.Name,
+            lMatrix.DOTLabel );
+        }
+        foreach ( Tuple<Matrix, Matrix> lPair in DirectDependencies )
+        {
+          lDOT.AddLine(
+            "{0}->{1}",
+            lPair.Item1.Name,
+            lPair.Item2.Name );
+        }
+        foreach ( Tuple<UniversalGeneralization, Matrix> lPair in ClosedPredications )
+        {
+          lDOT.AddLine(
+            "{0}->{1} [style=dashed]",
+            lPair.Item1.Name,
+            lPair.Item2.Name );
+        }
+
+        lDOT.AddLine( "}}" );
+
+        return lDOT.ToString();
+        //return string.Format( "digraph Proposition{0}" );
+        //return "digraph Proposition {1 [label=<Universal Generalization<BR/><B><FONT FACE=\"MONOSPACE\">x,</FONT></B>>];2 [label=<Predication<BR/><B><FONT FACE=\"MONOSPACE\">Px</FONT></B>>];1->2;1->2 [style=dashed]}";
+      }
+    }
+
+    internal string MakeProver9Formulas( Dictionary<char, string> aTranslatedVariableNames )
+    {
+      return string.Join( "", Conjuncts.Select( fConjunct => fConjunct.Prover9InputHelper( aTranslatedVariableNames ) + ".\n" ) );
+    }
+
+    internal virtual string Prover9InputHelper1( Dictionary<char, string> aTranslatedVariableNames )
+    {
+      return MakeProver9Formulas( aTranslatedVariableNames );
+    }
+
+    public string Prover9Input
+    {
+      get
+      {
+        Dictionary<char,string> lTranslatedVariableNames = new Dictionary<char,string>();
+        foreach ( Variable lVariable in FreeVariables )
+        {
+          char lFirstCharacter = lVariable.ToString()[0];
+          lTranslatedVariableNames[ lFirstCharacter ] = lFirstCharacter < 'u' || lFirstCharacter > 'z'
+            ? lVariable.ToString()
+            : "c" + lVariable.ToString();
+        }
+        return Prover9InputHelper1( lTranslatedVariableNames );
+      }
+    }
+
+    internal abstract string Prover9InputHelper( Dictionary<char,string> aTranslatedVariableNames );
+
+    /// <summary>
+    /// True if this matrix contains only nullary predicates and logical operators, false otherwise.  If it does, then
+    /// it is a proposition in Propositional Logic, and a truth table can be generated for it.
+    /// </summary>
+    public virtual bool IsPropositional
+    {
+      get { return false; }
+    }
 
     internal abstract IEnumerable<Variable> FreeVariables { get; }
 
@@ -302,4 +383,9 @@ namespace Logic
 
     internal abstract Matrix Substitute( Variable aVariable, Variable aReplacement );
 	}
+
+  /// <summary>
+  /// possible alethic modalities
+  /// </summary>
+  public enum Alethicity { Necessary, Contingent, Impossible };
 }

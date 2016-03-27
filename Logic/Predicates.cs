@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Logic
 {
@@ -35,6 +36,7 @@ namespace Logic
     private readonly int mBitsNeededToDistinguishWorlds;
     private readonly ulong mBitsNeeded;
     private readonly bool mModalitiesPresent;
+    private readonly int mDistinguishableWorldsWithinAKind;
     
     public Predicates(
       IEnumerable<NullPredicate> aNullPredicates,
@@ -47,8 +49,7 @@ namespace Logic
       mNullPredicates = aNullPredicates.ToArray();
       mBitsNeededToDistinguishObjects = BitsNeededToEnumerate( aMaximumNumberOfDistinguishableObjects + 1 );
       mBitsNeededToDistinguishWorlds = mBitsNeededToDistinguishObjects * NumberOfCombinationsOfUnaryPredicates + NumberOfNullPredicates;
-      if ( aMaximumNumberOfModalitiesInvolvedInIdentifications > 1 )
-        mBitsNeededToDistinguishWorlds *= BitsNeededToEnumerate( aMaximumNumberOfModalitiesInvolvedInIdentifications );
+      mDistinguishableWorldsWithinAKind = Math.Max( aMaximumNumberOfModalitiesInvolvedInIdentifications, 1 );
       mBitsNeeded = aModalitiesPresent
         ? 1UL << mBitsNeededToDistinguishWorlds
         : (ulong) mBitsNeededToDistinguishWorlds;
@@ -86,6 +87,45 @@ namespace Logic
     //  }
     //}
 
+    internal IEnumerable<KindOfWorld> DecodeInterpretationNumber( uint aInterpretation )
+    {
+      return KindsOfWorlds( aInterpretation ).Select( fNumber => DecodeKindOfWorldNumber( fNumber ) );
+    }
+
+    internal KindOfWorld DecodeKindOfWorldNumber( uint aKindOfWorld )
+    {
+      List<KindOfObject> lKindsOfObjects = new List<KindOfObject>();
+
+      int lNumberOfCombinationsOfUnaryPredicates = NumberOfCombinationsOfUnaryPredicates;
+
+      for ( int lPredicateCombination = 0; lPredicateCombination < lNumberOfCombinationsOfUnaryPredicates; lPredicateCombination++ )
+      {
+        uint lInstances = DistinguishableInstancesOfThisPredicateCombination( aKindOfWorld, lPredicateCombination );
+        if ( lInstances > 0 )
+        {
+          List<UnaryPredicate> lAffirmedPredicates = new List<UnaryPredicate>();
+          List<UnaryPredicate> lDeniedPredicates = new List<UnaryPredicate>();
+
+          int lKindOfObject = lPredicateCombination;
+          foreach ( UnaryPredicate lPredicate in mUnaryPredicates )
+          {
+            if ( ( lKindOfObject & 1 ) == 0 )
+              lDeniedPredicates.Add( lPredicate );
+            else
+              lAffirmedPredicates.Add( lPredicate );
+
+            lKindOfObject >>= 1;
+          }
+          lKindsOfObjects.Add( new KindOfObject( lInstances, lAffirmedPredicates, lDeniedPredicates ) );
+        }
+      }
+
+      return new KindOfWorld(
+        lKindsOfObjects,
+        mNullPredicates.Where( fPredicate => TrueIn( fPredicate, aKindOfWorld ) ),
+        mNullPredicates.Where( fPredicate => !TrueIn( fPredicate, aKindOfWorld ) ) );
+    }
+
     public IEnumerable<string> GetKindsOfObjectsIn( uint aKindOfWorld )
     {
       if ( NumberOfUnaryPredicates == 0 && mBitsNeededToDistinguishObjects == 0 )
@@ -116,10 +156,13 @@ namespace Logic
 
         for ( uint i = FirstNonemptyWorld; i <= lLastKindOfWorld; i++ )
         {
-          //if ( aInterpretation == 1 && i == 32 )
-          //  System.Diagnostics.Debugger.Break();
-          if ( ( ( 1U << (int) i ) & aInterpretation ) != 0 )
-            yield return i;
+          if ( ( ( 1U << (int) i ) & aInterpretation ) == 0 )
+            continue;
+
+          for ( uint j = 0; j < mDistinguishableWorldsWithinAKind; j++ )
+          {
+            yield return i + ( j << mBitsNeededToDistinguishWorlds );
+          }
         }
       }
       else

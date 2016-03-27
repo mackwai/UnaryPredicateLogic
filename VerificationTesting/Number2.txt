@@ -1,0 +1,6 @@
+1A
+1B
+x,(Ax|Bx)->Cx
+1C
+
+// Expected Result: Contingent

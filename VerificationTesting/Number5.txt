@@ -1,0 +1,4 @@
+1A <=> 1x,Ax
+2A <=> 3x,3y, ~x=y & Ax & Ay & (z, Az -> (x=z|y=z))
+
+// Expected Result: Necessary

@@ -1,0 +1,3 @@
+2A & 3A
+
+// Expected Result: Impossible

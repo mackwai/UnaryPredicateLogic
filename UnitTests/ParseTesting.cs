@@ -41,6 +41,36 @@ namespace UnitTests
     }
 
     [TestMethod]
+    public void Test_ParseExceptionMessages()
+    {
+      try
+      {
+        Logic.Parser.Parse( new string[] { @"<>A -> []<>" } );
+        Logic.Parser.Parse( new string[] { @"<>A -> []x," } );
+      }
+      catch ( Logic.ParseError )
+      {
+      }
+    }
+
+    [TestMethod]
+    public void Test_ParseBinaryPredications()
+    {
+      Logic.Parser.Parse( new string[] { @"aRb" } );
+      Logic.Parser.Parse( new string[] { @"x,y,Px&xZy" } );
+      Logic.Parser.Parse( new string[] { @"x,y,DaO|xZy" } );
+      Logic.Parser.Parse( new string[] { @"x,y,xZy|DaO" } );
+      try
+      {
+        Logic.Parser.Parse( new string[] { @"x,y,xZyDaO" } );
+        Logic.Parser.Parse( new string[] { @"x,y,xZyDyO" } );
+      }
+      catch ( Logic.ParseError )
+      {
+      }
+    }
+
+    [TestMethod]
     public void Test_Xor()
     {
       Logic.Parser.Parse( new string[]{"P^Q"} );
@@ -98,6 +128,42 @@ namespace UnitTests
       Logic.Parser.Parse( new string[] { "<>~Pa~Q'" } );
       Logic.Parser.Parse( new string[] { "<>(~Pi~Q'|3a,PaR')" } );
       Logic.Parser.Parse( new string[] { "<>(~Pi~Q'|3a,PaR')&P&Pa~P'" } );
+    }
+
+    [TestMethod]
+    public void Test_NumberedPredication()
+    {
+      Logic.Matrix lMatrix = Logic.Parser.Parse( new string[] { "1A" } );
+      lMatrix = Logic.Parser.Parse( new string[] { "2A" } );
+      lMatrix = Logic.Parser.Parse( new string[] { "3A" } );
+      lMatrix = Logic.Parser.Parse( new string[] { "0A" } );
+    }
+
+    [TestMethod]
+    public void Test_NumberedPropositions()
+    {
+      foreach ( string lStatement in new string[] { "0AB", "1AB", "2AB", "0ABC", "1ABC", "2ABC", "3ABC" } )
+      {
+        Console.WriteLine( "{0}\t<=>\t{1}", lStatement, Logic.Parser.Parse( new string[] { lStatement } ) );
+      }
+
+      foreach ( string lStatement in new string[] { "0AB <=> C", "C <=> 1AB", "A & 3x,2BC & D" } )
+      {
+        //Logic.Parser.Parse( new string[] { lStatement } );
+        Console.WriteLine( "{0}\t<=>\t{1}", lStatement, Logic.Parser.Parse( new string[] { lStatement } ) );
+      }
+
+      foreach ( string lStatement in new string[] { "3AB", "4ABC", "5ABC" } )
+      {
+        try
+        {
+          Logic.Parser.Parse( new string[] { "3AB" } );
+          Assert.Fail( "Parser did not throw an exception for {0}", lStatement );
+        }
+        catch ( Exception )
+        {
+        }
+      }
     }
 
     private static void ParseFile( string aPathToFile )

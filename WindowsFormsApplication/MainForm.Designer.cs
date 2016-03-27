@@ -57,6 +57,7 @@ namespace WindowsFormsApplication
       this.Result = new System.Windows.Forms.Label();
       this.OpenFileDialog = new System.Windows.Forms.OpenFileDialog();
       this.labelResult = new System.Windows.Forms.Label();
+      this.btnProver9Input = new System.Windows.Forms.Button();
       this.menuStrip1.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -85,32 +86,32 @@ namespace WindowsFormsApplication
       // openToolStripMenuItem
       // 
       this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-      this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+      this.openToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
       this.openToolStripMenuItem.Text = "&Open";
       this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
       // 
       // newToolStripMenuItem
       // 
       this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-      this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+      this.newToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
       this.newToolStripMenuItem.Text = "&New";
       // 
       // saveToolStripMenuItem
       // 
       this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-      this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+      this.saveToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
       this.saveToolStripMenuItem.Text = "&Save";
       // 
       // saveAsToolStripMenuItem
       // 
       this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-      this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+      this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
       this.saveAsToolStripMenuItem.Text = "Save &As";
       // 
       // quitToolStripMenuItem
       // 
       this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-      this.quitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+      this.quitToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
       this.quitToolStripMenuItem.Text = "&Quit";
       this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
       // 
@@ -162,11 +163,25 @@ namespace WindowsFormsApplication
       this.labelResult.Size = new System.Drawing.Size(0, 13);
       this.labelResult.TabIndex = 4;
       // 
+      // btnProver9Input
+      // 
+      this.btnProver9Input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+      this.btnProver9Input.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+      this.btnProver9Input.Location = new System.Drawing.Point(92, 385);
+      this.btnProver9Input.Name = "btnProver9Input";
+      this.btnProver9Input.Size = new System.Drawing.Size(75, 23);
+      this.btnProver9Input.TabIndex = 5;
+      this.btnProver9Input.Text = "Prover9 Input";
+      this.btnProver9Input.UseVisualStyleBackColor = true;
+      this.btnProver9Input.Click += new System.EventHandler(this.btnProver9Input_Click);
+      // 
       // MainForm
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(606, 416);
+      this.Controls.Add(this.btnProver9Input);
       this.Controls.Add(this.labelResult);
       this.Controls.Add(this.Result);
       this.Controls.Add(this.DecideButton);
@@ -197,6 +212,7 @@ namespace WindowsFormsApplication
     private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
     private System.Windows.Forms.Label labelResult;
+    private System.Windows.Forms.Button btnProver9Input;
   }
 }
 

@@ -132,5 +132,13 @@ namespace Logic
     {
       return new Identification( Left.Substitute( aVariable, aReplacement ), Right.Substitute( aVariable, aReplacement ) );
     }
+
+    internal override string Prover9InputHelper( Dictionary<char, string> aTranslatedVariableNames )
+    {
+      return string.Format(
+        "{0}={1}",
+        aTranslatedVariableNames[ Left.ToString()[ 0 ] ],
+        aTranslatedVariableNames[ Right.ToString()[ 0 ] ] );
+    }
   }
 }

@@ -1,4 +1,4 @@
-// somerby.net/mack/logic
+﻿// somerby.net/mack/logic
 // Copyright (C) 2015 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
@@ -17,18 +17,15 @@
 
 namespace Logic
 {
-  /// <summary>
-  /// a predicate over one variable
-  /// </summary>
-  public class UnaryPredicate
+  public class BinaryPredicate
   {
-    internal UnaryPredicate( char aLetter )
+    internal BinaryPredicate( char aLetter )
     {
       Letter = aLetter;
     }
 
     public char Letter { get; private set; }
-        
+
     public override bool Equals( object obj )
     {
       if ( obj is UnaryPredicate )
@@ -38,9 +35,9 @@ namespace Logic
         return this.Letter == that.Letter;
       }
 
-      throw new EngineException( "UnaryPredicate compared to non-UnaryPredicate." );
+      throw new EngineException( "BinaryPredicate compared to non-BinaryPredicate." );
     }
-    
+
     public override int GetHashCode()
     {
       return Letter.GetHashCode();

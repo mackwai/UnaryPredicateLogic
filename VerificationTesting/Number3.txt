@@ -1,0 +1,8 @@
+1A
+1B
+x,~(Ax&Bx)
+x,(Ax|Bx)<=>Cx
+->
+2C
+
+// Expected Result: Necessary

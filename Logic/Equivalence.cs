@@ -31,6 +31,11 @@ namespace Logic
       get { return "<=>"; }
     }
 
+    protected override string Prover9Connector
+    {
+      get { return "<->"; }
+    }
+
     internal override string DOTLabel
     {
       get { return "<Equivalence<BR/><B><FONT FACE=\"MONOSPACE\">&lt;=&gt;</FONT></B>>"; }
