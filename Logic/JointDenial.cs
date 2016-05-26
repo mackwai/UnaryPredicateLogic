@@ -15,6 +15,7 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+using System;
 using System.Collections.Generic;
 
 namespace Logic
@@ -50,6 +51,16 @@ namespace Logic
         @"(-{0} & -{1})",
         Left.Prover9InputHelper( aTranslatedVariableNames ),
         Right.Prover9InputHelper( aTranslatedVariableNames ) );
+    }
+
+    public override string TreeProofGeneratorInput
+    {
+      get { return String.Format( @"(neg\( {0} \lor {1}) ))", Left.TreeProofGeneratorInput, Right.TreeProofGeneratorInput ); }
+    }
+
+    protected override string TreeProofGeneratorConnector
+    {
+      get { throw new NotImplementedException( "JointDenial.TreeProofGeneratorConnector should be unreachable." ); }
     }
 
     internal override Matrix Substitute( Variable aVariable, Variable aReplacement )

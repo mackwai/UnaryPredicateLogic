@@ -83,7 +83,7 @@ namespace Logic
       return (int) ( this.NumberOfDistinguishableInstances << 6 )
         + this.Predicates
           .Select( fPredicate => (int) ( mPredicates[ fPredicate ] ? fPredicate.Letter : 4 ) )
-          .Aggregate( ( fOne, fTwo ) => ( fOne << 8 ) + fTwo );
+          .Aggregate( 0, ( fOne, fTwo ) => ( fOne << 8 ) + fTwo );
       throw new EngineException( "No hash code defined for KindOfObject." );
     }
   }

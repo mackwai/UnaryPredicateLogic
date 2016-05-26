@@ -32,7 +32,7 @@ namespace Logic
 
     private readonly UnaryPredicate[] mUnaryPredicates;
     private readonly NullPredicate[] mNullPredicates;
-    private readonly int mBitsNeededToDistinguishObjects;
+    private readonly int mBitsNeededToRepresentObjectsOfAKind;
     private readonly int mBitsNeededToDistinguishWorlds;
     private readonly ulong mBitsNeeded;
     private readonly bool mModalitiesPresent;
@@ -41,32 +41,38 @@ namespace Logic
     public Predicates(
       IEnumerable<NullPredicate> aNullPredicates,
       IEnumerable<UnaryPredicate> aUnaryPredicates,
-      int aMaximumNumberOfDistinguishableObjects,
+      int aMaximumNumberOfDistinguishableObjectsOfAKind,
       bool aModalitiesPresent,
       int aMaximumNumberOfModalitiesInvolvedInIdentifications )
     {
       mUnaryPredicates = aUnaryPredicates.ToArray();
       mNullPredicates = aNullPredicates.ToArray();
-      mBitsNeededToDistinguishObjects = BitsNeededToEnumerate( aMaximumNumberOfDistinguishableObjects + 1 );
-      mBitsNeededToDistinguishWorlds = mBitsNeededToDistinguishObjects * NumberOfCombinationsOfUnaryPredicates + NumberOfNullPredicates;
+      mBitsNeededToRepresentObjectsOfAKind = BitsNeededToEnumerate( aMaximumNumberOfDistinguishableObjectsOfAKind );
+      mBitsNeededToDistinguishWorlds =
+        mBitsNeededToRepresentObjectsOfAKind * NumberOfCombinationsOfUnaryPredicates + NumberOfNullPredicates;
       mDistinguishableWorldsWithinAKind = Math.Max( aMaximumNumberOfModalitiesInvolvedInIdentifications, 1 );
       mBitsNeeded = aModalitiesPresent
         ? 1UL << mBitsNeededToDistinguishWorlds
         : (ulong) mBitsNeededToDistinguishWorlds;
       mModalitiesPresent = aModalitiesPresent;
 
+      NoDistinguishableObjects = aMaximumNumberOfDistinguishableObjectsOfAKind == 0;
+
       if ( mBitsNeeded > BitsAvailable || mBitsNeededToDistinguishWorlds > BitsAvailable )
         throw new EngineException( "Too many predicates!" );
     }
 
+    public bool NoDistinguishableObjects
+    {
+      get; private set;
+    }
+
     /// <summary>
-    /// The first bits in the encoding represent null predicates; if all bits above
-    /// these bits are zero, then the encoding represents a kind of world with
-    /// nothing in it.
+    /// The first bits in the encoding represent null predicates.
     /// </summary>
     public uint FirstNonemptyWorld
     {
-      get { return mBitsNeededToDistinguishObjects == 0 ? 0 : 1U << NumberOfNullPredicates; }
+      get { return NumberOfUnaryPredicates > 0 ? 1U << NumberOfNullPredicates : 0; }
     }
 
     //public IEnumerable<uint> Interpretations
@@ -128,23 +134,14 @@ namespace Logic
 
     public IEnumerable<string> GetKindsOfObjectsIn( uint aKindOfWorld )
     {
-      if ( NumberOfUnaryPredicates == 0 && mBitsNeededToDistinguishObjects == 0 )
-      {
-        // This is needed in order to cause the body of the loop in UnviversalGeneralization.TrueIn to execute
-        // once when the proposition being decided contains no unary predicates.
-        yield return "";
-      }
-      else
-      {
-        int lNumberOfCombinationsOfUnaryPredicates = NumberOfCombinationsOfUnaryPredicates;
+      int lNumberOfCombinationsOfUnaryPredicates = NumberOfCombinationsOfUnaryPredicates;
 
-        for ( int lPredicateCombination = 0; lPredicateCombination < lNumberOfCombinationsOfUnaryPredicates; lPredicateCombination++ )
-        {
-          uint lDistinguishableInstancesOfThisPredicateCombination =
-            DistinguishableInstancesOfThisPredicateCombination( aKindOfWorld, lPredicateCombination );
-          for ( uint i = 0; i < lDistinguishableInstancesOfThisPredicateCombination; i++ )
-            yield return BuildUnaryPredicateCombination( lPredicateCombination, i );
-        }
+      for ( int lPredicateCombination = 0; lPredicateCombination < lNumberOfCombinationsOfUnaryPredicates; lPredicateCombination++ )
+      {
+        uint lDistinguishableInstancesOfThisPredicateCombination =
+          DistinguishableInstancesOfThisPredicateCombination( aKindOfWorld, lPredicateCombination );
+        for ( uint i = 0; i < lDistinguishableInstancesOfThisPredicateCombination; i++ )
+          yield return BuildUnaryPredicateCombination( lPredicateCombination, i );
       }
     }
     
@@ -210,10 +207,13 @@ namespace Logic
     /// <summary>
     /// Calculate the number of bits needed to enumerate aNumber different things.
     /// </summary>
-    /// <param name="aNumber">the number of different that are to be enumerated</param>
+    /// <param name="aNumber">the number of different things that are to be enumerated</param>
     /// <returns>the number of bits needed to enumerate aNumber different things</returns>
     private static int BitsNeededToEnumerate( int aNumber )
     {
+      if ( aNumber == 1 )
+        return 1;
+
       int i;
       aNumber--;
 
@@ -237,7 +237,7 @@ namespace Logic
 
       // Add a character that correspondS to the instance number to the string.  The character
       // must not be a capital letter.
-      lPredicateCombination[ lIndex ] = (char) ( aInstanceNumber + 32 );
+      lPredicateCombination[ lIndex ] = (char) ( aInstanceNumber + 49 );
 
       return new String( lPredicateCombination, 0, lIndex + 1 );
     }
@@ -245,12 +245,15 @@ namespace Logic
     private uint DistinguishableInstancesOfThisPredicateCombination( uint aKindOfWorld, int aKindOfObject )
 		{
 #if SALTARELLE
-      uint lBitMask = (uint) ( ( 1 << mBitsNeededToDistinguishObjects ) - 1 );
+      uint lBitMask = (uint) ( ( 1 << mBitsNeededToRepresentObjectsOfAKind ) - 1 );
 #else
-      uint lBitMask = Convert.ToUInt32( ( 1 << mBitsNeededToDistinguishObjects ) - 1 );
+      uint lBitMask = Convert.ToUInt32( ( 1 << mBitsNeededToRepresentObjectsOfAKind ) - 1 );
 #endif
       
-      return ( aKindOfWorld >> ( mBitsNeededToDistinguishObjects * aKindOfObject + NumberOfNullPredicates ) ) & lBitMask;
+      if ( NumberOfUnaryPredicates == 0 )
+        return ( ( aKindOfWorld >> NumberOfNullPredicates ) & lBitMask ) + 1;
+      else
+        return ( aKindOfWorld >> ( mBitsNeededToRepresentObjectsOfAKind * aKindOfObject + NumberOfNullPredicates ) ) & lBitMask;
 		}
 
     private int NumberOfCombinationsOfUnaryPredicates

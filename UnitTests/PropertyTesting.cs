@@ -30,6 +30,83 @@ namespace Logic
       return Parser.Parse( aStatement.Split( '\n' ) ).IsPropositional;
     }
 
+    private static int DepthOfLoopNesting( string aStatement )
+    {
+      return Parser.Parse( aStatement.Split( '\n' ) ).DepthOfLoopNesting;
+    }
+
+    [TestMethod]
+    public void Test_DepthOfLoopNesting01()
+    {
+      Assert.AreEqual( 0, DepthOfLoopNesting( @"P" ) );
+    }
+
+    [TestMethod]
+    public void Test_DepthOfLoopNesting02()
+    {
+      Assert.AreEqual( 0, DepthOfLoopNesting( @"Px" ) );
+    }
+
+    [TestMethod]
+    public void Test_DepthOfLoopNesting03()
+    {
+      Assert.AreEqual( 0, DepthOfLoopNesting( @"x=y" ) );
+    }
+
+    [TestMethod]
+    public void Test_DepthOfLoopNesting04()
+    {
+      Assert.AreEqual( 1, DepthOfLoopNesting( @"x,Y" ) );
+    }
+
+    [TestMethod]
+    public void Test_DepthOfLoopNesting05()
+    {
+      Assert.AreEqual( 1, DepthOfLoopNesting( @"3x,Yx" ) );
+    }
+
+    [TestMethod]
+    public void Test_DepthOfLoopNesting06()
+    {
+      Assert.AreEqual( 1, DepthOfLoopNesting( @"~3x,Yx" ) );
+    }
+
+    [TestMethod]
+    public void Test_DepthOfLoopNesting07()
+    {
+      Assert.AreEqual( 1, DepthOfLoopNesting( @"(~3x,Yx)|j,Kj" ) );
+    }
+
+    [TestMethod]
+    public void Test_DepthOfLoopNesting08()
+    {
+      Assert.AreEqual( 2, DepthOfLoopNesting( @"~3x,Yx|j,Kj" ) );
+    }
+
+    [TestMethod]
+    public void Test_DepthOfLoopNesting09()
+    {
+      Assert.AreEqual( 2, DepthOfLoopNesting( @"(t,P)&(~3x,Yx|j,Kj)" ) );
+    }
+
+    [TestMethod]
+    public void Test_DepthOfLoopNesting10()
+    {
+      Assert.AreEqual( 3, DepthOfLoopNesting( @"(t,P)&(~3x,Yx|[]j,Kj)" ) );
+    }
+
+    [TestMethod]
+    public void Test_DepthOfLoopNesting11()
+    {
+      Assert.AreEqual( 4, DepthOfLoopNesting( @"<>((t,P)&(~3x,Yx|[]j,Kj))" ) );
+    }
+
+    [TestMethod]
+    public void Test_DepthOfLoopNesting12()
+    {
+      Assert.AreEqual( 1, DepthOfLoopNesting( @"<>Q->[]Q" ) );
+    }
+
     [TestMethod]
     public void Test_Propositional01()
     {

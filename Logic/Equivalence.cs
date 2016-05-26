@@ -36,6 +36,11 @@ namespace Logic
       get { return "<->"; }
     }
 
+    protected override string TreeProofGeneratorConnector
+    {
+      get { return @"\leftrightarrow"; }
+    }
+
     internal override string DOTLabel
     {
       get { return "<Equivalence<BR/><B><FONT FACE=\"MONOSPACE\">&lt;=&gt;</FONT></B>>"; }

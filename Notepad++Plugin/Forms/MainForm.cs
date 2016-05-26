@@ -32,8 +32,11 @@ namespace Logic
   public partial class MainForm : Form
   {
     private const string dot = "dot.exe";
+    private const string prover9 = "prover9.exe";
+    private const string mace4 = "mace4.exe";
     private const string ImageFileNameExtension = "png";
     private const int TimeLimitForDepiction = 30000;
+    private const int TimeLimitForProver9 = 30000;
 
     private static List<string> gFilesToDelete = new List<string>();
 
@@ -56,11 +59,13 @@ namespace Logic
       InitializeComponent();
       mApplication = aApplication;
       bool lDepictionAvailable = ExistsInPath( dot );
+      bool lProver9Available = ExistsInPath( prover9 ) && ExistsInPath( mace4 );
       mApplication.Install(
         DecideActiveBuffer,
         DecideSelectedText,
         lDepictionAvailable ? DepictActiveBuffer : (Action) null,
-        lDepictionAvailable ? DepictSelectedText : (Action) null );
+        lDepictionAvailable ? DepictSelectedText : (Action) null,
+        lProver9Available ? ExecuteProver9OnActiveBuffer : (Action) null );
     }
 
     private void DepictActiveBuffer()
@@ -127,10 +132,25 @@ namespace Logic
     private void Log( string aFormatString, params object[] aParameters )
     {
       txtResult.AppendText( string.Format(
-        "{0}: {1}\r\n",
+        "{0}: {1}" + Environment.NewLine,
         DateTime.Now.TimeOfDay,
         string.Format( aFormatString, aParameters ) ) );
       Application.DoEvents();
+    }
+
+    private void ExecuteProver9OnActiveBuffer()
+    {
+      ActOnDialog( () =>
+      {
+        const int Timeout = 30;
+        string lActiveFileName = mApplication.NameOfActiveDocument;
+        this.Log( "Evaluating {0} with Prover9 and Mace4 for up to {1} seconds...", lActiveFileName, Timeout );
+        this.Log(
+          "... result: {0}",
+          Prover9Mace4.ToString( Prover9Mace4.Decide(
+            Logic.Parser.Parse( mApplication.ContentsOfActiveDocument.Split( '\n' ) ),
+            Timeout ) ) );
+      } );
     }
 
     public static void Depict( string aFileName, string aText )

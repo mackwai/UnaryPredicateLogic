@@ -81,9 +81,9 @@ namespace Logic
       }
     }
 
-    internal override int MaxmimumNumberOfDistinguishableObjects
+    internal override int MaxmimumNumberOfDistinguishableObjectsOfAKind
     {
-      get { return mInnerMatrix.MaxmimumNumberOfDistinguishableObjects; }
+      get { return mInnerMatrix.MaxmimumNumberOfDistinguishableObjectsOfAKind; }
     }
 
     internal override int MaxmimumNumberOfModalitiesInIdentifications
@@ -94,6 +94,11 @@ namespace Logic
     internal override IEnumerable<Necessity> ModalitiesInIdentifications
     {
       get { return mInnerMatrix.ModalitiesInIdentifications; }
+    }
+
+    internal override int DepthOfLoopNesting
+    {
+      get { return mInnerMatrix.DepthOfLoopNesting; }
     }
 
     internal override IEnumerable<Matrix> NonNullPredications

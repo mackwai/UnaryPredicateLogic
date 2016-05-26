@@ -39,11 +39,14 @@ namespace Logic
     /// application to depict the contents of the application's active document as graph</param>
     /// <param name="aDepictSelectedText">an action that the application should execute when the user commands the
     /// application to depict the selected text in the application's active document as a graph</param>
+    /// <param name="aExecuteProver9OnActiveDocument">an action that the application should execute when the user commands the
+    /// application to try to prove the contents of the active buffer with Prover9.</param>
     void Install(
       Action aDecideContentsOfActiveDocument,
       Action aDecideSelectedText,
       Action aDepictContentsOfActiveDocument,
-      Action aDepictSelectedText );
+      Action aDepictSelectedText,
+      Action aExecuteProver9OnActiveDocument );
 
     /// <summary>
     /// The name of the application's active document (usually the name of a file opened by the application).

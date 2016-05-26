@@ -1,0 +1,7 @@
+a,(cBa<=>dBa)
+x,y,(xBy -> y=a)
+3x,3y,xBy
+->
+c=d
+
+// Expected Result: Necessary

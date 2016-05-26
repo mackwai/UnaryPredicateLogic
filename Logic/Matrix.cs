@@ -18,6 +18,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#if SALTARELLE
+using System.Runtime.CompilerServices;
+#endif
 using System.Text;
 
 namespace Logic
@@ -49,7 +52,7 @@ namespace Logic
       return new Predicates(
         NullPredicates,
         UnaryPredicates,
-        MaxmimumNumberOfDistinguishableObjects,
+        MaxmimumNumberOfDistinguishableObjectsOfAKind,
         ContainsModalities,
         MaxmimumNumberOfModalitiesInIdentifications );
     }
@@ -116,6 +119,24 @@ namespace Logic
       return null;
     }
 
+#if SALTARELLE
+    private int StatusInterval
+    {
+      get
+      {
+        const int BaseInterval = 2500000;
+
+        int lDepthOfLoopNesting = DepthOfLoopNesting;
+        int lInterval = BaseInterval;
+
+        for ( int i = 0; i < lDepthOfLoopNesting; i++ )
+          lInterval /= 10;
+
+        return Math.Max( 1, lInterval );
+      }
+    }
+#endif
+
     /// <summary>
     /// Decide this matrix as a proposition.  Throw an exception if it contains both free variables and modal operators.
     /// Use up to System.Environment.ProcessorCount threads to make the decision.
@@ -137,6 +158,11 @@ namespace Logic
       bool lNotNecessary = false;
       uint lLastInterpretation = lPredicates.LastInterpretation;
       uint lLastKindOfWorld = lPredicates.LastKindOfWorld;
+      uint lFirstNonemptyWorld = lPredicates.FirstNonemptyWorld;
+      uint lFirstInterpretation = lPredicates.FirstInterpretation;
+#if SALTARELLE
+      int lStatusInterval = StatusInterval;
+#endif
 
 #if PARALLELIZE
       //System.Windows.Forms.MessageBox.Show( string.Format( "Maximum number of distinguishable objects: {0}", MaxmimumNumberOfDistinguishableObjects ) );
@@ -149,7 +175,7 @@ namespace Logic
       try
       {
 #endif
-        if ( ContainsModalities  )
+      if ( ContainsModalities  )
         {
 #if PARALLELIZE
           System.Threading.Tasks.Parallel.For(
@@ -161,9 +187,17 @@ namespace Logic
             uint lInterpretation = Convert.ToUInt32( fInterpretation );
 
 #else
-          for ( uint lInterpretation = lPredicates.FirstInterpretation; lInterpretation <= lLastInterpretation; lInterpretation++ )
+          for ( uint lInterpretation = lFirstInterpretation; lInterpretation <= lLastInterpretation; lInterpretation++ )
           {
 #endif
+#if SALTARELLE
+            if ( ( lInterpretation - lFirstInterpretation ) % lStatusInterval == 0 )
+              Utility.Status( String.Format(
+                "Deciding... {0:n0} of {1:n0} interpretations of predicates tested.",
+                lInterpretation - lFirstInterpretation,
+                lLastInterpretation - lFirstInterpretation + 1 ) );
+#endif
+
             foreach ( uint lKindOfWorld in lPredicates.KindsOfWorlds( lInterpretation ) )
             {
               if ( this.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
@@ -196,16 +230,24 @@ namespace Logic
           {
             uint lKindOfWorld = Convert.ToUInt32( fKindOfWorld );
 #else
-          for ( uint lKindOfWorld = lPredicates.FirstNonemptyWorld; lKindOfWorld <= lLastKindOfWorld; lKindOfWorld++ )
+          for ( uint lKindOfWorld = lFirstNonemptyWorld; lKindOfWorld <= lLastKindOfWorld; lKindOfWorld++ )
           {
-#endif         
-            if ( this.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
-              lNotImpossible = true;
-            else
-              lNotNecessary = true;  
+#endif
+#if SALTARELLE
+            if ( ( lKindOfWorld - lFirstNonemptyWorld ) % lStatusInterval == 0 )
+              Utility.Status( String.Format(
+                "Deciding... {0:n0} of {1:n0} kinds of worlds tested.",
+                lKindOfWorld - lFirstNonemptyWorld,
+                lLastKindOfWorld - lFirstNonemptyWorld + 1 ) );
+#endif
 
-            // End the decision once it has been determined that the proposition is neither necessary nor impossible.
-            // Further evaluation will not change the outcome.
+            if ( this.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
+                lNotImpossible = true;
+            else
+              lNotNecessary = true;
+
+          // End the decision once it has been determined that the proposition is neither necessary nor impossible.
+          // Further evaluation will not change the outcome.
             if ( lNotImpossible && lNotNecessary )
 #if PARALLELIZE
               lCancellationTokenSource.Cancel();
@@ -215,6 +257,13 @@ namespace Logic
       catch ( OperationCanceledException )
       {
         // An OperationCanceledException will occur iff lCancellationTokenSource.Cancel() is called; nothing needs to be done for it.
+      }
+      catch ( AggregateException lException )
+      {
+        // Combine all exception messages from the tasks into one message.
+        throw new EngineException( String.Join(
+          Environment.NewLine,
+          lException.Flatten().InnerExceptions.Select( fException => fException.Message ).Distinct() ) );
       }
 
       if ( lNotImpossible && lNotNecessary )
@@ -292,7 +341,9 @@ namespace Logic
 
     internal virtual string Prover9InputHelper1( Dictionary<char, string> aTranslatedVariableNames )
     {
-      return MakeProver9Formulas( aTranslatedVariableNames );
+      return string.Format(
+        "formulas(goals).\n{0}.\nend_of_list.\n",
+        Prover9InputHelper( aTranslatedVariableNames ) );
     }
 
     public string Prover9Input
@@ -312,6 +363,11 @@ namespace Logic
     }
 
     internal abstract string Prover9InputHelper( Dictionary<char,string> aTranslatedVariableNames );
+
+    public virtual string TreeProofGeneratorInput
+    {
+      get { throw new EngineException( "Can't generate input for Tree Proof Generator from this proposition." ); }
+    }
 
     /// <summary>
     /// True if this matrix contains only nullary predicates and logical operators, false otherwise.  If it does, then
@@ -333,13 +389,18 @@ namespace Logic
       get { yield return this; }
     }
 
-    internal abstract int MaxmimumNumberOfDistinguishableObjects { get; }
+    internal abstract int MaxmimumNumberOfDistinguishableObjectsOfAKind { get; }
 
     internal abstract int MaxmimumNumberOfModalitiesInIdentifications { get; }
 
     internal virtual IEnumerable<Necessity> ModalitiesInIdentifications
     {
       get { yield break; }
+    }
+
+    internal virtual int DepthOfLoopNesting
+    {
+      get { return 0; }
     }
 
     internal virtual IEnumerable<Matrix> NonNullPredications
@@ -349,7 +410,7 @@ namespace Logic
 
     internal abstract IEnumerable<NullPredicate> NullPredicates { get; }	
 
-    internal abstract IEnumerable<UnaryPredicate> UnaryPredicates { get; }    
+    internal abstract IEnumerable<UnaryPredicate> UnaryPredicates { get; }
 
     internal virtual void AssignModality( Necessity aNecessity ) {}
 
@@ -374,7 +435,7 @@ namespace Logic
       return lExclusions;
     }
 
-    internal abstract bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicateDictionary );
+    internal abstract bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates );
     
     internal virtual IEnumerable<Matrix> Conjuncts
     {

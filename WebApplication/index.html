@@ -24,11 +24,10 @@
 <title>somerby.net/mack/logic</title>
 <meta name="description" content="a web application that decides statements in symbolic logic including modal logic, propositional logic and unary predicate logic">
 
-<link rel="stylesheet" type="text/css" href="style.css" />
+<link rel="stylesheet" href="screen.css" type="text/css" media="Screen" />
+<link rel="stylesheet" href="mobile.css" type="text/css" media="handheld" />
 
-<script type="text/javascript" src="mscorlib.js"></script>
-<script type="text/javascript" src="linq.js"></script>
-<script type="text/javascript" src="Logic.js"></script>
+<script type="text/javascript" src="Servant.js"></script>
 
 </head>
 <body>
@@ -41,14 +40,14 @@
 
 <div id="main">
 
-<textarea name="expression" id="expression" rows="15" cols="80" spellcheck="false" class="text" oninput="HandleExpressionChanged();"></textarea>
+<textarea name="expression" id="expression" rows="15" cols="80" spellcheck="false" class="text" oninput="handleExpressionChanged();"></textarea>
 
 <div id="action_buttons">
-  <button id="decide_button" onclick="HandleDecideButtonClick(); return false;">Decide</button>
-  <button id="depict_button" onclick="HandleDepictButtonClick(); return false;">Depict</button>
-  <button id="truth_table_button" onclick="HandleTruthTableButtonClick(); return false;">Truth Table</button>
-  <button id="counterexample_button" onclick="HandleCounterexampleButtonClick(); return false;">Counterexample</button>
-  <button onclick="window.open('symbols.html','_blank','menubar=no,status=no,titlebar=no,width=350')">List of Symbols</button>
+  <button id="decide_button" onclick="handleDecideButtonClick(); return false;">decide</button>
+  <button id="depict_button" onclick="handleDepictButtonClick(); return false;">depict</button>
+  <button id="truth_table_button" onclick="handleTruthTableButtonClick(); return false;">Truth Table</button>
+  <button id="counterexample_button" onclick="handleCounterexampleButtonClick(); return false;">Counterexample</button>
+  <button id="cancel_button" onclick="handleCancelButtonClick(); return false;">Cancel</button>
 </div>
 
 <div id="result"></div>
@@ -56,6 +55,9 @@
 </div>
 
 <div id="sidebar">
+  <ul>
+    <li><a href="javascript:window.open('symbols.html','_blank','menubar=no,status=no,titlebar=no,width=350');void(0);">Quick Reference</a></li>
+  </ul>
   <h2>Documentation:</h2>
   <ul>
     <li><a href="documentation.html">What is this?</a></li>
@@ -68,13 +70,13 @@
   </ul>
   <h2>Examples:</h2>
   <ul>
-    <li><button onclick='ShowExample("Socrates");return false;'>A Categorical Syllogism</button></li>
-    <li><button onclick='ShowExample("OrderingDrinks");return false;'>Ordering Drinks</button></li>
-    <li><button onclick='ShowExample("HereButNotHere");return false;'>Here, but not Here</button></li>
-    <li><button onclick='ShowExample("RayOfSunshine");return false;'>A Formal Fallacy</button></li>
-    <li><button onclick='ShowExample("PandNP");return false;'>NP-Complete Problems</button></li>
-    <li><button onclick='ShowExample("Rules");return false;'>Rules of Inference and Replacement</button></li>
-    <li><button onclick='ShowExample("Axioms");return false;'>Axioms of Modal Logic</button></li>
+    <li><button onclick='showExample("Socrates");return false;'>A Categorical Syllogism</button></li>
+    <li><button onclick='showExample("OrderingDrinks");return false;'>Ordering Drinks</button></li>
+    <li><button onclick='showExample("HereButNotHere");return false;'>Here, but not Here</button></li>
+    <li><button onclick='showExample("RayOfSunshine");return false;'>A Formal Fallacy</button></li>
+    <li><button onclick='showExample("PandNP");return false;'>NP-Complete Problems</button></li>
+    <li><button onclick='showExample("Rules");return false;'>Rules of Inference and Replacement</button></li>
+    <li><button onclick='showExample("Axioms");return false;'>Axioms of Modal Logic</button></li>
   </ul>
 </div>
 
@@ -91,7 +93,7 @@ function now()
   return (new Date()).getTime();
 }
 
-function ConvertToHTMLEntities(str)
+function convertToHTMLEntities(str)
 {
   return String(str)
     .replace(/&/g, '&amp;')
@@ -109,133 +111,218 @@ examples.PandNP = "// \"If any NP-complete problem can be solved in polynomial t
 examples.Rules = "//Modus Ponens\n((P->Q) & P) -> Q\n\n//Modus Tollens\n((P->Q) & ~Q) -> ~P\n\n//Hypothetical Syllogism\n((P->Q) & (Q->R)) -> (P->R)\n\n//Disjunctive Syllogism\n((P|Q) & ~P) -> Q\n\n//Constructive Dilemma\n( ((P->Q) & (R->S)) & (P|R) ) -> (Q|S)\n\n//Simplification\n(P&Q) -> P\n\n//Conjunction\n((P) & (Q)) -> (P&Q)\n\n//Addition\nP -> (P|Q)\n\n//DeMorgan's Rule\n~(P&Q) <=> (~P|~Q)\n~(P|Q) <=> (~P&~Q)\n\n//Commutativity\n(P|Q) <=> (Q|P)\n(P&Q) <=> (Q&P)\n\n//Associativity\n( P|(Q|R) ) <=> ( (P|Q)|R )\n( P&(Q&R) ) <=> ( (P&Q)&R )\n\n//Distribution\n( P&(Q|R) ) <=> ( (P&Q)|(P&R) )\n( P|(Q&R) ) <=> ( (P|Q)&(P|R) )\n\n//Double Negation\nP <=> ~~P\n\n//Transposition\n(P->Q) <=> (~Q->~P)\n\n//Material Implication\n(P->Q) <=> (~P|Q)\n\n//Material Equivalence\n(P<=>Q) <=> ( (P->Q) & (Q->P) )\n(P<=>Q) <=> ( (P&Q) | (~P&~Q) )\n\n//Exportation\n( (P&Q)->R ) <=> (P->(Q->R))\n\n//Tautology\nP <=> (P|P)\nP <=> (P&P)";
 examples.Axioms = "// Axiom D\n[]A -> <>A\n\n// Axiom M\n[]A -> A\n\n// Axiom 4\n[]A->[][]A\n\n// Axiom B\nA -> []<>A\n\n// Axiom 5\n<>A -> []<>A\n\n// Axiom []M\n[]([]A -> A)\n\n// Axiom C4\n[][]A -> []A\n\n// Axiom C\n<>[]A -> []<>A\n\n// Axiom K\n[](A->B)->([]A->[]B)\n\n// Axiom T\n[]A -> A";
 
-function UpdateTruthTableButton()
-{
-  var truthTableIsPossible;
-  try
-  {
-    truthTableIsPossible = global.Logic.Parser.parse(document.getElementById("expression").value.split("\n")).get_isPropositional();
-  }
-  catch ( lException )
-  {
-    truthTableIsPossible = false;
-  }
-  document.getElementById("truth_table_button").disabled = !truthTableIsPossible;
-}
-
 var expressionChanged = false;
-function PeriodicTask()
+function doPeriodicTasks()
 {
   if ( expressionChanged )
   {
-    UpdateTruthTableButton();
+    updateTruthTableButton();
     expressionChanged = false;
-    SaveInput();
+    saveInput();
   }
 }
-window.setInterval(PeriodicTask,500);
+window.setInterval( doPeriodicTasks, 500 );
 
-function SetResult(aValue)
+function setResult( value )
 {
-  document.getElementById("result").innerHTML = aValue;
+  document.getElementById("result").innerHTML = value;
 }
 
-function SetDepiction(aValue)
+function setDepiction( value )
 {
-  document.getElementById("depiction").innerHTML = aValue;
+  document.getElementById("depiction").innerHTML = value;
 }
 
-function ShowExample(aExampleId)
+function showExample( exampleId )
 {
-  document.getElementById("expression").value = examples[aExampleId];
-  HandleExpressionChanged();
+  document.getElementById("expression").value = examples[ exampleId ];
+  handleExpressionChanged();
 }
 
-function HandleExpressionChanged()
+function getHTMLForException( exception )
 {
-  SetResult('');
-  SetDepiction('');
+  return convertToHTMLEntities(
+    "Error: "
+    + ( exception._message ? exception._message : exception ) );
+}
+
+function constructProposition( statement )
+{
+  return global.Logic.Parser.parse( statement.split( "\n" ) );
+}
+
+function findCounterexample( statement )
+{
+  try
+  {
+    return global.Logic.HTMLMaker.makeHTML( constructProposition( statement ).findCounterexample());
+  }
+  catch( exception )
+  {
+    return getHTMLForException( exception );
+  }
+}
+
+function isTruthTablePossible( statement )
+{
+  try
+  {
+    return constructProposition( statement ).get_isPropositional();
+  }
+  catch ( exception )
+  {
+    return false;
+  }
+}
+
+function decide( statement )
+{
+  try
+  {
+    var startTime = now();
+    var result = global.Logic.Utility.textForDecision( constructProposition( statement ).decide() );
+    var endTime = now();
+    
+    return "The statement is " + result + ".  Deciding took " + ( ( endTime - startTime ) / 1000 ) + " seconds.";
+  }
+  catch( exception )
+  {
+    return getHTMLForException( exception );
+  }
+}
+
+function depict( statement )
+{
+  try
+  {
+    var dot = constructProposition( statement ).get_graphvizDOT();
+    
+    if ( typeof( Viz ) === "undefined" )
+      importScripts( 'viz.js' );
+
+    return Viz(dot,"svg");
+  }
+  catch( exception )
+  {
+    return getHTMLForException( exception );
+  }
+}
+
+function makeTruthTable( statement )
+{
+  try
+  {
+    var expression = constructProposition( statement ).toString().replace( /\(([A-Z])\)/g, "$1" );
+    
+    if ( typeof( construct ) === "undefined" )
+      importScripts( 'truthtable.js' );
+
+    return construct( expression );
+  }
+  catch( exception )
+  {
+    return getHTMLForException( exception );
+  }
+}
+
+function setDepictionAndStopProcessing( htmlForDepiction )
+{
+  setDepiction( htmlForDepiction );
+  setProcessing( false );
+}
+
+function setResultAndStopProcessing( htmlForResult )
+{
+  setResult( htmlForResult );
+  setProcessing( false );
+}
+
+servant = new Servant( "mscorlib.js", "linq.js", "Logic.js" );
+servant.addFunction( convertToHTMLEntities );
+servant.addFunction( getHTMLForException );
+servant.addFunction( now );
+servant.addFunction( constructProposition );
+servant.addFunction(
+  findCounterexample,
+  setDepictionAndStopProcessing );
+servant.addFunction(
+  decide,
+  setResultAndStopProcessing,
+  setResult );
+servant.addFunction(
+  depict,
+  function ( result ) { setDepiction( result ); setProcessing( false ); } );
+servant.addFunction(
+  makeTruthTable,
+  setDepictionAndStopProcessing );
+servant.addFunction(
+  isTruthTablePossible,
+  function ( result ) { document.getElementById("truth_table_button").disabled = !result } );
+
+function handleCounterexampleButtonClick()
+{
+  setProcessing( true );
+  setDepiction("Searching for counterexamples...");
+  servant.findCounterexample( document.getElementById("expression").value );
+}
+
+function getStatement()
+{
+  return document.getElementById("expression").value;
+}
+
+function setStatement( value )
+{
+  document.getElementById("expression").value = value;
+}
+
+function handleDepictButtonClick()
+{
+  setProcessing( true );
+  setDepiction("depicting...");
+  
+  servant.depict( getStatement() );
+}
+
+function handleDecideButtonClick()
+{
+  setProcessing( true );
+  setResult( "Deciding..." );
+  
+  servant.decide( getStatement() );
+}
+
+function handleExpressionChanged()
+{
+  setResult( "" );
+  setDepiction( "" );
   expressionChanged = true;
 }
 
-function HandleDecideButtonClick()
+function handleTruthTableButtonClick()
 {
-  SetResult( "Deciding..." );
+  setProcessing( true );
+  setDepiction( "Building a truth table..." );
   
-  window.setTimeout(Decide,50);
+  servant.makeTruthTable( getStatement() );
 }
 
-function ExceptionToHTML(aException)
+function handleCancelButtonClick()
 {
-  return ConvertToHTMLEntities(
-    "Error: "
-    + ( aException._message ? aException._message : aException ) );
-}
+  setDepiction( "" );
+  setResult( "" );
 
-function Depict()
-{
-  try
-  {
-    var dot = global.Logic.Parser.parse(document.getElementById("expression").value.split("\n")).get_graphvizDOT();
-    
-    SetDepiction(Viz(dot,"svg"));
-  }
-  catch( lException )
-  {
-    SetDepiction(ExceptionToHTML(lException));
-  }
-}
-
-function HandleDepictButtonClick()
-{
-  SetDepiction("Depicting...");
+  servant.cancelAllWork();
   
-  window.setTimeout(Depict,50);
+  setProcessing( false );
 }
 
-function HandleTruthTableButtonClick()
+function updateTruthTableButton()
 {
-  try
-  {
-    var expression = global.Logic.Parser.parse(document.getElementById("expression").value.split("\n")).toString().replace(/\(([A-Z])\)/g,"$1");
-    
-    SetDepiction(construct(expression));
-  }
-  catch( lException )
-  {
-    SetDepiction(ExceptionToHTML(lException));
-  }
+  servant.isTruthTablePossible( getStatement() );
 }
 
-function HandleCounterexampleButtonClick()
-{
-  try
-  {
-    SetDepiction(global.Logic.HTMLMaker.makeHTML(global.Logic.Parser.parse(document.getElementById("expression").value.split("\n")).findCounterexample()));
-  }
-  catch( lException )
-  {
-    SetDepiction(ExceptionToHTML(lException));
-  }
-}
-
-function Decide()
-{ 
-  try
-  {
-    var lStartTime = now();
-    var lResult = global.Logic.Utility.textForDecision( global.Logic.Parser.parse(document.getElementById("expression").value.split("\n")).decide() );
-    var lEndTime = now();
-    
-    SetResult( "The statement is " + lResult + ".  Deciding took " + ( ( lEndTime - lStartTime ) / 1000 ) + " seconds." );
-  }
-  catch( lException )
-  {
-    document.getElementById("result").innerHTML = "Error: " + lException._message;
-  }
-}
-
-function GetQueryFields()
+function getQueryFields()
 {
   var fields = {};
   var queryString = location.search.slice(1);
@@ -250,52 +337,74 @@ function GetQueryFields()
   return fields;
 }
 
-function SaveInput()
+function saveInput()
 {
   try
   {
-    localStorage.expression = document.getElementById("expression").value;
+    localStorage.expression = getStatement();
   }
-  catch (error)
+  catch ( exception )
   {
-    // In case localStorage is not available; my IE10 says it's undefined.
+    // catch in case localStorage is not available; my IE10 says it's undefined.
   }
 }
 
-function LoadSavedInput()
+function loadSavedInput()
 {
   try
   {
     if ( localStorage.expression )
     {
-      document.getElementById("expression").value = localStorage.expression;
+      setStatement( localStorage.expression );
     }
   }
-  catch (error)
+  catch ( exception )
   {
-    // In case localStorage is not available; my IE10 says it's undefined.
+    // catch in case localStorage is not available; my IE10 says it's undefined.
   }
 }
 
-function FillTextBox()
+function fillTextBox()
 {
-  var statement = GetQueryFields()["statement"];
+  var statement = getQueryFields()["statement"];
   if ( statement )
   {
-    document.getElementById("expression").value = statement;
+    setStatement( statement );
   }
   else
   {
-    LoadSavedInput();
+    loadSavedInput();
   }
 }
 
-FillTextBox();
-UpdateTruthTableButton();
-</script>
+function enableButton( buttonId )
+{
+  document.getElementById( buttonId ).disabled = false;
+}
 
-<script type="text/javascript" src="viz.js"></script>
-<script type="text/javascript" src="truthtable.js"></script>
+function disableButton( buttonId )
+{
+  document.getElementById( buttonId ).disabled = true;
+}
+
+function setProcessing( processing )
+{
+  if ( processing )
+  {
+    [ "decide_button", "depict_button", "truth_table_button", "counterexample_button" ].forEach( disableButton );
+    enableButton( "cancel_button" );
+  }
+  else
+  {
+    [ "decide_button", "depict_button", "counterexample_button" ].forEach( enableButton );
+    disableButton( "cancel_button" );
+  }
+}
+
+disableButton( "cancel_button" );
+fillTextBox();
+updateTruthTableButton();
+</script>
 
 </body>
 </html>

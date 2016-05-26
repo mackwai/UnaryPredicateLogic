@@ -39,6 +39,7 @@ namespace Logic
     private static Action mDecideSelectedText = null;
     private static Action mDepictContentsOfActiveDocument = null;
     private static Action mDepictSelectedText = null;
+    private static Action mExecuteProver9OnActiveBuffer = null;
 
     #endregion
 
@@ -55,6 +56,8 @@ namespace Logic
         PluginBase.SetCommand( 2, "Depict", DepictContentsOfActiveDocument, new ShortcutKey( false, true, false, Keys.G ) );
       if ( mDepictSelectedText != null )
         PluginBase.SetCommand( 3, "Depict Selected Text", DepictSelectedText, new ShortcutKey( false, true, true, Keys.G ) );
+      if ( mExecuteProver9OnActiveBuffer != null )
+        PluginBase.SetCommand( 4, "Evaluate with Prover9/Mace4", ExecuteProver9OnActiveBuffer );
     }
 
     internal static void SetToolBarIcon()
@@ -98,17 +101,25 @@ namespace Logic
         mDepictSelectedText();
     }
 
+    private static void ExecuteProver9OnActiveBuffer()
+    {
+      if ( mExecuteProver9OnActiveBuffer != null )
+        mExecuteProver9OnActiveBuffer();
+    }
+
     #region " IPluginReceiver interface "
     public void Install(
       Action aDecideContentsOfActiveDocument,
       Action aDecideSelectedText,
       Action aDepictContentsOfActiveDocument,
-      Action aDepictSelectedText )
+      Action aDepictSelectedText,
+      Action aExecuteProver9OnActiveBuffer )
     {
       mDecideContentsOfActiveDocument = aDecideContentsOfActiveDocument;
       mDecideSelectedText = aDecideSelectedText;
       mDepictContentsOfActiveDocument = aDepictContentsOfActiveDocument;
       mDepictSelectedText = aDepictSelectedText;
+      mExecuteProver9OnActiveBuffer = aExecuteProver9OnActiveBuffer;
     }
 
     public string NameOfActiveDocument
@@ -147,7 +158,7 @@ namespace Logic
         }
         catch ( Exception ex )
         {
-          throw new ApplicationException( "Buffer Length : " + lBufferLength + "\n" + ex.ToString() );
+          throw new ApplicationException( "Buffer Length : " + lBufferLength + Environment.NewLine + ex.ToString() );
         }
       }
     }
@@ -177,7 +188,7 @@ namespace Logic
         }
         catch ( Exception ex )
         {
-          throw new ApplicationException( "Buffer Length : " + textLen + "\n" + ex.ToString() );
+          throw new ApplicationException( "Buffer Length: " + textLen + Environment.NewLine + ex.ToString() );
         }
       }
     }

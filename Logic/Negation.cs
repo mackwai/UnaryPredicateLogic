@@ -63,5 +63,13 @@ namespace Logic
     {
       return string.Format( "~{0}", mInnerMatrix );
     }
+
+    public override string TreeProofGeneratorInput
+    {
+      get
+      {
+        return string.Format( @"(\neg {0})", mInnerMatrix.TreeProofGeneratorInput );
+      }
+    }
   }
 }

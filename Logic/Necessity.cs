@@ -66,7 +66,12 @@ namespace Logic
     {
       get { return !mInnerMatrix.ContainsModalities && !this.FreeVariables.Any(); }
     }
-    
+
+    internal override int DepthOfLoopNesting
+    {
+      get { return mInnerMatrix.DepthOfLoopNesting + 1; }
+    }
+
     internal override bool TrueIn( uint aInterpetation, uint aKindOfWorld, Predicates aPredicates )
     {
       if ( Memoizible )

@@ -29,9 +29,10 @@ namespace UnitTests
     [TestMethod]
     public void Test_ParseProblems()
     {
-      string lGraph1 = UnitTestUtility.GetGraph( @"([]Gx) -> (3y,Gy&y=x)" );
       Type lType = typeof( Logic.NamedObject );
       FieldInfo lField = lType.GetField( "NextObjectNumber", BindingFlags.Static | BindingFlags.NonPublic );
+      lField.SetValue( null, 1 );
+      string lGraph1 = UnitTestUtility.GetGraph( @"([]Gx) -> (3y,Gy&y=x)" );      
       lField.SetValue( null, 1 );
       string lGraph2 = UnitTestUtility.GetGraph( @"([]Gx) -> (3y,Gy&y=x)" );
 
@@ -60,6 +61,7 @@ namespace UnitTests
       Logic.Parser.Parse( new string[] { @"x,y,Px&xZy" } );
       Logic.Parser.Parse( new string[] { @"x,y,DaO|xZy" } );
       Logic.Parser.Parse( new string[] { @"x,y,xZy|DaO" } );
+      Logic.Parser.Parse( new string[] { "x,y,xRy->yRx", "aRb", "->", "bRa" } );
       try
       {
         Logic.Parser.Parse( new string[] { @"x,y,xZyDaO" } );

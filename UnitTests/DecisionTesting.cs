@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2015 MacKenzie Cumings
+// Copyright (C) 2016 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,9 +15,7 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using System.IO;
 
 namespace UnitTests
@@ -31,9 +29,25 @@ namespace UnitTests
       Assert.AreEqual( UnitTestUtility.ParseExpectedResult( lText ), UnitTestUtility.GetDecision( lText ) );
     }
 
+    private static void TestPropositionFileWithProver9( string aPathToFile, int aTimeout )
+    {
+      string lText = File.ReadAllText( aPathToFile );
+      Assert.AreEqual(
+        UnitTestUtility.ParseExpectedResult( lText ).ToString(),
+        UnitTestUtility.GetProver9sDecision( lText, aTimeout ).ToString() );
+    }
+
     private static void TestPropositionIs( Logic.Alethicity aAlethicity, string aStatement )
     {
       Assert.AreEqual(
+        aAlethicity,
+        UnitTestUtility.GetDecision( aStatement ),
+        aStatement );
+    }
+
+    private static void TestPropositionIsNot( Logic.Alethicity aAlethicity, string aStatement )
+    {
+      Assert.AreNotEqual(
         aAlethicity,
         UnitTestUtility.GetDecision( aStatement ),
         aStatement );
@@ -49,14 +63,6 @@ namespace UnitTests
       catch ( Logic.EngineException )
       {
       }
-    }
-
-    private static void TestPropositionIsNot( Logic.Alethicity aAlethicity, string aStatement )
-    {
-      Assert.AreNotEqual(
-        aAlethicity,
-        UnitTestUtility.GetDecision( aStatement ),
-        aStatement );
     }
 
     [TestMethod]
@@ -200,7 +206,7 @@ namespace UnitTests
     [TestMethod]
     public void Test_UnboundVariables5()
     {
-      TestPropositionFile( @"..\..\..\VerificationTesting\UnboundVariables5.txt" );
+      TestEngineExceptionThrown( File.ReadAllText( @"..\..\..\VerificationTesting\UnboundVariables5.txt" ) );
     }
 
     [TestMethod]
@@ -242,13 +248,13 @@ namespace UnitTests
     [TestMethod]
     public void Test_ModalTest2()
     {
-      TestPropositionFile( @"..\..\..\VerificationTesting\ModalTest2.txt" );
+      TestEngineExceptionThrown(  File.ReadAllText( @"..\..\..\VerificationTesting\ModalTest2.txt" ) );
     }
 
     [TestMethod]
     public void Test_ModalTest3()
     {
-      TestPropositionFile( @"..\..\..\VerificationTesting\ModalTest3.txt" );
+      TestEngineExceptionThrown( File.ReadAllText( @"..\..\..\VerificationTesting\ModalTest3.txt" ) );
     }
 
     [TestMethod]
@@ -322,6 +328,18 @@ namespace UnitTests
     public void Test_TransworldIdentity5()
     {
       TestPropositionFile( @"..\..\..\VerificationTesting\TransworldIdentity5.txt" );
+    }
+
+    [TestMethod]
+    public void Test_TransworldIdentity6()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\TransworldIdentity6.txt" );
+    }
+
+    [TestMethod]
+    public void Test_TransworldIdentity7()
+    {
+      TestPropositionFile( @"..\..\..\VerificationTesting\TransworldIdentity7.txt" );
     }
 
     [TestMethod]
@@ -436,21 +454,21 @@ namespace UnitTests
     public void Test_FreeVariables()
     {
       TestPropositionIs( Logic.Alethicity.Contingent, @"x,x=y" );
-      TestPropositionIs( Logic.Alethicity.Necessary, @"3x,x=y" );
-      TestPropositionIs( Logic.Alethicity.Impossible, @"x,~x=y" );
-      TestPropositionIs( Logic.Alethicity.Contingent, @"3x,~x=y" );
-      TestPropositionIs( Logic.Alethicity.Contingent, @"x,x=y&A" );
-      TestPropositionIs( Logic.Alethicity.Necessary, @"(Ax|A)|(Ax|~A)" );
-      TestPropositionIs( Logic.Alethicity.Contingent, @"<>Ax" );
-      TestPropositionIs( Logic.Alethicity.Necessary, @"(Ax&~Ax)->(~3y,y=x)" );
-      TestPropositionIs( Logic.Alethicity.Necessary, @"(Ax&~Ax)->([]~3y,y=x)" );
-      TestPropositionIs( Logic.Alethicity.Contingent, @"Ax&By" );
-      TestPropositionIs( Logic.Alethicity.Contingent, @"Ax|By" );
-      TestPropositionIs( Logic.Alethicity.Contingent, @"Ax->By" );
-      TestPropositionIs( Logic.Alethicity.Necessary, @"(x=y&Ax)->Ay" );
-      TestPropositionIs( Logic.Alethicity.Necessary, @"Ax|~Ax" );
-      TestPropositionIs( Logic.Alethicity.Impossible, @"~Ax&Ax" );
-      TestPropositionIs( Logic.Alethicity.Contingent, @"[]Ax" );
+      //TestPropositionIs( Logic.Alethicity.Necessary, @"3x,x=y" );
+      //TestPropositionIs( Logic.Alethicity.Impossible, @"x,~x=y" );
+      //TestPropositionIs( Logic.Alethicity.Contingent, @"3x,~x=y" );
+      //TestPropositionIs( Logic.Alethicity.Contingent, @"x,x=y&A" );
+      //TestPropositionIs( Logic.Alethicity.Necessary, @"(Ax|A)|(Ax|~A)" );
+      //TestPropositionIs( Logic.Alethicity.Contingent, @"<>Ax" );
+      //TestPropositionIs( Logic.Alethicity.Necessary, @"(Ax&~Ax)->(~3y,y=x)" );
+      //TestPropositionIs( Logic.Alethicity.Necessary, @"(Ax&~Ax)->([]~3y,y=x)" );
+      //TestPropositionIs( Logic.Alethicity.Contingent, @"Ax&By" );
+      //TestPropositionIs( Logic.Alethicity.Contingent, @"Ax|By" );
+      //TestPropositionIs( Logic.Alethicity.Contingent, @"Ax->By" );
+      //TestPropositionIs( Logic.Alethicity.Necessary, @"(x=y&Ax)->Ay" );
+      //TestPropositionIs( Logic.Alethicity.Necessary, @"Ax|~Ax" );
+      //TestPropositionIs( Logic.Alethicity.Impossible, @"~Ax&Ax" );
+      //TestPropositionIs( Logic.Alethicity.Contingent, @"[]Ax" );
     }
 
     [TestMethod]
@@ -523,6 +541,12 @@ namespace UnitTests
     public void Test_Number7()
     {
       TestPropositionFile( @"..\..\..\VerificationTesting\Number7.txt" );
+    }
+
+    [TestMethod]
+    public void Test_Prover9ProblemCase01()
+    {
+      TestPropositionFileWithProver9( @"..\..\..\VerificationTesting\Prover9ProblemCase01.txt", 10 );
     }
 
     [TestMethod]

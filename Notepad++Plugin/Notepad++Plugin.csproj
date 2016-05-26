@@ -61,6 +61,15 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Decider\BackgroundProcesses.cs">
+      <Link>BackgroundProcesses.cs</Link>
+    </Compile>
+    <Compile Include="..\Decider\Prover9Mace4.cs">
+      <Link>Prover9Mace4.cs</Link>
+    </Compile>
+    <Compile Include="..\Decider\ShellParameters.cs">
+      <Link>ShellParameters.cs</Link>
+    </Compile>
     <Compile Include="..\Logic\BinaryOperator.cs">
       <Link>BinaryOperator.cs</Link>
     </Compile>

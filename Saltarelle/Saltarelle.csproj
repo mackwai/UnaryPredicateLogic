@@ -160,9 +160,6 @@
     <Compile Include="..\Parser\VariableDictionary.cs">
       <Link>VariableDictionary.cs</Link>
     </Compile>
-    <Compile Include="..\UnitTests\UnitTestUtility.cs">
-      <Link>UnitTestUtility.cs</Link>
-    </Compile>
     <Compile Include="HTMLMaker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

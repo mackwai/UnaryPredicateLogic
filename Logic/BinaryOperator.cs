@@ -60,6 +60,23 @@ namespace Logic
       get { return Connector; }
     }
 
+    public override string TreeProofGeneratorInput
+    {
+      get
+      {
+        return String.Format(
+          "({0} {1} {2})",
+          Left.TreeProofGeneratorInput,
+          TreeProofGeneratorConnector,
+          Right.TreeProofGeneratorInput );
+      }
+    }
+
+    protected abstract string TreeProofGeneratorConnector
+    {
+      get;
+    }
+
     internal override IEnumerable<Tuple<Matrix, Matrix>> DirectDependencies
     {
       get
@@ -127,13 +144,13 @@ namespace Logic
       }
     }
 
-    internal override int MaxmimumNumberOfDistinguishableObjects
+    internal override int MaxmimumNumberOfDistinguishableObjectsOfAKind
     {
       get
       {
         return Math.Max(
-          Left.MaxmimumNumberOfDistinguishableObjects,
-          Right.MaxmimumNumberOfDistinguishableObjects );
+          Left.MaxmimumNumberOfDistinguishableObjectsOfAKind,
+          Right.MaxmimumNumberOfDistinguishableObjectsOfAKind );
       }
     }
 
@@ -145,6 +162,11 @@ namespace Logic
           Left.MaxmimumNumberOfModalitiesInIdentifications,
           Right.MaxmimumNumberOfModalitiesInIdentifications );
       }
+    }
+
+    internal override int DepthOfLoopNesting
+    {
+      get { return Math.Max( Left.DepthOfLoopNesting, Right.DepthOfLoopNesting ); }
     }
 
     internal override IEnumerable<Matrix> NonNullPredications

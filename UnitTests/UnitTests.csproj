@@ -44,6 +44,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -85,8 +86,13 @@
     <Compile Include="UnitTestUtility.cs" />
     <Compile Include="DecisionTesting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebPageInputTesting.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Decider\Decider.csproj">
+      <Project>{25d0c0e7-59c9-4972-90ec-f7348463ba04}</Project>
+      <Name>Decider</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Logic\Logic.csproj">
       <Project>{5ca05f85-1a10-4d02-bf56-e0034f3647d6}</Project>
       <Name>Logic</Name>

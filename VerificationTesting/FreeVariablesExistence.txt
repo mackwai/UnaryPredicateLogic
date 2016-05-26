@@ -1,7 +1,8 @@
-// Being the value of a free variable shouldn't imply existence.
+// Maybe being the value of a constant shouldn't imply existence,
+// but in classical logic, it does.  See http://plato.stanford.edu/entries/logic-classical
 (3x,x=g) -> Lg
 3y,Lx
 ->
 3x,x=g
 
-// Expected Result: Contingent
+// Expected Result: Necessary

@@ -58,17 +58,22 @@ namespace Logic
       get { return mInnerMatrix.FreeVariables.Where( fVariable => !fVariable.Equals( mVariable ) ); }
     }
 
-    internal override int MaxmimumNumberOfDistinguishableObjects
+    internal override int MaxmimumNumberOfDistinguishableObjectsOfAKind
     {
       get
       {
         return Math.Max(
-          mInnerMatrix.MaxmimumNumberOfDistinguishableObjects,
+          mInnerMatrix.MaxmimumNumberOfDistinguishableObjectsOfAKind,
           mInnerMatrix.FreeVariables.Intersect( mInnerMatrix.IdentifiedVariables ).Count() );
       }
     }
-		
-		internal Variable Variable
+
+    internal override int DepthOfLoopNesting
+    {
+      get { return mInnerMatrix.DepthOfLoopNesting + 1; }
+    }
+
+    internal Variable Variable
 		{
 			get { return mVariable; }
 		}
@@ -81,6 +86,9 @@ namespace Logic
 
 		internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
 		{
+      if ( aPredicates.NoDistinguishableObjects )
+        return mInnerMatrix.TrueIn( aInterpretation, aKindOfWorld, aPredicates );
+
       foreach ( string lKindOfObject in aPredicates.GetKindsOfObjectsIn( aKindOfWorld ) )
       {
         Variable.Instantiate( lKindOfObject, aKindOfWorld );
@@ -121,6 +129,11 @@ namespace Logic
         "( all {0} {1} )",
         aTranslatedVariableNames[ lLetter ],
         mInnerMatrix.Prover9InputHelper( aTranslatedVariableNames ) );
+    }
+
+    public override string TreeProofGeneratorInput
+    {
+      get { return String.Format( @"(\forall {0} {1})", mVariable, mInnerMatrix.TreeProofGeneratorInput ); }
     }
 
     public override string ToString()

@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+if ( typeof(window) === "undefined" )
+  window = self;
 
 function k(Za){throw Za;}var p=void 0,q=!0,s=null,F=!1;function L(){return function(){}}
 window.Viz=function(Za,ec,$a){function ob(a){eval.call(s,a)}function I(a,b){a||$("Assertion failed: "+b)}function pb(a){try{var b=e["_"+a];b||(b=eval("_"+a))}catch(c){}I(b,"Cannot call unknown function "+a+" (perhaps LLVM optimizations or closure removed it?)");return b}function qb(a,b,c,f){function d(a,b){if("string"==b){if(a===s||a===p||0===a)return 0;a=U(a);b="array"}if("array"==b){i||(i=n.jd());var c=n.gd(a.length);rb(a,c);return c}return a}var i=0,e=0,f=f?f.map(function(a){return d(a,c[e++])}):

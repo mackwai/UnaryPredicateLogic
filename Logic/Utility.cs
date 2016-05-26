@@ -126,6 +126,13 @@ namespace Logic
       return new sbyte[ aNumberOfElements ];
     }
 
+#if SALTARELLE
+    [InlineCode( "status({aStatusMessage})" )]
+    public static void Status( string aStatusMessage )
+    {
+    }
+#endif
+
     public static IEnumerable<Tuple<TType,TType>> Pairs<TType>( IEnumerable<TType> aList )
     {
       TType[] lArray = aList.ToArray();

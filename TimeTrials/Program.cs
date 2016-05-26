@@ -47,8 +47,6 @@ namespace TimeTrials
       "Hurley454.txt",
       "Hurley457.txt",
       "ModalTest1.txt",
-      "ModalTest2.txt",
-      "ModalTest3.txt",
       "SocratesOverload.txt",
       "AxiomsOfModalLogic.txt",
       "EmptyWorldTest.txt",
@@ -56,14 +54,17 @@ namespace TimeTrials
       "LastWorldTested.txt",
       "AxiomsOfIdentity.txt",
       "KindaSlowEvaluation.txt",
-      "TransworldIdentity2.txt"
+      "TransworldIdentity2.txt",
+      "TransworldIdentity6.txt",
+      "TransworldIdentity7.txt"
     };
 
     private static readonly string[] NamesOfSlowTestFiles =  new string[]
     {
-      "ModalTest2.txt",
       "KindaSlowEvaluation.txt",
-      "TransworldIdentity2.txt"
+      "TransworldIdentity2.txt",
+      "TransworldIdentity6.txt",
+      "TransworldIdentity7.txt"
     };
 
     private static Matrix ParseFile( string aPathToFile )

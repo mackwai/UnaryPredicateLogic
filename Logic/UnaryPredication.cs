@@ -58,7 +58,7 @@ namespace Logic
       get { yield break; }
     }
 
-    internal override int MaxmimumNumberOfDistinguishableObjects
+    internal override int MaxmimumNumberOfDistinguishableObjectsOfAKind
     {
       get { return 1; }
     }
@@ -120,6 +120,11 @@ namespace Logic
     public override string ToString()
     {
       return string.Format( "{0}{1}", mPredicate, mVariable );
+    }
+
+    public override string TreeProofGeneratorInput
+    {
+      get { return this.ToString(); }
     }
   }
 }

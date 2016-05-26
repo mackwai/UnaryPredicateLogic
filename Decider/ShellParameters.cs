@@ -1,4 +1,4 @@
-﻿// somerby.net/mack/logic
+// somerby.net/mack/logic
 // Copyright (C) 2016 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
@@ -16,21 +16,30 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 using System;
-using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Logic;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-
-namespace UnitTests
+namespace Logic
 {
-  [TestClass]
-  public class CounterexampleTesting
+  internal class ShellParameters
   {
-    [TestMethod]
-    public void Test_CounterexampleProblemCase1()
+    public string Executable { get; private set; }
+    public string Arguments { get; private set; }
+    public string StandardInput { get; private set; }
+
+    public ShellParameters( string aExecutable, string aStandardInput )
     {
-      Matrix lMatrix = Logic.Parser.Parse( new string[] { "P & x,Gx" } );
-      Counterexample lCounterexample = lMatrix.FindCounterexample();
+      this.Executable = aExecutable;
+      this.StandardInput = aStandardInput;
+    }
+
+    public ShellParameters( string aExecutable, string aArguments, string aStandardInput )
+    {
+      this.Executable = aExecutable;
+      this.Arguments = aArguments;
+      this.StandardInput = aStandardInput;
     }
   }
 }

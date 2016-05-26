@@ -79,6 +79,11 @@ img
   min-height: 5ex;
 }
 
+#cancel_button
+{
+  float: right;
+}
+
 #all
 {
   width: 1028px;

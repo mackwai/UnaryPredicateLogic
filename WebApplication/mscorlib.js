@@ -2,7 +2,12 @@
 // Modified version of Script# Core Runtime (http://projects.nikhilk.net/ScriptSharp)
 
 if (typeof(global) === "undefined")
-	global = window;
+{
+  if (typeof(window) === "undefined")
+    global = self;
+  else
+	  global = window;
+}
 (function(global) {
 "use strict";
 

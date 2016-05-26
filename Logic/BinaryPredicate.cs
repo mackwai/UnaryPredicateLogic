@@ -28,9 +28,9 @@ namespace Logic
 
     public override bool Equals( object obj )
     {
-      if ( obj is UnaryPredicate )
+      if ( obj is BinaryPredicate )
       {
-        UnaryPredicate that = obj as UnaryPredicate;
+        BinaryPredicate that = obj as BinaryPredicate;
 
         return this.Letter == that.Letter;
       }

@@ -92,7 +92,7 @@ namespace Logic
       get { yield break; }
     }
 
-    internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicateDictionary )
+    internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
     {
       return Left.InstantiatedKindOfObject == Right.InstantiatedKindOfObject
           && Left.InstantiatedKindOfWorld == Right.InstantiatedKindOfWorld;
@@ -108,7 +108,7 @@ namespace Logic
       get { yield return this; }
     }
 
-    internal override int MaxmimumNumberOfDistinguishableObjects
+    internal override int MaxmimumNumberOfDistinguishableObjectsOfAKind
     {
       get { return IdentifiedVariables.Count(); }
     }
@@ -136,7 +136,7 @@ namespace Logic
     internal override string Prover9InputHelper( Dictionary<char, string> aTranslatedVariableNames )
     {
       return string.Format(
-        "{0}={1}",
+        "({0}={1})",
         aTranslatedVariableNames[ Left.ToString()[ 0 ] ],
         aTranslatedVariableNames[ Right.ToString()[ 0 ] ] );
     }

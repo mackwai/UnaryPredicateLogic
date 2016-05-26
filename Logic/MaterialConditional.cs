@@ -15,6 +15,7 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+using System;
 using System.Collections.Generic;
 
 namespace Logic
@@ -32,6 +33,11 @@ namespace Logic
     protected override string Connector
     {
       get { return "->"; }
+    }
+
+    protected override string TreeProofGeneratorConnector
+    {
+      get { return @"\to"; }
     }
 
     internal override string DOTLabel
@@ -52,9 +58,9 @@ namespace Logic
     internal override string Prover9InputHelper1( Dictionary<char, string> aTranslatedVariableNames )
     {
       return string.Format(
-        "formulas(assumptions).\n{0}end_of_list.\n\nformulas(goals).\n{1}end_of_list.\n",
+        "formulas(assumptions).\n{0}end_of_list.\n\nformulas(goals).\n{1}.\nend_of_list.\n",
         this.Left.MakeProver9Formulas( aTranslatedVariableNames ),
-        this.Right.MakeProver9Formulas( aTranslatedVariableNames ) );
+        this.Right.Prover9InputHelper( aTranslatedVariableNames ) );
     }
   }
 }
