@@ -37,6 +37,19 @@ namespace Logic
         throw new EngineException( "Unhandled subclass of Counterexample encountered in MakeHTML: {0}", aCounterexample.GetType() );
     }
 
+    public static string MakeHTMLForExample( Counterexample aCounterexample )
+    {
+      if ( aCounterexample == null )
+        return "<p>This proposition is self-contradictory; there are no examples.</p>";
+      else if ( aCounterexample is KindOfWorld )
+        return "<div class=\"counterexample\"><h3>Example</h3><p>This is a kind of world in which the statement is true.</p>"
+         + MakeHTML( aCounterexample as KindOfWorld, @"black" ) + "</div>";
+      else if ( aCounterexample is ModalCounterexample )
+        return MakeHTMLForExample( aCounterexample as ModalCounterexample );
+      else
+        throw new EngineException( "Unhandled subclass of Counterexample encountered in MakeHTML: {0}", aCounterexample.GetType() );
+    }
+
     private static string MakeHTML( KindOfWorld aCounterexample, string aColor )
     {
       StringBuilder lText = new StringBuilder();
@@ -91,6 +104,26 @@ namespace Logic
         lText.AddLine( MakeHTML( lKindOfWorld, "red" ) );
       }
       foreach ( KindOfWorld lKindOfWorld in aCounterexample.NonCounterexamples )
+      {
+        lText.AddLine( MakeHTML( lKindOfWorld, "black" ) );
+      }
+      lText.AddLine( "</div>" );
+      return lText.ToString();
+    }
+
+    private static string MakeHTMLForExample( ModalCounterexample aExample )
+    {
+      StringBuilder lText = new StringBuilder();
+      lText.AddLine( "<div class=\"counterexample\">" );
+      lText.AddLine( "<h3>Example</h3>" );
+      lText.AddLine( "<p>This is an interpretation of predicates in which the statement is possibly true."
+        + "  <span style=\"color:red\">Red text</span> indicates a kind of world in which the statement is true."
+        + "  <span style=\"color:black;font-weight:bold\">Black text</span> indicates a kind of world in which the statement is false.</p>" );
+      foreach ( KindOfWorld lKindOfWorld in aExample.Counterexamples )
+      {
+        lText.AddLine( MakeHTML( lKindOfWorld, "red" ) );
+      }
+      foreach ( KindOfWorld lKindOfWorld in aExample.NonCounterexamples )
       {
         lText.AddLine( MakeHTML( lKindOfWorld, "black" ) );
       }

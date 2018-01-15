@@ -121,6 +121,11 @@ namespace Logic
       get { return Left.ContainsModalities || Right.ContainsModalities; }
     }
 
+    internal override bool ContainsIdentifications
+    {
+      get { return Left.ContainsIdentifications || Right.ContainsIdentifications; }
+    }
+
     public override bool IsPropositional
     {
       get { return mLeft.IsPropositional && mRight.IsPropositional; }

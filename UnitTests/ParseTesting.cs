@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2015 MacKenzie Cumings
+// Copyright (C) 2015, 2017 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -142,6 +142,15 @@ namespace UnitTests
     }
 
     [TestMethod]
+    public void Test_Propositions()
+    {
+      Logic.Matrix lMatrix = Logic.Parser.Parse( new string[] { "A" } );
+      lMatrix = Logic.Parser.Parse( new string[] { "a" } );
+      lMatrix = Logic.Parser.Parse( new string[] { "a<=>A" } );
+      lMatrix = Logic.Parser.Parse( new string[] { "a&b" } );
+    }
+
+    [TestMethod]
     public void Test_NumberedPropositions()
     {
       foreach ( string lStatement in new string[] { "0AB", "1AB", "2AB", "0ABC", "1ABC", "2ABC", "3ABC" } )
@@ -184,6 +193,63 @@ namespace UnitTests
     public void Test_ParseErrors()
     {
       ParseFile( @"..\..\..\VerificationTesting\UnhelpfulParseErrorMessage.txt" );
+    }
+
+    [TestMethod]
+    public void Test_Replacement()
+    {
+      Assert.AreEqual(
+        @"(B<=>C)",
+        Logic.Parser.Parse( new string[] { "#replace == <=>", "B==C" } ).ToString() );
+      Assert.AreEqual(
+        @"(G<=>C)",
+        Logic.Parser.Parse( new string[] { "#replace B G", "B<=>C" } ).ToString() );
+      Assert.AreEqual(
+        @"(G<=>C)",
+        Logic.Parser.Parse( new string[] { "#replace B G", "#replace == <=>", "B==C" } ).ToString() );
+      Assert.AreEqual(
+        @"(G<=>C)",
+        Logic.Parser.Parse( new string[] { "#replace mervyn G", "mervyn <=>C" } ).ToString() );
+      Assert.AreEqual(
+        @"(G<=>C)",
+        Logic.Parser.Parse( new string[] { "#replace mervyn G", "mervyn<=>C" } ).ToString() );
+      Assert.AreEqual(
+        @"(G<=>C)",
+        Logic.Parser.Parse( new string[] { "#replace mervyn C", "G<=>mervyn" } ).ToString() );
+      Assert.AreEqual(
+        @"(G<=>C)",
+        Logic.Parser.Parse( new string[] { "#replace mervyn =", "G<mervyn>C" } ).ToString() );
+      Assert.AreEqual(
+        @"(G<=>(C->D))",
+        Logic.Parser.Parse( new string[] { "#replace => ->", "G<=>C=>D" } ).ToString() );
+
+      Assert.AreEqual(
+        @"(((x,(Hx->Mx))&Hs)->Ms)",
+        Logic.Parser.Parse( new string[] {
+          "#replace => ->",
+          "#replace man H",
+          "#replace mortal M",
+          "#replace socrates s",
+          "#replace therefore ->",
+          "",
+          "x, man x => mortal x",
+          "man socrates",
+          "therefore",
+          "mortal socrates" } ).ToString() );
+
+      Assert.AreEqual(
+        Logic.Alethicity.Necessary,
+        Logic.Parser.Parse( new string[] {
+          "#replace => ->",
+          "#replace man H",
+          "#replace mortal M",
+          "#replace socrates s",
+          "#replace therefore ->",
+          "",
+          "x, man x=> mortal x",
+          "man socrates",
+          "therefore",
+          "mortal socrates" } ).Decide() );
     }
   }
 }

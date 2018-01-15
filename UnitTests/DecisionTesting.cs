@@ -159,6 +159,10 @@ namespace UnitTests
     public void Test_NullPredicates()
     {
       TestPropositionFile( @"..\..\..\VerificationTesting\NullPredicates.txt" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"p<=>p" );
+      TestPropositionIs( Logic.Alethicity.Contingent, @"p<=>P" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"(P^p)->(P|p)" );
+      TestPropositionIs( Logic.Alethicity.Contingent, @"p&q" );
     }
 
     [TestMethod]
@@ -290,7 +294,7 @@ namespace UnitTests
     [TestMethod]
     public void Test_BigLastWorldTested()
     {
-      Assert.Inconclusive( "This one takes too long." );
+      Assert.Inconclusive( "This test passed on 2016-06-01 after running 19 hours." );
       //TestPropositionFile( @"..\..\..\VerificationTesting\BigLastWorldTested.txt" );
     }
 

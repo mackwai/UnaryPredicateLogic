@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   somerby.net/mack/logic
-  Copyright (C) 2015 MacKenzie Cumings
+  Copyright (C) 2015, 2018 MacKenzie Cumings
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -36,19 +36,33 @@
 
 <h2 id="introduction">Introduction</h2>
 
-<p>This web application (hereinafter referred to as &quot;the software&quot; or &quot;application&quot;) decides the validity/satisfiablity/inconsistency of certain kinds of simple statements in symbolic logic.</p>
+<p>This web application (hereinafter referred to as &quot;the software&quot; or &quot;application&quot;) decides the validity/satisfiablity/inconsistency of certain kinds of statements in symbolic logic.</p>
 
 <p>Most of the software is written in C# and translated into JavaScript with <a href="http://www.saltarelle-compiler.com/" target="_blank">Saltarelle</a>.  The source code is on <a href="https://github.com/mackwai/UnaryPredicateLogic" target="_blank">GitHub</a>.  <a href="https://github.com/mdaines/viz.js/">Viz.js</a> is used to generate diagrams.  The truth table feature is adapted from <a href="https://github.com/mrieppel/TruthTableGenerator" target="_blank">code</a> written by Michael Rieppel.</p>
 
 <h2 id="instructions">Instructions</h2>
 
-<p>To use this application, type a logical statement into the textbox on the main page, then click the "Decide" button.  If the application can decide the statement, it will.  Otherwise, it will show some kind of error message describing what went wrong.  The <a href="#the_language">language section</a> explains how to write logical statements for this application.  If you're looking for examples of statements, click on any of the buttons under the heading entitled "Examples" and the application will fill the text box with an example statement, ready to be decided.</p>
+<p>To use this application, type a logical statement into the textbox on the main page, then click the "Decide" button.
+If the application can decide the statement, it will.  Otherwise, it will show some kind of error message describing what went wrong.
+The <a href="#the_language">language section</a> explains how to write logical statements for this application.
+If you're looking for examples of statements, click on any of the buttons under the heading entitled "Examples" and the application will fill the text box with an example statement, ready to be decided.</p>
 
-<p>If you click "Depict" button, the application will draw a diagram that shows how the application interprets the statement in the textbox.  This diagram is a graphical representation of the data structure that the application actually uses to decide the statement.</p>
+<p>If you click "Depict" button, the application will draw a diagram that shows how the application interprets the statement in the textbox.
+This diagram is a graphical representation of the data structure that the application actually uses to decide the statement.</p>
 
-<p>If there is a syntactically valid propositional logic statement in the textbox, the "Truth Table" button will be enabled.  Clicking this button will cause the application to draw a <a href="http://en.wikipedia.org/wiki/Truth_table" target="_blank">truth table</a> for the statement.</p>
+<p>If there is a syntactically valid propositional logic statement in the textbox, the "Truth Table" button will be enabled.
+Clicking this button will cause the application to draw a <a href="http://en.wikipedia.org/wiki/Truth_table" target="_blank">truth table</a> for the statement.</p>
 
-<p>Clicking the "Counterexample" button will cause the application to attempt to find a kind of world where the statement is false.  If it succeeds, it will show a description of that kind of world.</p>
+<p>Clicking the "Example" button will cause the application to attempt to find a kind of world where the statement is true.
+If it succeeds, it will show a description of that kind of world.</p>
+
+<p>Clicking the "Counterexample" button will cause the application to attempt to find a kind of world where the statement is false.
+If it succeeds, it will show a description of that kind of world.</p>
+
+<p>Clicking the "Tree Proof" button will pass the statement to wo's <a href="http://www.umsu.de/logik/trees" target="_blank">Tree Proof Generator</a>.
+It is a web application that uses Semantic Tableaux to check the validity of a statement, and provides a proof if it finds that the statement is valid.
+The "Tree Proof" button will be enabled whenever there is a syntactically valid statement in the text box that does not contain identifications or modal operators.
+If you want to evaluate a statement that contains binary predicates (relations), use the Tree Proof Generator.</p>
 
 <h2 id="the_language">The Language</h2>
 
@@ -56,17 +70,19 @@
 
 <p>The language has these elements:</p>
 
-<ul class="bulletted">
+<ul>
   <li><a href="#language_logical_operators">Unary and binary logical operators</a></li>
   <li><a href="#language_variable">Variables</a></li>
   <li><a href="#language_constant">Constants</a></li>
   <li>Predicates on <a href="#language_unary_predicate">one variable</a> (properties) and predicates on <a href="#language_nullary_predicate">zero variables</a> (propositions)</li>
+  <li>Predicates on <a href="#language_binary_predicate">two variables</a> (relations)</li>
   <li><a href="#language_grouping">Grouping</a> with parentheses</li>
   <li><a href="#language_universal_generalization">Universal generalizations</a>, <a href="#language_existential_quantification">existential quantifications</a> and <a href="#language_definite_description">definite descriptions</a></li>
   <li><a href="#language_identity">Identity</a></li>
   <li><a href="#language_modal_operators">The modal operators for necessity and possibility</a></li>
   <li><a href="#language_two_term_propositions">Two-term Propositions</a></li>
   <li><a href="#language_assertions_of_number">Some simple assertions of number</a></li>
+  <li><a href="#text_replacements">Text Replacements</a></li>
 </ul>
 
 <h4 id="language_logical_operators">Logical Operators</h4>
@@ -131,11 +147,11 @@ x,Sx->Mx                                 // Socrates is mortal.</pre>
 
 <p>which, though more complicated, is in a way better because it makes explicit what we typically assume about Socrates, which is that he exists and he is, by definition, a unique individual.  Even so, I think constants are too convenient a feature to be omitted from the software.  The use of a constant implies that the object denoted by the constant actually exists.  This isn't the only way to interpret constants, but it's the easiest one to implement in this software.  Because of this interpretation, the software will decide that <span class="symbolic">3x,x=g</span> is necessarily true.  Possible objects (ones which may or may not exist) and impossible objects (ones which could never exist), can be represented with unary predicates.</p>
 
-<p>Since I have not yet found a satsfactory way to <a href="#decide">decide</a> statements which contain both modal operators and constants, the software rejects any statement that contains both modal operators and constants.</p>
+<p>Since I have not yet found a satisfactory way to <a href="#decide">decide</a> statements which contain both modal operators and constants, the software rejects any statement that contains both modal operators and constants.</p>
 
 <h4 id="language_nullary_predicate">Predicates on Zero Variables</h4>
 
-<p>A predicate on zero variables, which can be thought of as representing a true/false proposition, is represented by a single capital letter.</p>
+<p>A predicate on zero variables, which can be thought of as representing a true/false proposition, is represented by a single letter.</p>
 
 <h4 id="language_unary_predicate">Predicates on One Variable</h4>
 
@@ -149,11 +165,17 @@ x,Sx->Mx                                 // Socrates is mortal.</pre>
 
 <p>because the first &quot;<span class="symbolic">F</span>&quot; is interpreted as a unary predicate and the second &quot;<span class="symbolic">F</span>&quot; is interpreted as a nullary predicate.</p>
 
+<h4 id="language_binary_predicate">Predicates on Two Variables</h4>
+
+<p>A predication on two variables, which can be thought of as the assertion that two objects have some relation to each other, is represented by a single capital letter (the predicate) followed by two lowercase letters (the variables).
+The decision algorithm does not support predicates on two variables, and will usually reject a statement that contains them.
+Statements that have predicates on two variables can, however, be evaluated with the Tree Proof Generator, if they do not also contain <a href="#language_modal_operators">modal operators</a> or <a href="#language_identity">identifications</a>.</p>
+
 <h4 id="grouping">Grouping</h4>
 
 <p>Expressions can be grouped together with parentheses.  They work just like parentheses do in algebra or in other symbolic logics.</p>
 
-<h4 id="language_universal_generalization">Univeral Generalizations</h4>
+<h4 id="language_universal_generalization">Universal Generalizations</h4>
 
 <p>A universal generalization is a variable followed by a comma followed by the expression the generalization applies to.  So you could type
 
@@ -196,7 +218,7 @@ x,Sx->Mx                                 // Socrates is mortal.</pre>
 
 <h4 id="language_identity">Identity</h4>
 
-<p>An identification of two variables is just a lowercase letter followed by an equals sign followed by another lowercase letter, for example</p>
+<p>An identification of two objects is just a lowercase letter followed by an equals sign followed by another lowercase letter, for example</p>
 
 <pre class="symbolic">x,y, (Fx &amp; x=y) -&gt; Fy</pre>
 
@@ -204,7 +226,7 @@ x,Sx->Mx                                 // Socrates is mortal.</pre>
 
 <h4 id="language_modal_operators">Modal Operators</h4>
 
-<p>The software recognizes two modal operators, "<span class="symbolic">[]</span>" for necessity and "<span class="symbolic">&lt;&gt;</span>" for possibility.  They are right-associative and have the same precedence as negation.</p>
+<p>The software recognizes two modal operators, "<span class="symbolic">[]</span>" for necessity and "<span class="symbolic">&lt;&gt;</span>" for possibility.  They are right-associative and have the same precedence as negation.  The kind of modality represented by these operators is <a href="http://en.wikipedia.org/wiki/Alethic_modality">alethic</a> modality.</p>
 
 <h4 id="language_two_term_propositions">Two-term Propositions</h4>
 
@@ -241,6 +263,31 @@ x,Sx->Mx                                 // Socrates is mortal.</pre>
   <tr><td><span class="symbolic">1PQR</span></td><td>Only one of P, Q and R is true</td></tr>
   <tr><td><span class="symbolic">2PQR</span></td><td>Exactly 2 of P, Q and R are true</td></tr>
 </table>
+
+<h4 id="text_replacements">Text Replacements</h4>
+
+<p>A line that begins with "<span class="symbolic">#replace</span>" will be interpreted as a directive to replace one string of letters or symbols with another in the lines below the directive.  It's a way to define your own operator symbols or give meaningful names to predicates and variables. For example, when given the text</p>
+
+<pre class="symbolic">#replace => ->
+#replace man H
+#replace mortal M
+#replace socrates s
+#replace therefore ->
+
+x, man x => mortal x
+man socrates
+therefore
+mortal socrates</pre>
+
+<p>the application will convert it to</p>
+
+<pre class="symbolic">
+x, H x -> M x
+M s
+->
+M s</pre>
+
+<p>before parsing it.</p>
 
 <h3>Valid Expressions</h3>
 
@@ -307,8 +354,8 @@ Ms     // Socrates is mortal.</pre>
 
 <p>The language this tool uses is a kind of symbolic logic.  It was designed with these criteria in mind:</p>
 
-<ul class="bulletted">
-  <li>The language should only use basic SCII characters which are available on a standard English keyboard, so typing expressions in the language is easy.</li>
+<ul>
+  <li>The language should only use basic ASCII characters which are available on a standard English keyboard, so typing expressions in the language is easy.</li>
   <li>The language should be terse in such a way that it is fast to type but not generally difficult to read.</li>
   <li>The language should enable a person to arrange expressions in such a way that they are readable.</li>
   <li>The symbols defined in the language should have a precedent in other languages.  The symbols in this language are borrowed from conventional symbolic logic, conventional mathematical notation, and the C programming language.</li>
@@ -491,7 +538,7 @@ I don't have proof for this assumption, but it seems to work.</p>
 
 <p>When deciding a proposition that does not contain any <a href="#modality">modalities</a>, the software defines as many kinds of worlds as are possible under the assumptions that</p>
 
-<ul class="bulletted">
+<ul>
   <li>All nullary predicates are contingent and do not necessarily have any logical relationship with each other.</li>
   <li>All combinations of properties are possible, e.g. <span class="symbolic">3x,Px&amp;Qx</span> is always possible, so <span class="symbolic">P</span> and <span class="symbolic">Q</span> cannot be interpreted as "awesome" and "not awesome", respectively.</li>
 </ul>
@@ -532,7 +579,7 @@ x,Gx -> Px
 <>3x,Gx&~Px
 </pre>
 
-<p>Unfortunately, the software does not support propositions of this complexity, so this representation of transworld identity is moot.
+<p>Unfortunately, the software does not support propositions of this complexity, so it can't decide proposition that use this representation of transworld identity.
 
 <h4>Instantiation of Object inside of Modal Expressions</h4>
 
@@ -557,44 +604,42 @@ x, Rx & (Px -> []y, Ry -> Py)
 
 <table id="maxima_for_modal_propositions">
   <caption>Maxima for Modal Propositions</caption>
-  <tr><th>n</th><th>u</th><th>i</th></tr>
   <tr><td>5</td><td>0</td><td>0</td></tr>
-  <tr><td>4</td><td>0</td><td>1</td></tr>
-  <tr><td>3</td><td>1</td><td>1</td></tr>
-  <tr><td>3</td><td>0</td><td>3</td></tr>
-  <tr><td>2</td><td>0</td><td>7</td></tr>
-  <tr><td>1</td><td>2</td><td>1</td></tr>
-  <tr><td>1</td><td>1</td><td>3</td></tr>
-  <tr><td>1</td><td>0</td><td>15</td></tr>
+  <tr><td>4</td><td>0</td><td>2</td></tr>
+  <tr><td>3</td><td>1</td><td>2</td></tr>
+  <tr><td>3</td><td>0</td><td>4</td></tr>
+  <tr><td>2</td><td>0</td><td>8</td></tr>
+  <tr><td>1</td><td>2</td><td>2</td></tr>
+  <tr><td>1</td><td>1</td><td>4</td></tr>
+  <tr><td>1</td><td>0</td><td>16</td></tr>
   <tr><td>0</td><td>0</td><td>17</td></tr>
 </table>
 
 <table id="maxima_for_non_modal_propositions">
   <caption>Maxima for Non-modal Propositions</caption>
-  <tr><th>n</th><th>u</th><th>i</th></tr>
   <tr><td>32</td><td>0</td><td>0</td></tr>
-  <tr><td>31</td><td>0</td><td>1</td></tr>
-  <tr><td>30</td><td>1</td><td>1</td></tr>
-  <tr><td>30</td><td>0</td><td>3</td></tr>
-  <tr><td>29</td><td>0</td><td>7</td></tr>
-  <tr><td>28</td><td>2</td><td>1</td></tr>
-  <tr><td>28</td><td>1</td><td>3</td></tr>
-  <tr><td>28</td><td>0</td><td>15</td></tr>
+  <tr><td>31</td><td>0</td><td>2</td></tr>
+  <tr><td>30</td><td>1</td><td>2</td></tr>
+  <tr><td>30</td><td>0</td><td>4</td></tr>
+  <tr><td>29</td><td>0</td><td>8</td></tr>
+  <tr><td>28</td><td>2</td><td>2</td></tr>
+  <tr><td>28</td><td>1</td><td>4</td></tr>
+  <tr><td>28</td><td>0</td><td>16</td></tr>
   <tr><td>27</td><td>0</td><td>17</td></tr>
-  <tr><td>26</td><td>1</td><td>7</td></tr>
-  <tr><td>24</td><td>3</td><td>1</td></tr>
-  <tr><td>24</td><td>2</td><td>3</td></tr>
-  <tr><td>24</td><td>1</td><td>15</td></tr>
+  <tr><td>26</td><td>1</td><td>8</td></tr>
+  <tr><td>24</td><td>3</td><td>2</td></tr>
+  <tr><td>24</td><td>2</td><td>4</td></tr>
+  <tr><td>24</td><td>1</td><td>16</td></tr>
   <tr><td>22</td><td>1</td><td>17</td></tr>
-  <tr><td>20</td><td>2</td><td>7</td></tr>
-  <tr><td>16</td><td>4</td><td>1</td></tr>
-  <tr><td>16</td><td>3</td><td>3</td></tr>
-  <tr><td>16</td><td>2</td><td>15</td></tr>
+  <tr><td>20</td><td>2</td><td>8</td></tr>
+  <tr><td>16</td><td>4</td><td>2</td></tr>
+  <tr><td>16</td><td>3</td><td>4</td></tr>
+  <tr><td>16</td><td>2</td><td>16</td></tr>
   <tr><td>12</td><td>2</td><td>17</td></tr>
-  <tr><td>8</td><td>3</td><td>7</td></tr>
-  <tr><td>0</td><td>5</td><td>1</td></tr>
-  <tr><td>0</td><td>4</td><td>3</td></tr>
-  <tr><td>0</td><td>3</td><td>15</td></tr>
+  <tr><td>8</td><td>3</td><td>8</td></tr>
+  <tr><td>0</td><td>5</td><td>2</td></tr>
+  <tr><td>0</td><td>4</td><td>4</td></tr>
+  <tr><td>0</td><td>3</td><td>16</td></tr>
 </table>
 
 <h3>Contact</h3>

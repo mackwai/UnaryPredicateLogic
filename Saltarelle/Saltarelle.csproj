@@ -157,6 +157,9 @@
     <Compile Include="..\Parser\Parser.cs">
       <Link>Parser.cs</Link>
     </Compile>
+    <Compile Include="..\Parser\ReplacementRules.cs">
+      <Link>ReplacementRules.cs</Link>
+    </Compile>
     <Compile Include="..\Parser\VariableDictionary.cs">
       <Link>VariableDictionary.cs</Link>
     </Compile>

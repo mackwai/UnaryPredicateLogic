@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2015 MacKenzie Cumings
+// Copyright (C) 2015, 2018 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Logic
 {
@@ -235,7 +234,7 @@ namespace Logic
         aKindOfObject >>= 1;
       }
 
-      // Add a character that correspondS to the instance number to the string.  The character
+      // Add a character to the string that corresponds to the instance number.  The character
       // must not be a capital letter.
       lPredicateCombination[ lIndex ] = (char) ( aInstanceNumber + 49 );
 

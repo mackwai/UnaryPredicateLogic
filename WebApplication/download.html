@@ -24,6 +24,7 @@
 <title>Download somerby.net/mack/logic</title>
 
 <link rel="stylesheet" type="text/css" href="style.css">
+<script type="text/javascript" src="count.js"></script>
 
 </head>
 <body>
@@ -62,7 +63,8 @@
 <p>To install the plugin:</p>
 
 <ol class="bulletted">
-  <li>Download <a href="Notepad++Plugin.zip">Notepad++Plugin.zip</a>.</li>
+  <li>Download <a href="Notepad++Plugin.zip" onclick="
+  ga('send', 'event', 'Real', 'click', 'download'); return true;">Notepad++Plugin.zip</a>.</li>
   <li>Open the .zip file and copy its contents to NotePad++'s plugins folder (normally <em>C:\Program Files (x86)\Notepad++\plugins</em>).  Windows will ask if you want to merge the "Config" folder.  Choose "Yes".</li>
   <li>If you have Graphviz, add Graphviz' binary folder (e.g. <em>C:\Program Files (x86)\Graphviz2.34\bin</em>) to the PATH environment variable.</li>
 </ol>
@@ -81,8 +83,6 @@
 <p>If you attempt to use the plugin without .NET Framework 4.5.1 or higher, Notepad++ will show a message stating that the plugin is not compatible with that version of Notepad++.  Just install .NET 4.5.1 and restart Notepad++ and everything should be ok.</p>
 
 </div>
-
-<script type="text/javascript" src="count.js"></script>
 
 </body>
 </html>

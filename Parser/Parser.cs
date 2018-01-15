@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2015 MacKenzie Cumings
+// Copyright (C) 2015, 2017 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,7 +16,6 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -42,10 +41,27 @@ namespace Logic
       List<string> lAntecedents = new List<string>();
       List<string> lConsequents = new List<string>();
       string lConnective = null;
-      foreach ( string line in aFileContents )
+
+      ReplacementRules lReplacementRules = new ReplacementRules();
+
+      foreach ( string aLine in aFileContents )
       {
-        // Get rid of comments.
-        string lAdjustedLine = Utility.RegexReplace( line, @"//.*$", "" );
+        // Collect commands to replace strings with other strings.
+        if ( aLine.StartsWith( "#" ) )
+        {
+          if ( ReplacementRules.IsReplacementDirective( aLine ) )
+          {
+            lReplacementRules.Add( aLine );
+            continue;
+          }
+          else
+          {
+            throw new ParseError( "Invalid replacement directive: {0}", aLine );
+          }
+        }
+
+        // Get rid of comments and perform text replacements.
+        string lAdjustedLine = lReplacementRules.Apply( Utility.RegexReplace( aLine, @"//.*$", "" ) );
 
         if ( ( lAdjustedLine.Contains( "(" ) || lAdjustedLine.Contains( ")" ) )
           && !HasMatchingParentheses( lAdjustedLine ) )
@@ -93,7 +109,7 @@ namespace Logic
     private static Regex The = ExactMatch( @"1[a-z]," );
     private static Regex ThereExists = ExactMatch( @"3[a-z]," );
     private static Regex ThereAreThisManyOfThese = ExactMatch( @"\d+[A-Z]" );
-    private static Regex ThisManyOfTheseAreTrue = ExactMatch( @"(\d+)([A-Z]{2,})" );
+    private static Regex ThisManyOfTheseAreTrue = ExactMatch( @"(\d+)([A-Za-z]{2,})" );
     private static Regex ForAll = ExactMatch( @"[a-z]," );
     private static Regex And = ExactMatch( @"&" );
     private static Regex Or = ExactMatch( @"\|" );
@@ -106,13 +122,33 @@ namespace Logic
     private static Regex Is = ExactMatch( @"[A-Z][a-z]" );
     private static Regex IsTheSameAs = ExactMatch( @"[a-z]=[a-z]" );
     private static Regex Are = ExactMatch( @"[a-z][A-Z][a-z]" );
-    private static Regex TrueThat = ExactMatch( @"[A-Z]" );
+    private static Regex TrueThat = ExactMatch( @"[A-Za-z]" );
     private static Regex Possibly = ExactMatch( @"<>" );
     private static Regex Necessarily = ExactMatch( @"\[\]" );
     private static Regex ParenthesizedExpression = ExactMatch( @"\(.*\)" );
     private static Regex TwoTermProposition = ExactMatch( @"(~?)([A-Z])([aeiouy])(~?)([A-Z])('?)" );
     private static Regex StringPrefixedWithTwoTermProposition = new Regex( @"^~?[A-Z][aeiouy]~?[A-Z]'?" );
     private static Regex StringPrefixedWithThisMany = new Regex( @"^\d+[A-Z]+" );
+
+    private static Regex StartsWithQuantifier = StartsWith( @"[13]?[a-z]," );
+    private static Regex StartsWithThereAreThisManyOfThese = StartsWithButIsNotFollowedBy( @"\d+[A-Z]", @"[A-Z]+" );
+    private static Regex StartsWithThisManyOfTheseAreTrue = StartsWith( @"\d+[A-Za-z]{2,}" );
+    private static Regex StartsWithAnd = StartsWith( @"&" );
+    private static Regex StartsWithOr = StartsWith( @"\|" );
+    private static Regex StartsWithOnlyIf = StartsWith( @"->" );
+    private static Regex StartsWithIfAndOnlyIf = StartsWith( @"<=>" );
+    private static Regex StartsWithNot = StartsWithButIsNotFollowedBy( @"~", @"[A-Z][aeiouy]~?[A-Z]'?" );
+    private static Regex StartsWithNor = StartsWith( @"!" );
+    private static Regex StartsWithXor = StartsWith( @"\^" );
+    private static Regex StartsWithNecessarilyOnlyIf = StartsWith( @"-<" );
+    private static Regex StartsWithIs = StartsWithButIsNotFollowedBy( @"[A-Z][a-z]", @"[A-Z~]" );
+    private static Regex StartsWithIsTheSameAs = StartsWith( @"[a-z]=[a-z]" );
+    private static Regex StartsWithAre = StartsWith( @"[a-z][A-Z][a-z]" );
+    private static Regex StartsWithTrueThat = StartsWithButIsNotFollowedBy( @"[A-Za-z]", @"[,=A-Za-z]" );
+    private static Regex StartsWithPossibly = StartsWith( @"<>" );
+    private static Regex StartsWithNecessarily = StartsWith( @"\[\]" );
+    private static Regex StartsWithTwoTermProposition = StartsWith( @"~?[A-Z][aeiouy]~?[A-Z]'?" );
+
 
     private static bool AreUnariesFollowedByAQuantifier( IEnumerable<string> aExpressions )
     {
@@ -137,48 +173,27 @@ namespace Logic
       return new Regex( string.Format( "^{0}$", aPattern ) );
     }
 
+    private static Regex StartsWith( string aPattern )
+    {
+      return new Regex( string.Format( "^{0}", aPattern ) );
+    }
+
+    private static Regex StartsWithButIsNotFollowedBy( string aPattern1, string aPattern2 )
+    {
+      return new Regex( string.Format( "^{0}(?!{1})", aPattern1, aPattern2 ) );
+    }
+
     private static string[] GetSubexpressions( this string aString )
     {
       List<string> lSubexpressions = new List<string>();
-      int lStartingPoint = 0;
+      int lCurrentIndex = 0;
 
-      for ( int i = 1; i < aString.Length; i++ )
+      while ( lCurrentIndex < aString.Length )
       {
-        RegexMatch lMatchStringPrefixedWithTwoTermProposition =
-          StringPrefixedWithTwoTermProposition.Exec( aString.Substring( lStartingPoint ) );
-
-        RegexMatch lMatchThisMany =
-          StringPrefixedWithThisMany.Exec( aString.Substring( lStartingPoint ) );
-
-        if ( lMatchStringPrefixedWithTwoTermProposition != null )
-        {
-          lSubexpressions.Add( lMatchStringPrefixedWithTwoTermProposition[ 0 ] );
-          lStartingPoint += lMatchStringPrefixedWithTwoTermProposition[ 0 ].Length;
-          i = lStartingPoint;
-        }
-        else if ( lMatchThisMany != null )
-        {
-          lSubexpressions.Add( lMatchThisMany[ 0 ] );
-          lStartingPoint += lMatchThisMany[ 0 ].Length;
-          i = lStartingPoint;
-        }
-        // Always interpret a capital letter followed by a lowercase letter as a predication over one variable, unless it is part of
-        // a two-term proposition.
-        else if ( aString.Substring( lStartingPoint, 2 ).Matches( Is ) )
-        {
-          lSubexpressions.Add( aString.Substring( lStartingPoint, 2 ) );
-          lStartingPoint += 2;
-          i = lStartingPoint;
-        }
-        else if ( aString.Substring( lStartingPoint, i - lStartingPoint ).IsToken() )
-        {
-          lSubexpressions.Add( aString.Substring( lStartingPoint, i - lStartingPoint ) );
-          lStartingPoint = i;
-        }
+        string lNextSubexpression = GetFirstSubexpression( aString.Substring( lCurrentIndex ) );
+        lSubexpressions.Add( lNextSubexpression );
+        lCurrentIndex += lNextSubexpression.Length;
       }
-
-      if ( lStartingPoint < aString.Length )
-        lSubexpressions.Add( aString.Substring( lStartingPoint, aString.Length - lStartingPoint ) );
 
       return lSubexpressions.ToArray();
     }
@@ -224,6 +239,35 @@ namespace Logic
       else
         // The program should never reach this point.
         throw new Exception();
+    }
+
+    private static string ExpressionWithMatchedParentheses( this string aString )
+    {
+      if ( aString[ 0 ] != '(' )
+        return aString;
+
+      int lCount = 1;
+      
+      for ( int i = 1; i < aString.Length; i++ )
+      {
+        char lChar = aString[ i ];
+
+        switch ( lChar )
+        {
+          case '(':
+            lCount++;
+            break;
+          case ')':
+            lCount--;
+            break;
+        }
+
+        if ( lCount == 0 )
+          return aString.Substring( 0, i + 1 );
+
+      }
+
+      throw new ParseError( "Couldn't parse a token from \"{0}\"", aString );
     }
 
     private static bool HasMatchingParentheses( this string aString )
@@ -281,29 +325,34 @@ namespace Logic
       return aString.IsAnyOf( ForAll, ThereExists, The );
     }
 
-    private static bool IsToken( this string aString )
+    private static string GetFirstSubexpression( this string aString )
     {
-      return aString.IsParenthesizedGroup() || aString.IsAnyOf(
-        And,
-        Or,
-        IfAndOnlyIf,
-        ThereExists,
-        ThisManyOfTheseAreTrue,
-        ThereAreThisManyOfThese,
-        OnlyIf,
-        Not,
-        Nor,
-        Xor,
-        Is,
-        IsTheSameAs,
-        Are,
-        TrueThat,
-        ForAll,
-        Possibly,
-        Necessarily,
-        NecessarilyOnlyIf,
-        TwoTermProposition,
-        The );
+      foreach ( Regex lRegex in Utility.MakeArray(
+        StartsWithQuantifier,
+        StartsWithThereAreThisManyOfThese,
+        StartsWithThisManyOfTheseAreTrue,
+        StartsWithAnd,
+        StartsWithOr,
+        StartsWithOnlyIf,
+        StartsWithIfAndOnlyIf,
+        StartsWithNot,
+        StartsWithNor,
+        StartsWithXor,
+        StartsWithNecessarilyOnlyIf,
+        StartsWithIs,
+        StartsWithIsTheSameAs,
+        StartsWithAre,
+        StartsWithTrueThat,
+        StartsWithPossibly,
+        StartsWithNecessarily,
+        StartsWithTwoTermProposition ) )
+      {
+        RegexMatch lMatch = lRegex.Exec( aString );
+        if ( lMatch != null )
+          return lMatch[ 0 ];
+      }
+
+      return ExpressionWithMatchedParentheses( aString );
     }
 
     private static bool IsParenthesizedGroup( this string aString )
@@ -339,7 +388,7 @@ namespace Logic
       string lFirst = aExpressions[ 0 ];
 
       if ( aExpressions.Length == 1 )
-        return ParsePropositionalToken( lFirst, aCollectedItems, aBoundVariables );
+        return ParsePropositionalSubexpression( lFirst, aCollectedItems, aBoundVariables );
 
       string[] lTail = aExpressions.Tail<string>();
 
@@ -444,7 +493,7 @@ namespace Logic
       throw new Exception();
     }
 
-    private static Matrix ParsePropositionalToken(
+    private static Matrix ParsePropositionalSubexpression(
       string aExpression,
       CollectedItems aCollectedItems,
       VariableDictionary aBoundVariables )

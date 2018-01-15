@@ -15,8 +15,6 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-using System;
-using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -28,6 +26,11 @@ namespace Logic
     private static bool IsPropositional( string aStatement )
     {
       return Parser.Parse( aStatement.Split( '\n' ) ).IsPropositional;
+    }
+
+    private static bool IsCompatibleWithTreeProofGenerator( string aStatement )
+    {
+      return Parser.Parse( aStatement.Split( '\n' ) ).IsCompatibleWithTreeProofGenerator;
     }
 
     private static int DepthOfLoopNesting( string aStatement )
@@ -219,6 +222,54 @@ namespace Logic
     {
       Necessity[] lModalities = Parser.Parse(new string[]{@"x,([]y,x=y|(<>(z=y|x=y)))"}).ModalitiesInIdentifications.ToArray();
       Assert.IsTrue(lModalities.Contains(null));
+    }
+
+    [TestMethod]
+    public void Test_IsCompatibleWithTreeProofGenerator01()
+    {
+      Assert.AreEqual( true, IsCompatibleWithTreeProofGenerator( @"P&Q" ) );
+    }
+
+    [TestMethod]
+    public void Test_IsCompatibleWithTreeProofGenerator02()
+    {
+      Assert.AreEqual( false, IsCompatibleWithTreeProofGenerator( @"P&[]Q" ) );
+    }
+
+    [TestMethod]
+    public void Test_IsCompatibleWithTreeProofGenerator03()
+    {
+      Assert.AreEqual( true, IsCompatibleWithTreeProofGenerator( @"x,xRy" ) );
+    }
+
+    [TestMethod]
+    public void Test_IsCompatibleWithTreeProofGenerator04()
+    {
+      Assert.AreEqual( false, IsCompatibleWithTreeProofGenerator( @"3y,x,xRy|x=y" ) );
+    }
+
+    [TestMethod]
+    public void Test_IsCompatibleWithTreeProofGenerator05()
+    {
+      Assert.AreEqual( true, IsCompatibleWithTreeProofGenerator( @"((Px->Rx)&(J->xRx))" ) );
+    }
+
+    [TestMethod]
+    public void Test_IsCompatibleWithTreeProofGenerator06()
+    {
+      Assert.AreEqual( false, IsCompatibleWithTreeProofGenerator( @"(((x=x<=>Px)->Rx)&(J->xRx))" ) );
+    }
+
+    [TestMethod]
+    public void Test_IsCompatibleWithTreeProofGenerator07()
+    {
+      Assert.AreEqual( false, IsCompatibleWithTreeProofGenerator( @"((Px->Rx)&(J->[]xRx))" ) );
+    }
+
+    [TestMethod]
+    public void Test_IsCompatibleWithTreeProofGenerator08()
+    {
+      Assert.AreEqual( false, IsCompatibleWithTreeProofGenerator( @"[]((Px->Rx)&(J->xRx))" ) );
     }
   }
 }

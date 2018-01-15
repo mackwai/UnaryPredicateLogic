@@ -68,8 +68,68 @@ namespace Logic
       return false;
     }
 
+    public Counterexample FindExample()
+    {
+      if ( this.FreeVariables.Any() && ContainsModalities )
+        throw new EngineException( "This proposition can't be evaluated; it contains both constants and modal operators." );
+
+      Matrix lNegation = Factory.Not( this );
+
+      if ( lNegation.FreeVariables.Any() )
+        return Factory.Bind( FreeVariables, lNegation, Factory.ForAll ).FindCounterexample();
+      
+      Predicates lPredicates = lNegation.CollectPredicates();
+      if ( lNegation.ContainsModalities )
+      {
+#if COMPLEX_COUNTEREXAMPLE
+        uint lLastInterpretation = lPredicates.LastInterpretation;
+        for ( uint lInterpretation = lPredicates.FirstInterpretation; lInterpretation <= lLastInterpretation; lInterpretation++ )
+        
+#else
+        uint lFirstInterpretation = lPredicates.FirstInterpretation;
+        for ( uint lInterpretation = lPredicates.LastInterpretation; lInterpretation >= lFirstInterpretation; lInterpretation-- )
+#endif
+        {
+          if ( lNegation.HasCounterexample( lInterpretation, lPredicates ) )
+          {
+            List<KindOfWorld> lCounterexamples = new List<KindOfWorld>();
+            List<KindOfWorld> lNonCounterexamples = new List<KindOfWorld>();
+            foreach ( uint lKindOfWorld in lPredicates.KindsOfWorlds( lInterpretation ) )
+            {
+              if ( lNegation.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
+                lNonCounterexamples.Add( lPredicates.DecodeKindOfWorldNumber( lKindOfWorld ) );
+              else
+                lCounterexamples.Add( lPredicates.DecodeKindOfWorldNumber( lKindOfWorld ) );   
+            }
+            return new ModalCounterexample( lCounterexamples, lNonCounterexamples );
+          }
+        }
+      }
+      else
+      {
+        uint lInterpretation = lPredicates.FirstInterpretation;
+#if COMPLEX_COUNTEREXAMPLE
+        uint lLastKindOfWorld = lPredicates.LastKindOfWorld;
+        for ( uint lKindOfWorld = lPredicates.FirstNonemptyWorld; lKindOfWorld <= lLastKindOfWorld; lKindOfWorld++ )
+#else
+        uint lFirstKindOfWorld = lPredicates.FirstNonemptyWorld;
+        for ( uint lKindOfWorld = lPredicates.LastKindOfWorld; lKindOfWorld >= lFirstKindOfWorld; lKindOfWorld-- )
+#endif   
+        {
+          if ( !lNegation.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
+            return lPredicates.DecodeKindOfWorldNumber( lKindOfWorld );
+        }
+      }
+
+      // No counterexample exists; the proposition is necessarily true.
+      return null;
+    }
+
     public Counterexample FindCounterexample()
     {
+      if ( this.FreeVariables.Any() && ContainsModalities )
+        throw new EngineException( "This proposition can't be evaluated; it contains both constants and modal operators." );
+
       if ( this.FreeVariables.Any() )
         return Factory.Bind( FreeVariables, this, Factory.ForAll ).FindCounterexample();
 
@@ -287,6 +347,11 @@ namespace Logic
       get { return false; }
     }
 
+    internal virtual bool ContainsIdentifications
+    {
+      get { return false; }
+    }
+
     internal virtual IEnumerable<Tuple<Matrix, Matrix>> DirectDependencies
     {
       get { yield break; }
@@ -306,17 +371,43 @@ namespace Logic
         lDOT.AddLine( "ordering=out;bgcolor=\"#FFFFFF80\"" );
         foreach ( Matrix lMatrix in this.Matrices.Distinct( new ReferenceComparer() ) )
         {
-          lDOT.AddLine(
-            "{0} [label={1},shape=rectangle,fontsize=10,style=filled,fillcolor=\"white\",margin=\"0.11,0.00\"];",
-            lMatrix.Name,
-            lMatrix.DOTLabel );
+          if ( !( lMatrix is NullPredicate ) )
+          {
+            lDOT.AddLine(
+              "{0} [label={1},shape=rectangle,fontsize=10,style=filled,fillcolor=\"white\",margin=\"0.11,0.00\"];",
+              lMatrix.Name,
+              lMatrix.DOTLabel );
+          }
         }
-        foreach ( Tuple<Matrix, Matrix> lPair in DirectDependencies )
+        Tuple < Matrix, Matrix >[] lDirectDependencies = DirectDependencies.ToArray();
+        for ( int i = 0; i < lDirectDependencies.Length; i++ )
         {
-          lDOT.AddLine(
-            "{0}->{1}",
-            lPair.Item1.Name,
-            lPair.Item2.Name );
+          Tuple<Matrix, Matrix> lPair = lDirectDependencies[ i ];
+          if ( lPair.Item2 is NullPredicate )
+          {
+            lDOT.AddLine(
+              "-{0} [label={1},shape=rectangle,fontsize=10,style=filled,fillcolor=\"white\",margin=\"0.11,0.00\"];",
+              i,
+              lPair.Item2.DOTLabel );
+          }
+        }
+        for ( int i = 0; i < lDirectDependencies.Length; i++ )
+        {
+          Tuple<Matrix, Matrix> lPair = lDirectDependencies[ i ];
+          if ( lPair.Item2 is NullPredicate )
+          {
+            lDOT.AddLine(
+              "{0}-> -{1}",
+              lPair.Item1.Name,
+              i );
+          }
+          else
+          {
+            lDOT.AddLine(
+              "{0}->{1}",
+              lPair.Item1.Name,
+              lPair.Item2.Name );
+          }
         }
         foreach ( Tuple<UniversalGeneralization, Matrix> lPair in ClosedPredications )
         {
@@ -376,6 +467,15 @@ namespace Logic
     public virtual bool IsPropositional
     {
       get { return false; }
+    }
+
+    /// <summary>
+    /// True if this matrix does not contain modal operators or identifications, false otherwise.  If it doesn't then
+    /// it is compatible with the Tree Proof Generator.
+    /// </summary>
+    public virtual bool IsCompatibleWithTreeProofGenerator
+    {
+      get { return !( ContainsIdentifications || ContainsModalities ); }
     }
 
     internal abstract IEnumerable<Variable> FreeVariables { get; }

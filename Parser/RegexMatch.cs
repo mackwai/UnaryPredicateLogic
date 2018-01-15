@@ -33,10 +33,14 @@ namespace System.Text.RegularExpressions
   {
     public static RegexMatch Exec( this Regex aRegex, string aString )
     {
-      Match lMatch = aRegex.Match( aString );
-      return lMatch.Success
+      return aRegex.IsMatch( aString )
         ? new RegexMatch( aRegex.Match( aString ), aString )
         : null;
+    }
+
+    public static bool IsMatch( this Regex aRegex, string aString )
+    {
+      return aRegex.Match( aString ).Success;
     }
   }
 

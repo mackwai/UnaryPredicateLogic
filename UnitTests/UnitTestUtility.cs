@@ -22,11 +22,7 @@ using Logic;
 
 namespace UnitTests
 {
-#if SALTARELLE
-  public static class UnitTestUtility
-#else
   internal static class UnitTestUtility
-#endif
   {
     private const int Prover9Mace4Timeout = 30;
 

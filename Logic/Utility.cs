@@ -149,5 +149,16 @@ namespace Logic
     {
       return aEnumerable.Concat( new T[] { aItem } );
     }
+
+    public static IEnumerable<T> AllBut<T>( this IEnumerable<T> aList, int aIndex )
+    {
+      int lIndex = 0;
+      foreach ( T lItem in aList )
+      {
+        if ( lIndex != aIndex )
+          yield return lItem;
+        lIndex++;
+      }
+    }
   }
 }

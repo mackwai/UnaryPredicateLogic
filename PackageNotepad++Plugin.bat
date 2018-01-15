@@ -16,7 +16,7 @@ REM  with this program; if not, write to the Free Software Foundation, Inc.,
 REM  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 cd WebApplication
-del /Y "Notepad++Plugin.zip"
+del "Notepad++Plugin.zip"
 mkdir Plugin\Config
 copy "..\Notepad++Plugin\bin\Release\Notepad++Plugin.dll" .\Plugin\SymbolicLogic.dll
 copy "C:\Program Files (x86)\Notepad++\plugins\Config\Decide.bmp" .\Plugin\Config\Decide.bmp

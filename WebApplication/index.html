@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   somerby.net/mack/logic
-  Copyright (C) 2016 MacKenzie Cumings
+  Copyright (C) 2015, 2018 MacKenzie Cumings
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 <link rel="stylesheet" href="mobile.css" type="text/css" media="handheld" />
 
 <script type="text/javascript" src="Servant.js"></script>
+<script type="text/javascript" src="count.js"></script>
 
 </head>
 <body>
@@ -43,10 +44,12 @@
 <textarea name="expression" id="expression" rows="15" cols="80" spellcheck="false" class="text" oninput="handleExpressionChanged();"></textarea>
 
 <div id="action_buttons">
-  <button id="decide_button" onclick="handleDecideButtonClick(); return false;">decide</button>
-  <button id="depict_button" onclick="handleDepictButtonClick(); return false;">depict</button>
+  <button id="decide_button" onclick="handleDecideButtonClick(); return false;">Decide</button>
+  <button id="depict_button" onclick="handleDepictButtonClick(); return false;">Depict</button>
   <button id="truth_table_button" onclick="handleTruthTableButtonClick(); return false;">Truth Table</button>
+  <button id="example_button" onclick="handleExampleButtonClick(); return false;">Example</button>
   <button id="counterexample_button" onclick="handleCounterexampleButtonClick(); return false;">Counterexample</button>
+  <button id="tree_proof_button" onclick="handleTreeProofButtonClick(); return false;">Tree Proof</button>
   <button id="cancel_button" onclick="handleCancelButtonClick(); return false;">Cancel</button>
 </div>
 
@@ -77,14 +80,13 @@
     <li><button onclick='showExample("PandNP");return false;'>NP-Complete Problems</button></li>
     <li><button onclick='showExample("Rules");return false;'>Rules of Inference and Replacement</button></li>
     <li><button onclick='showExample("Axioms");return false;'>Axioms of Modal Logic</button></li>
+    <li><button onclick='showExample("Celaront");return false;'>Celaront</button></li>
   </ul>
 </div>
 
 </div>
 
 <div id="depiction"></div>
-
-<!-- for debugging... <pre id="dot_output"></pre> -->
 
 <script type="text/javascript">
 
@@ -110,13 +112,14 @@ examples.RayOfSunshine = "// Every person is a ray of sunshine.\nx,Px->Rx\n// Ev
 examples.PandNP = "// \"If any NP-complete problem can be solved in polynomial time,\n// then all NP-complete problems can be solved in\n// polynomial time.\"\n(3x,Nx&Px) -> (x,Nx -> Px)\n\n<=> // is equivalent to\n\n// \"If two problems are NP-complete, then if one is\n// solvable in polynomial time, the other is also solvable in\n// polynomial time.\"\nx,y, (Nx&Ny) -> (Px -> Py)";
 examples.Rules = "//Modus Ponens\n((P->Q) & P) -> Q\n\n//Modus Tollens\n((P->Q) & ~Q) -> ~P\n\n//Hypothetical Syllogism\n((P->Q) & (Q->R)) -> (P->R)\n\n//Disjunctive Syllogism\n((P|Q) & ~P) -> Q\n\n//Constructive Dilemma\n( ((P->Q) & (R->S)) & (P|R) ) -> (Q|S)\n\n//Simplification\n(P&Q) -> P\n\n//Conjunction\n((P) & (Q)) -> (P&Q)\n\n//Addition\nP -> (P|Q)\n\n//DeMorgan's Rule\n~(P&Q) <=> (~P|~Q)\n~(P|Q) <=> (~P&~Q)\n\n//Commutativity\n(P|Q) <=> (Q|P)\n(P&Q) <=> (Q&P)\n\n//Associativity\n( P|(Q|R) ) <=> ( (P|Q)|R )\n( P&(Q&R) ) <=> ( (P&Q)&R )\n\n//Distribution\n( P&(Q|R) ) <=> ( (P&Q)|(P&R) )\n( P|(Q&R) ) <=> ( (P|Q)&(P|R) )\n\n//Double Negation\nP <=> ~~P\n\n//Transposition\n(P->Q) <=> (~Q->~P)\n\n//Material Implication\n(P->Q) <=> (~P|Q)\n\n//Material Equivalence\n(P<=>Q) <=> ( (P->Q) & (Q->P) )\n(P<=>Q) <=> ( (P&Q) | (~P&~Q) )\n\n//Exportation\n( (P&Q)->R ) <=> (P->(Q->R))\n\n//Tautology\nP <=> (P|P)\nP <=> (P&P)";
 examples.Axioms = "// Axiom D\n[]A -> <>A\n\n// Axiom M\n[]A -> A\n\n// Axiom 4\n[]A->[][]A\n\n// Axiom B\nA -> []<>A\n\n// Axiom 5\n<>A -> []<>A\n\n// Axiom []M\n[]([]A -> A)\n\n// Axiom C4\n[][]A -> []A\n\n// Axiom C\n<>[]A -> []<>A\n\n// Axiom K\n[](A->B)->([]A->[]B)\n\n// Axiom T\n[]A -> A";
+examples.Celaront = "// No reptiles have fur.\nMeP\n// All snakes are reptiles.\nSaM\n// Therefore,\n->\n// Some snakes have no fur.\nSoP"
 
 var expressionChanged = false;
 function doPeriodicTasks()
 {
   if ( expressionChanged )
   {
-    updateTruthTableButton();
+    updateButtons();
     expressionChanged = false;
     saveInput();
   }
@@ -163,15 +166,42 @@ function findCounterexample( statement )
   }
 }
 
-function isTruthTablePossible( statement )
+function findExample( statement )
 {
   try
   {
-    return constructProposition( statement ).get_isPropositional();
+    return global.Logic.HTMLMaker.makeHTMLForExample( constructProposition( statement ).findExample());
+  }
+  catch( exception )
+  {
+    return getHTMLForException( exception );
+  }
+}
+
+function getCharacteristics( statement )
+{
+  var characteristics = { truthTableIsPossible: false, compatibleWithTreeProofGenerator: false };
+  try
+  {
+    var proposition = constructProposition( statement );
+    characteristics.truthTableIsPossible = proposition.get_isPropositional();
+    characteristics.isCompatibleWithTreeProofGenerator = proposition.get_isCompatibleWithTreeProofGenerator();
   }
   catch ( exception )
   {
-    return false;
+  }
+  return characteristics;
+}
+
+function constructTreeProofGeneratorInput( statement )
+{
+  try
+  {
+    return constructProposition( statement ).get_treeProofGeneratorInput();
+  }
+  catch ( exception )
+  {
+    return undefined;
   }
 }
 
@@ -183,7 +213,7 @@ function decide( statement )
     var result = global.Logic.Utility.textForDecision( constructProposition( statement ).decide() );
     var endTime = now();
     
-    return "The statement is " + result + ".  Deciding took " + ( ( endTime - startTime ) / 1000 ) + " seconds.";
+    return "The statement is " + result + ".  Decided in " + ( ( endTime - startTime ) / 1000 ) + " seconds.";
   }
   catch( exception )
   {
@@ -237,6 +267,17 @@ function setResultAndStopProcessing( htmlForResult )
   setProcessing( false );
 }
 
+function sendToTreeProofGenerator( input )
+{
+  if ( input !== undefined )
+  {
+    // If we try to open the site as a new page, some browsers will block it as a pop-up,  
+    // so open it in the current tab.  
+    //window.open( "http://www.umsu.de/logik/trees/?f=" + input, "_blank" ).focus();
+    window.location = "http://www.umsu.de/logik/trees/?f=" + input;
+  }
+}
+
 servant = new Servant( "mscorlib.js", "linq.js", "Logic.js" );
 servant.addFunction( convertToHTMLEntities );
 servant.addFunction( getHTMLForException );
@@ -244,6 +285,9 @@ servant.addFunction( now );
 servant.addFunction( constructProposition );
 servant.addFunction(
   findCounterexample,
+  setDepictionAndStopProcessing );
+servant.addFunction(
+  findExample,
   setDepictionAndStopProcessing );
 servant.addFunction(
   decide,
@@ -256,14 +300,36 @@ servant.addFunction(
   makeTruthTable,
   setDepictionAndStopProcessing );
 servant.addFunction(
-  isTruthTablePossible,
-  function ( result ) { document.getElementById("truth_table_button").disabled = !result } );
+  getCharacteristics,
+  function ( result )
+  {
+    document.getElementById("truth_table_button").disabled = !result.truthTableIsPossible;
+    document.getElementById("tree_proof_button").disabled = !result.isCompatibleWithTreeProofGenerator;
+  } );
+servant.addFunction(
+  constructTreeProofGeneratorInput,
+  sendToTreeProofGenerator );
 
 function handleCounterexampleButtonClick()
 {
   setProcessing( true );
   setDepiction("Searching for counterexamples...");
   servant.findCounterexample( document.getElementById("expression").value );
+  ga('send', 'event', 'Real', 'click', 'counterexample');
+}
+
+function handleExampleButtonClick()
+{
+  setProcessing( true );
+  setDepiction("Searching for examples...");
+  servant.findExample( document.getElementById("expression").value );
+  ga('send', 'event', 'Real', 'click', 'example');
+}
+
+function handleTreeProofButtonClick()
+{
+  servant.constructTreeProofGeneratorInput( document.getElementById("expression").value );
+  ga('send', 'event', 'Real', 'click', 'tree proof');
 }
 
 function getStatement()
@@ -282,6 +348,7 @@ function handleDepictButtonClick()
   setDepiction("depicting...");
   
   servant.depict( getStatement() );
+  ga('send', 'event', 'Real', 'click', 'depict');
 }
 
 function handleDecideButtonClick()
@@ -290,6 +357,7 @@ function handleDecideButtonClick()
   setResult( "Deciding..." );
   
   servant.decide( getStatement() );
+  ga('send', 'event', 'Real', 'click', 'decide');
 }
 
 function handleExpressionChanged()
@@ -305,6 +373,7 @@ function handleTruthTableButtonClick()
   setDepiction( "Building a truth table..." );
   
   servant.makeTruthTable( getStatement() );
+  ga('send', 'event', 'Real', 'click', 'truth table');
 }
 
 function handleCancelButtonClick()
@@ -317,9 +386,9 @@ function handleCancelButtonClick()
   setProcessing( false );
 }
 
-function updateTruthTableButton()
+function updateButtons()
 {
-  servant.isTruthTablePossible( getStatement() );
+  servant.getCharacteristics( getStatement() );
 }
 
 function getQueryFields()
@@ -391,19 +460,20 @@ function setProcessing( processing )
 {
   if ( processing )
   {
-    [ "decide_button", "depict_button", "truth_table_button", "counterexample_button" ].forEach( disableButton );
+    [ "decide_button", "depict_button", "truth_table_button", "example_button", "counterexample_button" ].forEach( disableButton );
     enableButton( "cancel_button" );
   }
   else
   {
-    [ "decide_button", "depict_button", "counterexample_button" ].forEach( enableButton );
+    [ "decide_button", "depict_button", "example_button", "counterexample_button" ].forEach( enableButton );
     disableButton( "cancel_button" );
+    expressionChanged = true;
   }
 }
 
 disableButton( "cancel_button" );
 fillTextBox();
-updateTruthTableButton();
+updateButtons();
 </script>
 
 </body>

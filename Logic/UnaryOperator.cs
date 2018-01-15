@@ -42,6 +42,11 @@ namespace Logic
       get { return mInnerMatrix.ContainsModalities; }
     }
 
+    internal override bool ContainsIdentifications
+    {
+      get { return mInnerMatrix.ContainsIdentifications; }
+    }
+
     internal override IEnumerable<Tuple<Matrix, Matrix>> DirectDependencies
     {
       get

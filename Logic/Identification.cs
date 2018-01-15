@@ -55,6 +55,11 @@ namespace Logic
       get { yield break; }
     }
 
+    internal override bool ContainsIdentifications
+    {
+      get { return true; }
+    }
+
     internal override IEnumerable<Variable> FreeVariables
     {
       get { return IdentifiedVariables; }
