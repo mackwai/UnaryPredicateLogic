@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2015 MacKenzie Cumings
+// Copyright (C) 2015,2018 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ namespace Logic
   /// <summary>
   /// a binary operator that represents a function of the truth values of two matrices
   /// </summary>
-  internal abstract class BinaryOperator : Matrix
+  public abstract class BinaryOperator : Matrix
 	{
 	  private readonly Matrix mLeft;
     private readonly Matrix mRight;

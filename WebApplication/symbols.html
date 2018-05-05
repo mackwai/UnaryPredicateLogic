@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   somerby.net/mack/logic
-  Copyright (C) 2016 MacKenzie Cumings
+  Copyright (C) 2016, 2018 MacKenzie Cumings
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 
 <h1>Symbols</h1>
 <table id="symbols">
+  <tr><td><span class="symbolic">.'.</span></td><td>therefore</td></tr>
   <tr><td><span class="symbolic">&amp;</span></td><td>and</td></tr>
   <tr><td><span class="symbolic">|</span></td><td>or</td></tr>
   <tr><td><span class="symbolic">~</span></td><td>not</td></tr>
@@ -56,6 +57,14 @@
   <tr><td><span class="symbolic">SyP</span></td><td>some S are P and some S are not P</tr>
   <tr><td><span class="symbolic"><em>n</em>P</span></td><td><em>n</em> objects are P</tr>
   <tr><td><span class="symbolic"><em>n</em>PQ&hellip;</span></td><td><em>n</em> of P, Q, &hellip; are true</td></tr>
+</table>
+<h1>Statements across Lines</h1>
+<table id="statements">
+  <tr><td><span class="symbolic"><em>p<sub>1</sub></em></br><em>p<sub>2</sub></em></br>.'.</br><em>c</em></span></td><td><em>p<sub>1</sub></em> and <em>p<sub>2</sub></em>, therefore <em>c</em></td><td>((<em>p<sub>1</sub></em>)&amp;(<em>p<sub>2</sub></em>))-&gt;((<em>c</em>))</td></tr>
+  <tr><td><span class="symbolic"><em>p</em></span></td><td>assert <em>p</em></td><td><em>p</em></td></tr>
+  <tr><td><span class="symbolic"><em>p</em></br><em>q</em></span></td><td>assert <em>p</em> AND <em>q</em></td><td>(<em>p</em>)&amp;(<em>q</em>)</td></tr>
+  <tr><td><span class="symbolic"><em>p<sub>1</sub></em></br><em>p<sub>2</sub></em></br>-&gt;</br><em>c</em></span></td><td>assert that <em>c</em> follows from  <em>p<sub>1</sub></em> and <em>p<sub>2</sub></em></td><td>((<em>p<sub>1</sub></em>)&amp;(<em>p<sub>2</sub></em>))-&gt;((<em>c</em>))</td></tr>
+  <tr><td><span class="symbolic"><em>p<sub>1</sub></em></br><em>p<sub>2</sub></em></br>&lt;=&gt;</br><em>q<sub>1</sub></em></br><em>q<sub>2</sub></em></td><td>assert <em>p<sub>1</sub></em> and <em>p<sub>2</sub></em> are jointly equivalent to <em>q<sub>1</sub></em> and <em>q<sub>2</sub></em></td><td>((<em>p<sub>1</sub></em>)&amp;(<em>p<sub>2</sub></em>))&lt;=&gt;((<em>q<sub>1</sub></em>)&amp;(<em>q<sub>2</sub></em>))</td></tr>
 </table>
 </body>
 </html>

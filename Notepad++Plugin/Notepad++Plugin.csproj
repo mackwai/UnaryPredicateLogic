@@ -70,6 +70,9 @@
     <Compile Include="..\Decider\ShellParameters.cs">
       <Link>ShellParameters.cs</Link>
     </Compile>
+    <Compile Include="..\Logic\Argument.cs">
+      <Link>Argument.cs</Link>
+    </Compile>
     <Compile Include="..\Logic\BinaryOperator.cs">
       <Link>BinaryOperator.cs</Link>
     </Compile>

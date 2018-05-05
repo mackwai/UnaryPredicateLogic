@@ -27,7 +27,7 @@ namespace Logic
     public static string MakeHTML( Counterexample aCounterexample )
     {
       if ( aCounterexample == null )
-        return "<p>This proposition is necessarily true; there are no counterexamples.</p>";
+        return "<p>This statement is necessarily true; there are no counterexamples.</p>";
       else if ( aCounterexample is KindOfWorld )
         return "<div class=\"counterexample\"><h3>Counterexample</h3><p>This is a kind of world in which the statement is not true.</p>"
          + MakeHTML( aCounterexample as KindOfWorld, @"black" ) + "</div>";
@@ -40,7 +40,7 @@ namespace Logic
     public static string MakeHTMLForExample( Counterexample aCounterexample )
     {
       if ( aCounterexample == null )
-        return "<p>This proposition is self-contradictory; there are no examples.</p>";
+        return "<p>This statement is self-contradictory; there are no examples.</p>";
       else if ( aCounterexample is KindOfWorld )
         return "<div class=\"counterexample\"><h3>Example</h3><p>This is a kind of world in which the statement is true.</p>"
          + MakeHTML( aCounterexample as KindOfWorld, @"black" ) + "</div>";

@@ -476,6 +476,11 @@ namespace Logic
       return lResult;
     }
 
+    public static Argument Therefore( IEnumerable<Matrix> aPremises, Matrix aConclusion )
+    {
+      return new Argument( aPremises, aConclusion );
+    }
+
     public static Matrix ThereAreThisManyOfThese( uint aNumber, UnaryPredicate aPredicate )
     {
       Variable[] lVariables = MakeNVariables( Math.Max( aNumber, 1 ) );

@@ -61,7 +61,7 @@ namespace TimeTrials
 
     private static readonly string[] NamesOfSlowTestFiles =  new string[]
     {
-      "KindaSlowEvaluation.txt",
+      //"KindaSlowEvaluation.txt",
       "TransworldIdentity2.txt",
       "TransworldIdentity6.txt",
       "TransworldIdentity7.txt"

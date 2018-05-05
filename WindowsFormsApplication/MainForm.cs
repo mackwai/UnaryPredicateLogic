@@ -52,7 +52,7 @@ namespace WindowsFormsApplication
     {
       try
       {
-        labelResult.Text = Logic.Parser.Parse( TextBox.Lines ).Decide().ToString();
+        labelResult.Text = Logic.Utility.StatementOfResult( Logic.Parser.Parse( TextBox.Lines ) );
       }
       catch ( Exception lException )
       {

@@ -163,12 +163,7 @@ namespace Logic
       }
       else
       {
-        uint lLastKindOfWorld = LastKindOfWorld;
-
-        for ( uint i = FirstNonemptyWorld; i <= lLastKindOfWorld; i++ )
-        {
-          yield return i;
-        }
+        yield return aInterpretation;
       }
     }
 
@@ -189,7 +184,49 @@ namespace Logic
 
     public uint FirstInterpretation
     {
-      get { return mModalitiesPresent ? 1U : LastInterpretation; }
+      get { return mModalitiesPresent ? 1U : FirstNonemptyWorld; }
+    }
+
+    #if SALTARELLE
+    private int StatusInterval
+    {
+      get
+      {
+        const int BaseInterval = 2500000;
+
+        int lDepthOfLoopNesting = 3;//DepthOfLoopNesting;
+        int lInterval = BaseInterval;
+
+        for ( int i = 0; i < lDepthOfLoopNesting; i++ )
+          lInterval /= 10;
+
+        return Math.Max( 1, lInterval );
+      }
+    }
+#endif
+
+    public IEnumerable<uint> Interpretations
+    {
+      get
+      {
+        uint lFirstInterpretation = FirstInterpretation;
+        uint lLastInterpretation = LastInterpretation;
+#if SALTARELLE
+        int lStatusInterval = StatusInterval;
+#endif
+
+        for ( uint i = lFirstInterpretation; i <= lLastInterpretation; i++ )
+        {
+#if SALTARELLE
+            if ( ( i - lFirstInterpretation ) % lStatusInterval == 0 )
+              Utility.Status( String.Format(
+                "Deciding... {0:n0} of {1:n0} interpretations of predicates tested.",
+                i - lFirstInterpretation,
+                lLastInterpretation - lFirstInterpretation + 1 ) );
+#endif
+          yield return i;
+        }
+      }
     }
 
     public bool TrueIn( NullPredicate aPredicate, uint aKindOfWorld )

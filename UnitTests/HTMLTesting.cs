@@ -26,12 +26,12 @@ namespace UnitTests
   public class HTMLTesting
   {
     [TestMethod]
-    public void TestMethod1()
+    public void Test_HTMLTestPage()
     {
       File.WriteAllText(
         "test.html",
         "<!DOCTYPE html>\n<html><head><meta charset=\"UTF-8\" /><link rel=\"stylesheet\" type=\"text/css\" href=\"../../../WebApplication/style.css\" /></head><body>"
-        + HTMLMaker.MakeHTML( Parser.Parse( new string[] { "~(P&Q&<>~(P|Q)&<>(P&~Q)&<>x,Gx&<>~x,Gx)" } ).FindCounterexample() )
+        + HTMLMaker.MakeHTML( Parser.Parse( new string[] { "~(P&Q&<>~(P|Q)&<>(P&~Q)&<>x,Gx&<>~x,Gx)" } ).FindNextCounterexample() )
         + "</body></html>" );
       System.Diagnostics.Process.Start( "test.html" );
     }

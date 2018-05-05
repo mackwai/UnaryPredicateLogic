@@ -86,10 +86,7 @@ namespace Logic
       {
         string lActiveFileName = mApplication.NameOfActiveDocument;
         this.Log( "Deciding {0}...", lActiveFileName );
-        this.Log(
-          "{0} is {1}",
-          lActiveFileName,
-          Logic.Parser.Parse( mApplication.ContentsOfActiveDocument.Split( '\n' ) ).Decide().ToString() );
+        this.Log( Logic.Utility.StatementOfResult( Logic.Parser.Parse( mApplication.ContentsOfActiveDocument.Split( '\n' ) ) ) );
       } );
     }
 
@@ -99,7 +96,7 @@ namespace Logic
       {
         string lSelectedText = mApplication.SelectedText;
         this.Log( "Deciding \"{0}\" ...", lSelectedText );
-        this.Log( Logic.Parser.Parse( lSelectedText.Split( '\n' ) ).Decide().ToString() );
+        this.Log( Logic.Utility.StatementOfResult( Logic.Parser.Parse( lSelectedText.Split( '\n' ) ) ) );
       } );
     }
 

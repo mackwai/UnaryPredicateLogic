@@ -84,19 +84,47 @@ namespace Logic
     }
 #endif
 
-    public static string TextForDecision( Alethicity lDecision )
+    public static string StatementOfResult( Matrix aMatrix )
     {
-      switch ( lDecision )
+      if ( aMatrix is Argument )
+        return TextResult( ( aMatrix as Argument ).Quality );
+      else
+        return TextForDecision( aMatrix.Decide() );
+    }
+
+    public static string TextResult( Quality aQuality )
+    {
+      switch ( aQuality )
       {
-        case Alethicity.Necessary:
-          return "necessarily true";
-        case Alethicity.Contingent:
-          return "contingent";
-        case Alethicity.Impossible:
-          return "self-contradictory";
+        case Quality.InconsistentPremises:
+          return "The argument is valid but its premises are inconsistent.";
+        case Quality.InconsistentPremisesAndTautologicalConclusion:
+          return "The argument valid but its premises are inconsistent and its conclusion is tautological.";
+        case Quality.Invalid:
+          return "The argument is invalid.";
+        case Quality.TautologicalConclusion:
+          return "The argument is valid because its conclusion is tautological.";
+        case Quality.Valid:
+          return "The argument is valid.";
         default:
           throw new NotImplementedException(
-            String.Format( "The value Alethicity.{0} is not supported by this application.", lDecision ) );
+            String.Format( "The value Quality.{0} is not supported by this application.", aQuality ) );
+      }
+    }
+
+    public static string TextForDecision( Alethicity aDecision )
+    {
+      switch ( aDecision )
+      {
+        case Alethicity.Necessary:
+          return "The statement is necessarily true.";
+        case Alethicity.Contingent:
+          return "The statement is contingent.";
+        case Alethicity.Impossible:
+          return "The statement is self-contradictory.";
+        default:
+          throw new NotImplementedException(
+            String.Format( "The value Alethicity.{0} is not supported by this application.", aDecision ) );
       }
     }
 
@@ -129,6 +157,11 @@ namespace Logic
 #if SALTARELLE
     [InlineCode( "status({aStatusMessage})" )]
     public static void Status( string aStatusMessage )
+    {
+    }
+
+    [InlineCode( "console.log({aLogMessage})" )]
+    public static void Log( string aLogMessage )
     {
     }
 #endif

@@ -71,6 +71,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Optimize>false</Optimize>
+    <DefineConstants>TRACE;DEBUG;PARALLELIZE</DefineConstants>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <ItemGroup>
@@ -89,6 +90,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Argument.cs" />
     <Compile Include="BinaryPredicate.cs" />
     <Compile Include="BinaryPredication.cs" />
     <Compile Include="ModalCounterexample.cs" />

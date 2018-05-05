@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2015, 2017 MacKenzie Cumings
+// Copyright (C) 2015, 2018 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ namespace Logic
         if ( lAdjustedLine.Length == 0 )
           continue;
 
-        if ( lAdjustedLine.IsBinaryOperator() )
+        if ( lAdjustedLine.IsBinaryOperator() || lAdjustedLine.Matches( Therefore ) )
         {
           lConnective = lAdjustedLine;
           continue;
@@ -94,6 +94,8 @@ namespace Logic
           throw new ParseError( "No antecedents found in argument" );
         else if ( lConsequents.Count == 0 )
           throw new ParseError( "No consequents found in argument" );
+        else if ( lConnective.Matches( Therefore ) )
+          return Parse( lAntecedents, Conjoin( lConsequents ) );
         else
           return Parse( Parenthesize( Conjoin( lAntecedents ) ) + lConnective + Parenthesize( Conjoin( lConsequents ) ) );
       }
@@ -114,6 +116,7 @@ namespace Logic
     private static Regex And = ExactMatch( @"&" );
     private static Regex Or = ExactMatch( @"\|" );
     private static Regex OnlyIf = ExactMatch( @"->" );
+    private static Regex Therefore = ExactMatch( @".'." );
     private static Regex IfAndOnlyIf = ExactMatch( @"<=>" );
     private static Regex Not = ExactMatch( @"~" );
     private static Regex Nor = ExactMatch( @"!" );
@@ -378,6 +381,16 @@ namespace Logic
     private static Matrix Parse( string aString )
     {
       return Parse( aString.GetSubexpressions(), new CollectedItems(), new VariableDictionary() );
+    }
+
+    private static Argument Parse( IEnumerable<string> aPremises, string aConclusion )
+    {
+      CollectedItems lCollectedItems = new CollectedItems();
+      VariableDictionary lVariableDictionary = new VariableDictionary();
+
+      return Factory.Therefore(
+        aPremises.Select( fPremise => Parse( Utility.MakeArray( Parenthesize( fPremise ) ), lCollectedItems, lVariableDictionary ) ),
+        Parse( Utility.MakeArray( Parenthesize( aConclusion ) ), lCollectedItems, lVariableDictionary ) );
     }
 
     private static Matrix Parse(

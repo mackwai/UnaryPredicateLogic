@@ -24,7 +24,7 @@
     <ProjectGuid>{15F8F11B-7C72-4896-8EF2-26787EE78539}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Logic</RootNamespace>
+    <RootNamespace>UnitTests</RootNamespace>
     <AssemblyName>UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -79,6 +79,7 @@
     <Compile Include="..\Saltarelle\HTMLMaker.cs">
       <Link>HTMLMaker.cs</Link>
     </Compile>
+    <Compile Include="ArgumentTesting.cs" />
     <Compile Include="ConsoleApplicationTesting.cs" />
     <Compile Include="CounterexampleTesting.cs" />
     <Compile Include="FactoryTesting.cs" />

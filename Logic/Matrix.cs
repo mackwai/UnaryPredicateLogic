@@ -32,6 +32,11 @@ namespace Logic
   /// </summary>
 	public abstract class Matrix : NamedObject
 	{
+    private uint? mLastExampleFound = null;
+    private bool mExampleMightBe = true;
+    private uint? mLastCounterexampleFound = null;
+    private bool mCounterexampleMightBe = true;
+
     public int Complexity
     {
       get { return (int) CollectPredicates().BitsNeeded; }
@@ -68,115 +73,162 @@ namespace Logic
       return false;
     }
 
-    public Counterexample FindExample()
+    private static uint NextPossibility( uint aPossibility, uint aFirstPossiblity, uint aLastPossbility )
+    {
+      return aPossibility == aLastPossbility
+        ? aFirstPossiblity
+        : aPossibility + 1;
+    }
+
+    private static ModalCounterexample ConstructModalCounterexample( Matrix aProposition, uint aInterpretation, Predicates aPredicates )
+    {
+      List<KindOfWorld> lCounterexamples = new List<KindOfWorld>();
+      List<KindOfWorld> lNonCounterexamples = new List<KindOfWorld>();
+      foreach ( uint lKindOfWorld in aPredicates.KindsOfWorlds( aInterpretation ) )
+      {
+        if ( aProposition.TrueIn( aInterpretation, lKindOfWorld, aPredicates ) )
+          lNonCounterexamples.Add( aPredicates.DecodeKindOfWorldNumber( lKindOfWorld ) );
+        else
+          lCounterexamples.Add( aPredicates.DecodeKindOfWorldNumber( lKindOfWorld ) );   
+      }
+      return new ModalCounterexample( lCounterexamples, lNonCounterexamples );
+    }
+
+    public Counterexample FindNextExample()
     {
       if ( this.FreeVariables.Any() && ContainsModalities )
         throw new EngineException( "This proposition can't be evaluated; it contains both constants and modal operators." );
 
       Matrix lNegation = Factory.Not( this );
-
-      if ( lNegation.FreeVariables.Any() )
-        return Factory.Bind( FreeVariables, lNegation, Factory.ForAll ).FindCounterexample();
+      lNegation = Factory.Bind( FreeVariables, lNegation, Factory.ForAll );
+      Counterexample lExample = null;
       
       Predicates lPredicates = lNegation.CollectPredicates();
       if ( lNegation.ContainsModalities )
       {
-#if COMPLEX_COUNTEREXAMPLE
         uint lLastInterpretation = lPredicates.LastInterpretation;
-        for ( uint lInterpretation = lPredicates.FirstInterpretation; lInterpretation <= lLastInterpretation; lInterpretation++ )
-        
-#else
-        uint lFirstInterpretation = lPredicates.FirstInterpretation;
-        for ( uint lInterpretation = lPredicates.LastInterpretation; lInterpretation >= lFirstInterpretation; lInterpretation-- )
-#endif
+
+        uint lPossibility = mLastExampleFound.HasValue
+          ? mLastExampleFound.Value
+          : lLastInterpretation;
+
+        while ( mExampleMightBe )
         {
-          if ( lNegation.HasCounterexample( lInterpretation, lPredicates ) )
+          lPossibility = NextPossibility( lPossibility, lPredicates.FirstInterpretation, lLastInterpretation );
+
+          if ( lNegation.HasCounterexample( lPossibility, lPredicates ) )
           {
-            List<KindOfWorld> lCounterexamples = new List<KindOfWorld>();
-            List<KindOfWorld> lNonCounterexamples = new List<KindOfWorld>();
-            foreach ( uint lKindOfWorld in lPredicates.KindsOfWorlds( lInterpretation ) )
-            {
-              if ( lNegation.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
-                lNonCounterexamples.Add( lPredicates.DecodeKindOfWorldNumber( lKindOfWorld ) );
-              else
-                lCounterexamples.Add( lPredicates.DecodeKindOfWorldNumber( lKindOfWorld ) );   
-            }
-            return new ModalCounterexample( lCounterexamples, lNonCounterexamples );
+            mLastExampleFound = lPossibility;
+            break;
+          }
+          else if ( lPossibility == lLastInterpretation && !mLastExampleFound.HasValue )
+          {
+            mExampleMightBe = false;
+            break;
           }
         }
+
+        if ( mLastExampleFound.HasValue )
+          lExample = ConstructModalCounterexample( lNegation, mLastExampleFound.Value, lPredicates );
       }
       else
       {
         uint lInterpretation = lPredicates.FirstInterpretation;
-#if COMPLEX_COUNTEREXAMPLE
         uint lLastKindOfWorld = lPredicates.LastKindOfWorld;
-        for ( uint lKindOfWorld = lPredicates.FirstNonemptyWorld; lKindOfWorld <= lLastKindOfWorld; lKindOfWorld++ )
-#else
-        uint lFirstKindOfWorld = lPredicates.FirstNonemptyWorld;
-        for ( uint lKindOfWorld = lPredicates.LastKindOfWorld; lKindOfWorld >= lFirstKindOfWorld; lKindOfWorld-- )
-#endif   
-        {
-          if ( !lNegation.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
-            return lPredicates.DecodeKindOfWorldNumber( lKindOfWorld );
-        }
-      }
 
-      // No counterexample exists; the proposition is necessarily true.
-      return null;
+        uint lPossibility = mLastExampleFound.HasValue
+          ? mLastExampleFound.Value
+          : lLastKindOfWorld;
+
+        while ( mExampleMightBe )
+        {
+          lPossibility = NextPossibility( lPossibility, lPredicates.FirstNonemptyWorld, lLastKindOfWorld );
+
+          if ( !lNegation.TrueIn( lInterpretation, lPossibility, lPredicates ) )
+          {
+            mLastExampleFound = lPossibility;
+            break;
+          }
+          else if ( lPossibility == lLastKindOfWorld && !mLastExampleFound.HasValue )
+          {
+            mExampleMightBe = false;
+            break;
+          }
+        }
+
+        if ( mLastExampleFound.HasValue )
+          lExample = lPredicates.DecodeKindOfWorldNumber( mLastExampleFound.Value );
+      }
+      return lExample;
     }
 
-    public Counterexample FindCounterexample()
+    public Counterexample FindNextCounterexample()
     {
       if ( this.FreeVariables.Any() && ContainsModalities )
         throw new EngineException( "This proposition can't be evaluated; it contains both constants and modal operators." );
 
-      if ( this.FreeVariables.Any() )
-        return Factory.Bind( FreeVariables, this, Factory.ForAll ).FindCounterexample();
+      Matrix lProposition = this;
+      if ( lProposition.FreeVariables.Any() )
+        lProposition = Factory.Bind( FreeVariables, this, Factory.ForAll );
+      Counterexample lCounterexample = null;
 
-      Predicates lPredicates = CollectPredicates();
-      if ( this.ContainsModalities )
+      Predicates lPredicates = lProposition.CollectPredicates();
+      if ( lProposition.ContainsModalities )
       {
-#if COMPLEX_COUNTEREXAMPLE
-        uint lFirstInterpretation = lPredicates.FirstInterpretation;
-        for ( uint lInterpretation = lPredicates.LastInterpretation; lInterpretation >= lFirstInterpretation; lInterpretation-- )
-#else
         uint lLastInterpretation = lPredicates.LastInterpretation;
-        for ( uint lInterpretation = lPredicates.FirstInterpretation; lInterpretation <= lLastInterpretation; lInterpretation++ )
-#endif
+
+        uint lPossibility = mLastCounterexampleFound.HasValue
+          ? mLastCounterexampleFound.Value
+          : lLastInterpretation;
+
+        while ( mCounterexampleMightBe )
         {
-          if ( HasCounterexample( lInterpretation, lPredicates ) )
+          lPossibility = NextPossibility( lPossibility, lPredicates.FirstInterpretation, lLastInterpretation );
+
+          if ( lProposition.HasCounterexample( lPossibility, lPredicates ) )
           {
-            List<KindOfWorld> lCounterexamples = new List<KindOfWorld>();
-            List<KindOfWorld> lNonCounterexamples = new List<KindOfWorld>();
-            foreach ( uint lKindOfWorld in lPredicates.KindsOfWorlds( lInterpretation ) )
-            {
-              if ( this.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
-                lNonCounterexamples.Add( lPredicates.DecodeKindOfWorldNumber( lKindOfWorld ) );
-              else
-                lCounterexamples.Add( lPredicates.DecodeKindOfWorldNumber( lKindOfWorld ) );   
-            }
-            return new ModalCounterexample( lCounterexamples, lNonCounterexamples );
+            mLastCounterexampleFound = lPossibility;
+            break;
+          }
+          else if ( lPossibility == lLastInterpretation && !mLastCounterexampleFound.HasValue )
+          {
+            mCounterexampleMightBe = false;
+            break;
           }
         }
+
+        if ( mLastCounterexampleFound.HasValue )
+          lCounterexample = ConstructModalCounterexample( lProposition, mLastCounterexampleFound.Value, lPredicates );
       }
       else
       {
         uint lInterpretation = lPredicates.FirstInterpretation;
-#if COMPLEX_COUNTEREXAMPLE
-        uint lFirstKindOfWorld = lPredicates.FirstNonemptyWorld;
-        for ( uint lKindOfWorld = lPredicates.LastKindOfWorld; lKindOfWorld >= lFirstKindOfWorld; lKindOfWorld-- )
-#else
         uint lLastKindOfWorld = lPredicates.LastKindOfWorld;
-        for ( uint lKindOfWorld = lPredicates.FirstNonemptyWorld; lKindOfWorld <= lLastKindOfWorld; lKindOfWorld++ )
-#endif   
-        {
-          if ( !this.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
-            return lPredicates.DecodeKindOfWorldNumber( lKindOfWorld );
-        }
-      }
 
-      // No counterexample exists; the proposition is necessarily true.
-      return null;
+        uint lPossibility = mLastCounterexampleFound.HasValue
+          ? mLastCounterexampleFound.Value
+          : lLastKindOfWorld;
+
+        while ( mExampleMightBe )
+        {
+          lPossibility = NextPossibility( lPossibility, lPredicates.FirstNonemptyWorld, lLastKindOfWorld );
+
+          if ( !lProposition.TrueIn( lInterpretation, lPossibility, lPredicates ) )
+          {
+            mLastCounterexampleFound = lPossibility;
+            break;
+          }
+          else if ( lPossibility == lLastKindOfWorld && !mLastCounterexampleFound.HasValue )
+          {
+            mCounterexampleMightBe = false;
+            break;
+          }
+        }
+
+        if ( mLastCounterexampleFound.HasValue )
+          lCounterexample = lPredicates.DecodeKindOfWorldNumber( mLastCounterexampleFound.Value );
+      }
+      return lCounterexample;
     }
 
 #if SALTARELLE
@@ -197,11 +249,58 @@ namespace Logic
     }
 #endif
 
-    /// <summary>
-    /// Decide this matrix as a proposition.  Throw an exception if it contains both free variables and modal operators.
-    /// Use up to System.Environment.ProcessorCount threads to make the decision.
-    /// </summary>
-    /// <returns>whether this proposition is necessary, contingent or impossible</returns>
+    private delegate void ActionWithBreakFlag<T>( T aInput, ref bool aBreak );
+
+#if PARALLELIZE
+    private static void Foreach<T>( IEnumerable<T> aEnumerable, ActionWithBreakFlag<T> aAction )
+    {
+      System.Threading.Tasks.ParallelOptions lParallelOptions = new System.Threading.Tasks.ParallelOptions();
+      System.Threading.CancellationTokenSource lCancellationTokenSource = new System.Threading.CancellationTokenSource();
+      lParallelOptions.CancellationToken = lCancellationTokenSource.Token;
+      lParallelOptions.MaxDegreeOfParallelism = System.Environment.ProcessorCount;
+
+      bool lBreak = false;
+
+      try
+      {
+        System.Threading.Tasks.Parallel.ForEach(
+          aEnumerable,
+          lParallelOptions,
+          (fItem) =>
+          {
+            aAction( fItem, ref lBreak );
+
+            if ( lBreak )
+              lCancellationTokenSource.Cancel();
+          } );
+      }
+      catch ( OperationCanceledException )
+      {
+        // An OperationCanceledException will occur iff lCancellationTokenSource.Cancel() is called; nothing needs to be done for it.
+      }
+      catch ( AggregateException lException )
+      {
+        // Combine all exception messages from the tasks into one message.
+        throw new EngineException( String.Join(
+          Environment.NewLine,
+          lException.Flatten().InnerExceptions.Select( fException => fException.Message ).Distinct() ) );
+      }
+    }
+#else
+    private static void Foreach<T>( IEnumerable<T> aEnumerable, ActionWithBreakFlag<T> aAction )
+    {
+      bool lBreak = false;
+
+      foreach ( T aItem in aEnumerable )
+      {
+        aAction( aItem, ref lBreak );
+
+        if ( lBreak )
+          break;
+      }
+    }
+#endif
+
     public Alethicity Decide()
     {
       if ( this.FreeVariables.Any() )
@@ -216,125 +315,35 @@ namespace Logic
 
       bool lNotImpossible = false;
       bool lNotNecessary = false;
-      uint lLastInterpretation = lPredicates.LastInterpretation;
-      uint lLastKindOfWorld = lPredicates.LastKindOfWorld;
-      uint lFirstNonemptyWorld = lPredicates.FirstNonemptyWorld;
-      uint lFirstInterpretation = lPredicates.FirstInterpretation;
-#if SALTARELLE
-      int lStatusInterval = StatusInterval;
-#endif
 
-#if PARALLELIZE
-      //System.Windows.Forms.MessageBox.Show( string.Format( "Maximum number of distinguishable objects: {0}", MaxmimumNumberOfDistinguishableObjects ) );
-      
-      System.Threading.Tasks.ParallelOptions lParallelOptions = new System.Threading.Tasks.ParallelOptions();
-      System.Threading.CancellationTokenSource lCancellationTokenSource = new System.Threading.CancellationTokenSource();
-      lParallelOptions.CancellationToken = lCancellationTokenSource.Token;
-      lParallelOptions.MaxDegreeOfParallelism = System.Environment.ProcessorCount;
-
-      try
-      {
-#endif
-      if ( ContainsModalities  )
+      Foreach(
+        lPredicates.Interpretations,
+        ( uint fInterpretation, ref bool fNoMoreIterationsNeeded ) =>
         {
-#if PARALLELIZE
-          System.Threading.Tasks.Parallel.For(
-            Convert.ToInt64( lPredicates.FirstInterpretation ),
-            Convert.ToInt64( lLastInterpretation ) + 1,
-            lParallelOptions,
-            ( fInterpretation ) =>
+          foreach ( uint lKindOfWorld in lPredicates.KindsOfWorlds( fInterpretation ) )
           {
-            uint lInterpretation = Convert.ToUInt32( fInterpretation );
-
-#else
-          for ( uint lInterpretation = lFirstInterpretation; lInterpretation <= lLastInterpretation; lInterpretation++ )
-          {
-#endif
-#if SALTARELLE
-            if ( ( lInterpretation - lFirstInterpretation ) % lStatusInterval == 0 )
-              Utility.Status( String.Format(
-                "Deciding... {0:n0} of {1:n0} interpretations of predicates tested.",
-                lInterpretation - lFirstInterpretation,
-                lLastInterpretation - lFirstInterpretation + 1 ) );
-#endif
-
-            foreach ( uint lKindOfWorld in lPredicates.KindsOfWorlds( lInterpretation ) )
-            {
-              if ( this.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
-                lNotImpossible = true;
-              else
-                lNotNecessary = true;
-
-              // End the decision once it has been determined that the proposition is neither necessary nor impossible.
-              // Further evaluation will not change the outcome.
-              if ( lNotImpossible && lNotNecessary )
-#if PARALLELIZE
-                lCancellationTokenSource.Cancel();
-            }
-          } );
-#else
-                return Alethicity.Contingent;
-            }
-          }
-#endif
-        }
-        else
-        {
-          uint lInterpretation = lPredicates.FirstInterpretation;
-#if PARALLELIZE
-          System.Threading.Tasks.Parallel.For(
-            Convert.ToInt64( lPredicates.FirstNonemptyWorld ),
-            Convert.ToInt64( lLastKindOfWorld ) + 1,
-            lParallelOptions,
-            ( fKindOfWorld ) =>
-          {
-            uint lKindOfWorld = Convert.ToUInt32( fKindOfWorld );
-#else
-          for ( uint lKindOfWorld = lFirstNonemptyWorld; lKindOfWorld <= lLastKindOfWorld; lKindOfWorld++ )
-          {
-#endif
-#if SALTARELLE
-            if ( ( lKindOfWorld - lFirstNonemptyWorld ) % lStatusInterval == 0 )
-              Utility.Status( String.Format(
-                "Deciding... {0:n0} of {1:n0} kinds of worlds tested.",
-                lKindOfWorld - lFirstNonemptyWorld,
-                lLastKindOfWorld - lFirstNonemptyWorld + 1 ) );
-#endif
-
-            if ( this.TrueIn( lInterpretation, lKindOfWorld, lPredicates ) )
-                lNotImpossible = true;
+            if ( this.TrueIn( fInterpretation, lKindOfWorld, lPredicates ) )
+              lNotImpossible = true;
             else
               lNotNecessary = true;
-
-          // End the decision once it has been determined that the proposition is neither necessary nor impossible.
-          // Further evaluation will not change the outcome.
+            
+            // End the decision once it has been determined that the proposition is neither necessary nor impossible.
+            // Further evaluation will not change the outcome.
             if ( lNotImpossible && lNotNecessary )
-#if PARALLELIZE
-              lCancellationTokenSource.Cancel();
-          } );
+            {
+              fNoMoreIterationsNeeded = true;
+              return;
+            }
+          }
         }
-      }
-      catch ( OperationCanceledException )
-      {
-        // An OperationCanceledException will occur iff lCancellationTokenSource.Cancel() is called; nothing needs to be done for it.
-      }
-      catch ( AggregateException lException )
-      {
-        // Combine all exception messages from the tasks into one message.
-        throw new EngineException( String.Join(
-          Environment.NewLine,
-          lException.Flatten().InnerExceptions.Select( fException => fException.Message ).Distinct() ) );
-      }
+      );
 
       if ( lNotImpossible && lNotNecessary )
         return Alethicity.Contingent;
-#else
-              return Alethicity.Contingent;
-          }
-        }
-#endif
-
-      return lNotNecessary ? Alethicity.Impossible :  Alethicity.Necessary;
+      else if ( lNotNecessary )
+        return Alethicity.Impossible;
+      else
+        return Alethicity.Necessary;
     }
 
     internal virtual IEnumerable<Tuple<UniversalGeneralization, Matrix>> ClosedPredications
@@ -369,52 +378,63 @@ namespace Logic
         StringBuilder lDOT = new StringBuilder();
         lDOT.AddLine( "digraph Proposition_{0} {{", this.Name );
         lDOT.AddLine( "ordering=out;bgcolor=\"#FFFFFF80\"" );
-        foreach ( Matrix lMatrix in this.Matrices.Distinct( new ReferenceComparer() ) )
+        Matrix[] lMatrices = this.Matrices.Distinct( new ReferenceComparer() ).Cast<Matrix>().ToArray();
+        if ( lMatrices.Length == 1 )
         {
-          if ( !( lMatrix is NullPredicate ) )
-          {
-            lDOT.AddLine(
-              "{0} [label={1},shape=rectangle,fontsize=10,style=filled,fillcolor=\"white\",margin=\"0.11,0.00\"];",
-              lMatrix.Name,
-              lMatrix.DOTLabel );
-          }
+          lDOT.AddLine(
+            "{0} [label={1},shape=rectangle,fontsize=10,style=filled,fillcolor=\"white\",margin=\"0.11,0.00\"];",
+            this.Name,
+            this.DOTLabel );
         }
-        Tuple < Matrix, Matrix >[] lDirectDependencies = DirectDependencies.ToArray();
-        for ( int i = 0; i < lDirectDependencies.Length; i++ )
+        else
         {
-          Tuple<Matrix, Matrix> lPair = lDirectDependencies[ i ];
-          if ( lPair.Item2 is NullPredicate )
+          foreach ( Matrix lMatrix in this.Matrices.Distinct( new ReferenceComparer() ) )
           {
-            lDOT.AddLine(
-              "-{0} [label={1},shape=rectangle,fontsize=10,style=filled,fillcolor=\"white\",margin=\"0.11,0.00\"];",
-              i,
-              lPair.Item2.DOTLabel );
+            if ( !( lMatrix is NullPredicate ) )
+            {
+              lDOT.AddLine(
+                "{0} [label={1},shape=rectangle,fontsize=10,style=filled,fillcolor=\"white\",margin=\"0.11,0.00\"];",
+                lMatrix.Name,
+                lMatrix.DOTLabel );
+            }
           }
-        }
-        for ( int i = 0; i < lDirectDependencies.Length; i++ )
-        {
-          Tuple<Matrix, Matrix> lPair = lDirectDependencies[ i ];
-          if ( lPair.Item2 is NullPredicate )
+          Tuple < Matrix, Matrix >[] lDirectDependencies = this.DirectDependencies.ToArray();
+          for ( int i = 0; i < lDirectDependencies.Length; i++ )
           {
-            lDOT.AddLine(
-              "{0}-> -{1}",
-              lPair.Item1.Name,
-              i );
+            Tuple<Matrix, Matrix> lPair = lDirectDependencies[ i ];
+            if ( lPair.Item2 is NullPredicate )
+            {
+              lDOT.AddLine(
+                "-{0} [label={1},shape=rectangle,fontsize=10,style=filled,fillcolor=\"white\",margin=\"0.11,0.00\"];",
+                i,
+                lPair.Item2.DOTLabel );
+            }
           }
-          else
+          for ( int i = 0; i < lDirectDependencies.Length; i++ )
+          {
+            Tuple<Matrix, Matrix> lPair = lDirectDependencies[ i ];
+            if ( lPair.Item2 is NullPredicate )
+            {
+              lDOT.AddLine(
+                "{0}-> -{1}",
+                lPair.Item1.Name,
+                i );
+            }
+            else
+            {
+              lDOT.AddLine(
+                "{0}->{1}",
+                lPair.Item1.Name,
+                lPair.Item2.Name );
+            }
+          }
+          foreach ( Tuple<UniversalGeneralization, Matrix> lPair in ClosedPredications )
           {
             lDOT.AddLine(
-              "{0}->{1}",
+              "{0}->{1} [style=dashed]",
               lPair.Item1.Name,
               lPair.Item2.Name );
           }
-        }
-        foreach ( Tuple<UniversalGeneralization, Matrix> lPair in ClosedPredications )
-        {
-          lDOT.AddLine(
-            "{0}->{1} [style=dashed]",
-            lPair.Item1.Name,
-            lPair.Item2.Name );
         }
 
         lDOT.AddLine( "}}" );

@@ -72,6 +72,16 @@ namespace UnitTests
       return Parser.Parse( aText.Split( '\n' ) ).Decide();
     }
 
+    public static Quality GetQuality( string aText )
+    {
+      Argument lArgument = Parser.Parse( aText.Split( '\n' ) ) as Argument;
+
+      if ( lArgument == null )
+        Assert.Fail( "text was not parsed as an argument." );
+
+      return lArgument.Quality;
+    }
+
     public static Prover9Mace4.Result GetProver9sDecision( string aText, int aTimeout )
     {
       Matrix lProposition = Parser.Parse( aText.Split( '\n' ) );

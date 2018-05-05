@@ -17,6 +17,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Logic;
 
@@ -30,7 +31,58 @@ namespace UnitTests
     public void Test_CounterexampleProblemCase1()
     {
       Matrix lMatrix = Logic.Parser.Parse( new string[] { "P & x,Gx" } );
-      Counterexample lCounterexample = lMatrix.FindCounterexample();
+      Counterexample lCounterexample = lMatrix.FindNextCounterexample();
+    }
+
+    [TestMethod]
+    public void Test_Counterexample()
+    {
+      Matrix lMatrix = Logic.Parser.Parse( new string[] { "P<=>Q" } );
+      Counterexample lCounterexample = lMatrix.FindNextCounterexample();
+      KindOfWorld lWorld = lCounterexample as KindOfWorld;
+      Assert.IsTrue( lWorld.Affirms( lWorld.Predicates.ElementAt( 0 ) ) );
+      Assert.IsTrue( lWorld.Denies( lWorld.Predicates.ElementAt( 1 ) ) );
+
+      lCounterexample = lMatrix.FindNextCounterexample();
+      lWorld = lCounterexample as KindOfWorld;
+      Assert.IsTrue( lWorld.Affirms( lWorld.Predicates.ElementAt( 1 ) ) );
+      Assert.IsTrue( lWorld.Denies( lWorld.Predicates.ElementAt( 0 ) ) );
+
+      lCounterexample = lMatrix.FindNextCounterexample();
+      lWorld = lCounterexample as KindOfWorld;
+      Assert.IsTrue( lWorld.Affirms( lWorld.Predicates.ElementAt( 0 ) ) );
+      Assert.IsTrue( lWorld.Denies( lWorld.Predicates.ElementAt( 1 ) ) );
+    }
+
+    [TestMethod]
+    public void Test_Example()
+    {
+      Matrix lMatrix = Logic.Parser.Parse( new string[] { "P<=>Q" } );
+
+      Counterexample lCounterexample = lMatrix.FindNextExample();
+      KindOfWorld lWorld = lCounterexample as KindOfWorld;
+      Assert.IsTrue( lWorld.Denies( lWorld.Predicates.ElementAt( 0 ) ) );
+      Assert.IsTrue( lWorld.Denies( lWorld.Predicates.ElementAt( 1 ) ) );
+
+      lCounterexample = lMatrix.FindNextExample();
+      lWorld = lCounterexample as KindOfWorld;
+      Assert.IsTrue( lWorld.Affirms( lWorld.Predicates.ElementAt( 0 ) ) );
+      Assert.IsTrue( lWorld.Affirms( lWorld.Predicates.ElementAt( 1 ) ) );
+
+      lCounterexample = lMatrix.FindNextExample();
+      lWorld = lCounterexample as KindOfWorld;
+      Assert.IsTrue( lWorld.Denies( lWorld.Predicates.ElementAt( 0 ) ) );
+      Assert.IsTrue( lWorld.Denies( lWorld.Predicates.ElementAt( 1 ) ) );
+    }
+
+    [TestMethod]
+    public void Test_ProblemCase1()
+    {
+      Matrix lMatrix = Logic.Parser.Parse( new string[] { "P|Q" } );
+      for ( int i = 1; i < 10; i++ )
+      {
+        Assert.IsNotNull( lMatrix.FindNextCounterexample(), String.Format( "Counterexemple not found for P|Q on iteration {0}", i ) );
+      }
     }
   }
 }

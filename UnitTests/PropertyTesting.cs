@@ -15,6 +15,7 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -270,6 +271,17 @@ namespace Logic
     public void Test_IsCompatibleWithTreeProofGenerator08()
     {
       Assert.AreEqual( false, IsCompatibleWithTreeProofGenerator( @"[]((Px->Rx)&(J->xRx))" ) );
+    }
+
+    [TestMethod]
+    public void Test_GraphVizDOT()
+    {
+      Assert.IsTrue( Parser.Parse( new string[] { "P" } ).GraphvizDOT.Contains( ">P<" ) );
+      Console.WriteLine( Parser.Parse( new string[] { "P" } ).GraphvizDOT );
+      Assert.IsTrue( Parser.Parse( new string[] { "P|Q" } ).GraphvizDOT.Contains( ">|<" ) );
+      Assert.IsTrue( Parser.Parse( new string[] { "P|Q" } ).GraphvizDOT.Contains( ">P<" ) );
+      Assert.IsTrue( Parser.Parse( new string[] { "P|Q" } ).GraphvizDOT.Contains( ">Q<" ) );
+      Console.WriteLine( Parser.Parse( new string[] { "P|Q" } ).GraphvizDOT );
     }
   }
 }
