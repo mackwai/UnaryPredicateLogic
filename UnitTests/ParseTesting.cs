@@ -41,17 +41,16 @@ namespace UnitTests
         lGraph2 );
     }
 
+    private static void ConfirmParseErrorOnParsing( params string[] aStatement )
+    {
+      UnitTestUtility.ConfirmThrows<Logic.ParseError>( () => Logic.Parser.Parse( aStatement ) );
+    }
+
     [TestMethod]
     public void Test_ParseExceptionMessages()
     {
-      try
-      {
-        Logic.Parser.Parse( new string[] { @"<>A -> []<>" } );
-        Logic.Parser.Parse( new string[] { @"<>A -> []x," } );
-      }
-      catch ( Logic.ParseError )
-      {
-      }
+      ConfirmParseErrorOnParsing( @"<>A -> []<>" );
+      ConfirmParseErrorOnParsing( @"<>A -> []x," );
     }
 
     [TestMethod]
@@ -62,14 +61,8 @@ namespace UnitTests
       Logic.Parser.Parse( new string[] { @"x,y,DaO|xZy" } );
       Logic.Parser.Parse( new string[] { @"x,y,xZy|DaO" } );
       Logic.Parser.Parse( new string[] { "x,y,xRy->yRx", "aRb", "->", "bRa" } );
-      try
-      {
-        Logic.Parser.Parse( new string[] { @"x,y,xZyDaO" } );
-        Logic.Parser.Parse( new string[] { @"x,y,xZyDyO" } );
-      }
-      catch ( Logic.ParseError )
-      {
-      }
+      ConfirmParseErrorOnParsing( @"x,y,xZyDaO" );
+      ConfirmParseErrorOnParsing( @"x,y,xZyDyO" );
     }
 
     [TestMethod]
@@ -164,16 +157,9 @@ namespace UnitTests
         Console.WriteLine( "{0}\t<=>\t{1}", lStatement, Logic.Parser.Parse( new string[] { lStatement } ) );
       }
 
-      foreach ( string lStatement in new string[] { "3AB", "4ABC", "5ABC" } )
+      foreach ( string lStatement in new string[] { "3AB", "4ABC", "5ABC", "6ABC" } )
       {
-        try
-        {
-          Logic.Parser.Parse( new string[] { "3AB" } );
-          Assert.Fail( "Parser did not throw an exception for {0}", lStatement );
-        }
-        catch ( Exception )
-        {
-        }
+        UnitTestUtility.ConfirmThrows<Logic.EngineException>( () => Logic.Parser.Parse( new string[] {  lStatement }  ) );
       }
     }
 
@@ -193,6 +179,110 @@ namespace UnitTests
     public void Test_ParseErrors()
     {
       ParseFile( @"..\..\..\VerificationTesting\UnhelpfulParseErrorMessage.txt" );
+
+      try
+      {
+        Logic.Parser.Parse( new string[] { "()" } );
+      }
+      catch ( Exception lException )
+      {
+        Assert.IsTrue( lException is Logic.ParseError, "Exception is not a ParseError." );
+      }
+    }
+
+    [TestMethod]
+    public void Test_MutliLineStatements()
+    {
+      Assert.AreEqual(
+        @"((a&b)&c)",
+        Logic.Parser.Parse( new string[] {
+          "( a",
+          " & b",
+          " & c // Comment!",
+          ")" } ).ToString() );
+
+      ConfirmParseErrorOnParsing(
+          "( a",
+          "  b",
+          " & c // Comment!",
+          ")" );
+
+      ConfirmParseErrorOnParsing(
+          "( a",
+          "  b",
+          " & c // )",
+          ")" );
+
+      ConfirmParseErrorOnParsing(
+          "( a",
+          " & b",
+          " & c )",
+          ")" );
+
+      ConfirmParseErrorOnParsing(
+          "( a",
+          "  b",
+          " & c // )" );
+
+      Assert.AreEqual(
+        @"((a|b)|c)",
+        Logic.Parser.Parse( new string[] {
+          "a",
+          " | b |",
+          "c",
+          "" } ).ToString() );
+
+      Assert.AreEqual(
+        @"((a|b)|c)",
+        Logic.Parser.Parse( new string[] {
+          "a",
+          " | b |",
+          "c" } ).ToString() );
+
+      Assert.AreEqual(
+        @"(a->((a|b)|c))",
+        Logic.Parser.Parse( new string[] {
+          "a",
+          "->",
+          "a",
+          " | b |",
+          "c" } ).ToString() );
+
+      Assert.AreEqual(
+        @"((a&b)->((a|b)|c))",
+        Logic.Parser.Parse( new string[] {
+          "a",
+          "b",
+          "->",
+          "( a",
+          " | b |",
+          "c )" } ).ToString() );
+
+      Assert.AreEqual(
+        @"((a&(b&c))->d)",
+        Logic.Parser.Parse( new string[] {
+          "a",
+          "b",
+          "&c",
+          "->",
+          "d" } ).ToString() );
+
+      Assert.AreEqual(
+        @"(((a&b)&c)->d)",
+        Logic.Parser.Parse( new string[] {
+          "a",
+          "&b",
+          "&c",
+          "->",
+          "d" } ).ToString() );
+
+      Assert.AreEqual(
+        @"(((p->~q)&(~p->~q))->~q)",
+        Logic.Parser.Parse( new string[] {
+         "(p->~q)",
+         "(~p->~q)",
+         ".'.",
+         "~q" } ).ToString() );
     }
 
     [TestMethod]

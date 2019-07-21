@@ -97,5 +97,18 @@ namespace UnitTests
     {
       return ParseExpectedResult( aText ) == GetDecision( aText );
     }
+
+    public static void ConfirmThrows<T>( Action aAction )
+      where T : Exception
+    {
+      try
+      {
+        aAction();
+        Assert.Fail( "{0} not thrown.", typeof( T ) );
+      }
+      catch ( T )
+      {
+      }
+    }
   }
 }

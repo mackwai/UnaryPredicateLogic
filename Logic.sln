@@ -1,21 +1,4 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# somerby.net/mack/logic
-# Copyright (C) 2016 MacKenzie Cumings
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -36,6 +19,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notepad++Plugin", "Notepad++Plugin\Notepad++Plugin.csproj", "{E56F6E12-089C-40ED-BCFD-923E5FA121A1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Decider", "Decider\Decider.csproj", "{25D0C0E7-59C9-4972-90EC-F7348463BA04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translate", "Translator\Translate.csproj", "{FD1F3741-2986-4AFE-A985-A3B4DA2C9D52}"
+	ProjectSection(ProjectDependencies) = postProject
+		{54BAEA56-D660-40FE-8306-803831529967} = {54BAEA56-D660-40FE-8306-803831529967}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -139,6 +127,18 @@ Global
 		{25D0C0E7-59C9-4972-90EC-F7348463BA04}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{25D0C0E7-59C9-4972-90EC-F7348463BA04}.Release|x86.ActiveCfg = Release|Any CPU
 		{25D0C0E7-59C9-4972-90EC-F7348463BA04}.Release|x86.Build.0 = Release|Any CPU
+		{FD1F3741-2986-4AFE-A985-A3B4DA2C9D52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD1F3741-2986-4AFE-A985-A3B4DA2C9D52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD1F3741-2986-4AFE-A985-A3B4DA2C9D52}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FD1F3741-2986-4AFE-A985-A3B4DA2C9D52}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FD1F3741-2986-4AFE-A985-A3B4DA2C9D52}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FD1F3741-2986-4AFE-A985-A3B4DA2C9D52}.Debug|x86.Build.0 = Debug|Any CPU
+		{FD1F3741-2986-4AFE-A985-A3B4DA2C9D52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD1F3741-2986-4AFE-A985-A3B4DA2C9D52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD1F3741-2986-4AFE-A985-A3B4DA2C9D52}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FD1F3741-2986-4AFE-A985-A3B4DA2C9D52}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FD1F3741-2986-4AFE-A985-A3B4DA2C9D52}.Release|x86.ActiveCfg = Release|Any CPU
+		{FD1F3741-2986-4AFE-A985-A3B4DA2C9D52}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

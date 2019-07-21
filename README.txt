@@ -62,7 +62,7 @@ A Notepad++Plugin that decides and depicts statements in symbolic logic.  It
 uses Graphviz, if it's installed and on the PATH, to generate depictions.
 
 
-- WindowsFormsAppliction
+- WindowsFormsApplication
 
 A simple Windows application that uses Logic and Parser to read and decide
 statements in symbolic logic.

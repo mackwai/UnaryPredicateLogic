@@ -1,0 +1,404 @@
+A Logic Calculator
+Calculador Lógico
+
+a web application that decides statements in symbolic logic including modal logic, propositional logic and unary predicate logic
+Un aplicación web que decide fórmulas en lógica simbólica, incluyendo lógica modal, lógica proposicional, y lógica de predicados unarios
+
+Decide
+Decidir
+
+Depict
+Diagramar
+
+Truth Table
+Tabla de verdad
+
+Example
+Ejemplo
+
+Counterexample
+Contraejemplo
+
+Tree Proof
+Árbol semántico
+
+Quick Reference
+Referencia rápida
+
+Cancel
+Cancela
+
+Information:
+Información (Inglés):
+
+What is this?
+¿Qué es ésto?
+
+Instructions
+Instrucciones
+
+The Language
+El lenguaje
+
+The Algorithm
+El algoritmo
+
+Updates
+Actualizaciones
+
+Contact
+Contacto
+
+Downloads
+Descargas
+
+Examples:
+Ejemplos:
+
+list of symbols used by somerby.net/mack/logic
+lista de símbolos utilizados por somerby.net/mack/logic
+
+Symbols
+Símbolos
+
+therefore
+por lo tanto
+
+and
+y
+
+or
+o
+
+not
+no
+
+if &hellip; then &hellip;
+si &hellip;, entonces &hellip;
+
+if and only if
+si y sólo si
+
+XOR
+o bien &hellip; o bien
+
+NOR
+ni &hellip; ni
+
+for all x, &hellip;
+para todo x, &hellip;
+
+for some x, &hellip;
+existe al menos un x, y &hellip;
+
+x is y
+x es y
+
+necessarily
+necesariamente
+
+possibly
+es posible que
+
+necessarily, if &hellip; then &hellip;
+es necesario que si &hellip;, entonces &hellip;
+
+P is true
+P es verdad
+
+p is true
+p es verdad
+
+x is P
+x es P
+
+x is P of y
+x es P de y
+
+all S are P
+todo S es P
+
+no S are P
+ningún S es P
+
+some S are P
+algún S es P
+
+not all S are P
+algún S no es P
+
+either all S are P or no S are P
+todo S es P o ningún S es P
+
+some S are P and some S are not P
+algún S es P y algún S no es P
+
+ objects are P
+ objetos son P
+
+ of P, Q, &hellip; are true
+ de P, Q, &hellip; son verdaderos
+
+Statements across Lines
+Fórmulas en más de una línea
+
+ and 
+ y 
+
+ , therefore 
+ , por lo tanto 
+
+assert 
+afirma 
+
+ AND 
+ y 
+
+assert that 
+afirma que 
+
+ follows from 
+ se sigue de 
+
+ are jointly equivalent to 
+ conjuntamente son equivalentes a 
+
+, therefore 
+, por lo tanto, 
+
+Can't conjoin an empty list of matrices.
+No se puede unir una lista vacía de matrices.
+
+Can't disjoin an empty list of matrices.
+No se puede unir una lista vacía de matrices.
+
+{0} of the predicate(s) {1} can't be true because there are only {2} of them.
+No es posible que {0} de los predicados {1} sean verdaderos porque sólamente hay {2}.
+
+This is a kind of world in which the statement is not true.
+Este es un tipo de mundo en que la fórmula no es verdadera.
+
+This is a kind of world in which the statement is true.
+Este es un tipo de mundo en que la fórmula es verdadera.
+
+Kind of World
+Tipo de mundo
+
+Kinds of Objects:
+Tipos de objetos:
+
+Nullary Predicates:
+Predicados Nulos:
+
+This is an interpretation of predicates in which the statement is not necessarily true.  <span style="color:red">Red text</span> indicates a kind of world in which the statement is false.  <span style="color:black;font-weight:bold">Black text</span> indicates a kind of world in which the statement is true.
+Este es un interpretación de los predicados en que la fórmula no es necesariamente verdadera.  <span style="color:red">Texto en rojo</span> indica un tipo de mundo en que la fórmula es falsa.  <span style="color:black;font-weight:bold">Texto en negro</span> indica un tipo de mundo en que la fórmula es verdadera.
+
+This is an interpretation of predicates in which the statement is possibly true.  <span style="color:red">Red text</span> indicates a kind of world in which the statement is true.  <span style="color:black;font-weight:bold">Black text</span> indicates a kind of world in which the statement is false.
+Este es un interpretación de los predicados en que la fórmula es posiblemente verdadera.  <span style="color:red">Texto en rojo</span> indica un tipo de mundo en que la fórmula es verdadera.  <span style="color:black;font-weight:bold">Texto en negro</span> indica un tipo de mundo en que la fórmula es falsa.
+
+Found unmatched parenthesis in "{0}"
+Encontró paréntesis sin par en "{0}"
+
+Could not parse "{0}"
+No pudo analizar sintácticamente "{0}"
+
+Expected predication or parenthesized expression, found "{0}"
+Predicación o expresión entre paréntesis requerida, pero se encontró "{0}"
+
+This proposition can't be evaluated; it contains both constants and modal operators.
+Esta proposición no puede ser evaluada; contiene constantes y operadores modales.
+
+This proposition can't be decided; it contains both constants and modal operators.
+Esta proposición no puede ser decidido; contiene constantes y operadores modales.
+
+Can't generate input for Tree Proof Generator from this proposition.
+No se puede generar una entrada para Tree Proof Generator a partir de esta proposición.
+
+<Binary Predication<BR/><B><FONT FACE="MONOSPACE">{0}</FONT></B>>
+<Predicación binaria<BR/><B><FONT FACE="MONOSPACE">{0}</FONT></B>>
+
+Can't decide a proposition that contains binary predicates.
+No puede decidir una proposición que contenga predicados binarios.
+
+<Conjunction<BR/><B><FONT FACE="MONOSPACE">&amp;</FONT></B>>
+<Conjunción<BR/><B><FONT FACE="MONOSPACE">&amp;</FONT></B>>
+
+<Disjunction<BR/><B><FONT FACE="MONOSPACE">|</FONT></B>>
+<Disyunción<BR/><B><FONT FACE="MONOSPACE">|</FONT></B>>
+
+<Equivalence<BR/><B><FONT FACE="MONOSPACE">&lt;=&gt;</FONT></B>>
+<Equivalencia<BR/><B><FONT FACE="MONOSPACE">&lt;=&gt;</FONT></B>>
+
+<Identification<BR/><B><FONT FACE="MONOSPACE">{0}</FONT></B>>
+<Identificación<BR/><B><FONT FACE="MONOSPACE">{0}</FONT></B>>
+
+<Joint Denial<BR/><B><FONT FACE="MONOSPACE">!</FONT></B>>
+<Disyunción opuesta<BR/><B><FONT FACE="MONOSPACE">!</FONT></B>>
+
+<Necessity<BR/><B><FONT FACE="MONOSPACE">[]</FONT></B>>
+<Necesidad<BR/><B><FONT FACE="MONOSPACE">[]</FONT></B>>
+
+<Negation<BR/><B><FONT FACE="MONOSPACE">~</FONT></B>>
+<Negación<BR/><B><FONT FACE="MONOSPACE">~</FONT></B>>
+
+<Argument<BR/><B><FONT FACE="MONOSPACE">.\'.</FONT></B>>
+<Argumento<BR/><B><FONT FACE="MONOSPACE">.\'.</FONT></B>>
+
+<Null Predicate<BR/><B><FONT FACE="MONOSPACE">{0}</FONT></B>>
+<Proposición<BR/><B><FONT FACE="MONOSPACE">{0}</FONT></B>>
+
+<Universal Generalization<BR/><B><FONT FACE="MONOSPACE">{0},</FONT></B>>
+<Generalización universal<BR/><B><FONT FACE="MONOSPACE">{0},</FONT></B>>
+
+<Unary Predication<BR/><B><FONT FACE="MONOSPACE">{0}</FONT></B>>
+<Predicación unario<BR/><B><FONT FACE="MONOSPACE">{0}</FONT></B>>
+
+Too many predicates!
+¡Hay demasiados predicados!
+
+Unhandled subclass of Counterexample encountered in MakeHTML: {0}
+Encontró un subclase de Contraejemplo imprevisto en MakeHTML: {0}
+
+This statement is self-contradictory; there are no examples.
+Esta fórmula es autocontradictoria; no hay ejemplos.
+
+distinct
+distinta
+
+Attempted to construct an invalid KindOfObject: some predicates are both affirmed and denied by the world.
+Intentó construir un KindOfObject que no es válido: algunos predicados son afirmados por el mundo y algunos predicados son negados por el mundo.
+
+Attempted to construct an invalid KindOfWorld: some predicates are both affirmed and denied by the object.
+Intentó construir un KindOfWorld que no es válido: algunos predicados son afirmados por el objeto y algunos predicados son negados por el objeto.
+
+Invalid replacement directive: {0}
+Directiva de reemplazo inválida: {0}
+
+No antecedents found in argument
+No se encontraron premisas en el argumento
+
+No consequents found in argument
+No se encontraron conclusiones en el argumento
+
+No content found.
+No se encontró contenido.
+
+Unhandled form of two-term proposition: {0}
+Encontró una forma de proposición de dos términos que es imprevista: {0}
+
+Couldn\'t parse a token from "{0}"
+No se pudo generar un token de "{0}"
+
+The argument is valid but its premises are inconsistent.
+El argumento es válido pero sus premisas son inconsistentes.
+
+The argument is invalid.
+El argumento no es válido.
+
+The argument is valid because its conclusion is tautological.
+El argumento es válido porque su conclusión es una tautología.
+
+The argument is valid.
+El argumento es válido.
+
+The value Quality.{0} is not supported by this application.
+Este aplicación no procesa Quality.{0}.
+
+The statement is necessarily true.
+La fórmula es verdadera necesariamente.
+
+The statement is contingent.
+La fórmula es contingente.
+
+The statement is self-contradictory.
+La fórmula es autocontradictoria.
+
+The value Alethicity.{0} is not supported by this application.
+Este aplicación no procesa Alethicity.{0}.
+
+JointDenial.TreeProofGeneratorConnector should be unreachable.
+JointDenial.TreeProofGeneratorConnector debe ser inalcanzable.
+
+Prover9 does not support modal logic.
+Prover9 no es compatible con la lógica modal.
+
+Deciding... {0:n0} of {1:n0} interpretations of predicates tested.
+Decidiendo... {0:n0} de {1:n0} interpretaciones de predicados han sido probados.
+
+Null predicate {0}. not found in proposition.
+No se encuentra la proposición {0} en la fórmula.
+
+BinaryPredicate compared to non-BinaryPredicate.
+BinaryPredicate estaba comparado con un objeto que no es un BinaryPredicate.
+
+No hash code defined for KindOfObject.
+No hay un código hash definido para KindOfObject.
+
+UnaryPredicate compared to non-UnaryPredicate.
+UnaryPredicate estaba comparado con un objeto que no es un UnaryPredicate.
+
+Attempted to assign a modality to a variable that already had a different modality assigned to it.
+Intentó asignar una modalidad a una variable que ya tenía una modalidad diferente asignada.
+
+  Decided in 
+  Decidió en 
+
+ seconds.
+ segundos.
+
+This statement is necessarily true; there are no counterexamples.
+Este fórmula es necesariamente verdadera; no hay contraejemplos.
+
+depicting...
+diagramando...
+
+No subexpressions found in "{0}".
+No encontró subexpresiones en {0}."
+
+<Material Conditional<BR/><B><FONT FACE="MONOSPACE">-&gt;</FONT></B>>
+<Condicional material<BR/><B><FONT FACE="MONOSPACE">-&gt;</FONT></B>>
+
+A Categorical Syllogism
+Un silogismo categórico
+
+// All men are mortal.\nx,Hx->Mx\n// Socrates is a man.\nHs\n// Therefore,\n.'.\n// Socrates is mortal.\nMs
+// Todo hombre es mortal.\nx,Hx->Mx\n// Sócrates es hombre.\nHs\n// Por lo tanto,\n.'.\n// Sócrates es mortal.\nMs
+
+Ordering Drinks
+Ordenando bebidas
+
+// Everyone will order tea or coffee, but not both.\nx, Tx^Cx\n// Either Jay or Kay will order coffee, but not both.\nCj^Ck\n// If Jay orders coffee, Elle will order tea.\nCj->Tl\n// Elle and Kay will not both order tea.\n~(Tl&Tk)\n//Therefore:\n.'.\n// Jay won't order coffee.\n~Cj\n// Kay won't order tea.\n~Tk
+// Cada persona pedirá o bien té o bien café.\np, Tp^Cp\n// Pedirá café o bien Xavier or o bien Yolanda.\nCx^Cy\n// Si Xavier pide café, Zacarías pedirá té.\nCx->Tz\n// Zacarías y Yolanda no pedirán ambos té.\n~(Tz&Ty)\n//Por lo tanto:\n.'.\n// Xavier no pedirá café.\n~Cx\n// Yolanda no pedirá té.\n~Ty
+
+Here, but not Here
+Aquí, pero no aquí
+
+// It's possible for something to be here but not here.\n<>3x,Hx&~Hx
+// Es posible que algo esté aquí pero no esté aquí.\n<>3x,Hx&~Hx
+
+A Formal Fallacy
+Una falacia formal
+
+// Every person is a ray of sunshine.\nx,Px->Rx\n// Every person is a being of light and shade.\nx,Px->(Lx&Sx)\n// Therefore,\n.'.\n// every being of light and shade is a ray of sunshine.\nx,(Lx&Sx)->Rx
+// Cada persona es un rayo de sol.\nx,Px->Rx\n// Cada persona es un ser de luz y sombra.\nx,Px->(Lx&Sx)\n// Por lo tanto,\n.'.\n// cada ser de luz y sombra es un rayo de sol.\nx,(Lx&Sx)->Rx
+
+NP-Complete Problems
+Problemas de NP-completo
+
+// \"If any NP-complete problem can be solved in polynomial time,\n// then all NP-complete problems can be solved in\n// polynomial time.\"\n(3x,Nx&Px) -> (x,Nx -> Px)\n\n<=> // is equivalent to\n\n// \"If two problems are NP-complete, then if one is\n// solvable in polynomial time, the other is also solvable in\n// polynomial time.\"\nx,y, (Nx&Ny) -> (Px -> Py)
+// \"Si cualquier problema de NP-completo se puede resolver en tiempo polinomial,\n// entonces todos los problemas de NP-completo se pueden resolver en\n// tiempo polinomial.\"\n(3x,Nx&Px) -> (x,Nx -> Px)\n\n<=> // es equivalente a\n\n// \"Si dos problemas son NP-completos, entonces si uno \n// se puede resolver en tiempo polinómico, el otro también se puede resolver en\n// tiempo polinómico.\"\nx,y, (Nx&Ny) -> (Px -> Py)
+
+Everything Follows&hellip;
+Ex contradictione quodlibet
+
+Ls    // Lois Lane loves Superman.\n~Lc   // Lois Lane does not love Clark Kent.\nc=s   // Clark Kent is Superman.\n\n.'.   // Therefore\n\n~Ms   // Superman never made any money saving the world from Solomon Grundy.
+Ls    // Lois Lane ama a Superman.\n~Lc   // Lois Lane no ama a Clark Kent.\nc=s   // Clark Kent es Superman.\n\n.'.   // por lo tanto,\n\n~Ms   // Superman nunca ganó dinero\n      // salvando el mundo de Solomon Grundy.
+
+Axioms of Modal Logic
+Axiomas de lógica modal
+
+// Axiom D\n[]A -> <>A\n\n// Axiom M\n[]A -> A\n\n// Axiom 4\n[]A->[][]A\n\n// Axiom B\nA -> []<>A\n\n// Axiom 5\n<>A -> []<>A\n\n// Axiom []M\n[]([]A -> A)\n\n// Axiom C4\n[][]A -> []A\n\n// Axiom C\n<>[]A -> []<>A\n\n// Axiom K\n[](A->B)->([]A->[]B)\n\n// Axiom T\n[]A -> A
+// Axioma D\n[]A -> <>A\n\n// Axioma M\n[]A -> A\n\n// Axioma 4\n[]A->[][]A\n\n// Axioma B\nA -> []<>A\n\n// Axioma 5\n<>A -> []<>A\n\n// Axioma []M\n[]([]A -> A)\n\n// Axioma C4\n[][]A -> []A\n\n// Axioma C\n<>[]A -> []<>A\n\n// Axioma K\n[](A->B)->([]A->[]B)\n\n// Axioma T\n[]A -> A
+
+// No reptiles have fur.\nMeP\n// All snakes are reptiles.\nSaM\n// Therefore\n.'.\n// some snakes have no fur.\nSoP
+// Ningún reptil tiene pelo.\nMeP\n// Todas las serpientes son reptiles.\nSaM\n// Por lo tanto,\n.'.\n// Algunas serpientes no tienen pelo.\nSoP

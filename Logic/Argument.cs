@@ -20,10 +20,10 @@ namespace Logic
     {
     }
 
-    protected override string Connector
-    {
-      get { return ".'."; }
-    }
+    //protected override string Connector
+    //{
+    //  get { return ".'."; }
+    //}
 
     internal override string DOTLabel
     {

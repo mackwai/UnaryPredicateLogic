@@ -55,14 +55,7 @@ namespace UnitTests
 
     private static void TestEngineExceptionThrown( string aStatement )
     {
-      try
-      {
-        UnitTestUtility.GetDecision( aStatement );
-        Assert.Fail( "Exception not thrown when deciding \"{0}\"", aStatement );
-      }
-      catch ( Logic.EngineException )
-      {
-      }
+      UnitTestUtility.ConfirmThrows<Logic.EngineException>( () => UnitTestUtility.GetDecision( aStatement ) );
     }
 
     [TestMethod]
@@ -503,6 +496,15 @@ namespace UnitTests
       TestPropositionIs( Logic.Alethicity.Necessary, @"1ABC	<=>	((((~A&~B)&C)|((~A&B)&~C))|((A&~B)&~C))" );
       TestPropositionIs( Logic.Alethicity.Necessary, @"2ABC	<=>	((((~A&B)&C)|((A&~B)&C))|((A&B)&~C))" );
       TestPropositionIs( Logic.Alethicity.Necessary, @"3ABC	<=>	((A&B)&C)" );
+    }
+
+    [TestMethod]
+    public void Test_LowercasePredicatesInProver9()
+    {
+      TestPropositionIs( Logic.Alethicity.Contingent, @"p" );
+      TestPropositionIs( Logic.Alethicity.Contingent, @"q" );
+      TestPropositionIs( Logic.Alethicity.Contingent, @"a" );
+      TestPropositionIs( Logic.Alethicity.Contingent, @"x" );
     }
 
   [TestMethod]

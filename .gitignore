@@ -249,3 +249,5 @@ packages/Saltarelle.Web.3.0.1/Saltarelle.Web.3.0.1.nuspec
 Parser.dll
 upl.exe
 WebApplication/Logic.js
+logic.hs
+*.zip

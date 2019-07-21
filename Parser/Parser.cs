@@ -29,7 +29,8 @@ namespace Logic
   {
     /// <summary>
     /// Parse a file containing a list of statements or a logical argument.  Ignore comments and whitespace.
-    /// Interpret each line as a statement; conjoin the statements into one statement.  If one line contains
+    /// Interpret each line as a statement, unless it has unbalanced parentheses or it starts with or ends with a boolean
+    /// binary operator, in which case; conjoin the statements into one statement.  If one line contains
     /// a binary operator, conjoin all statements before it and make them the left side of the operation and
     /// conjoin all statements after it and make them the right side of the operation.  Throw a ParseError
     /// if the text can't be parsed.
@@ -42,50 +43,23 @@ namespace Logic
       List<string> lConsequents = new List<string>();
       string lConnective = null;
 
-      ReplacementRules lReplacementRules = new ReplacementRules();
-
-      foreach ( string aLine in aFileContents )
+      foreach ( string aLine in ConnectStatementsAcrossLines( Preprocess( aFileContents ) ) )
       {
-        // Collect commands to replace strings with other strings.
-        if ( aLine.StartsWith( "#" ) )
+        if ( aLine.IsMajorOperator() )
         {
-          if ( ReplacementRules.IsReplacementDirective( aLine ) )
-          {
-            lReplacementRules.Add( aLine );
-            continue;
-          }
-          else
-          {
-            throw new ParseError( "Invalid replacement directive: {0}", aLine );
-          }
+          lConnective = aLine;
+          continue;
         }
 
-        // Get rid of comments and perform text replacements.
-        string lAdjustedLine = lReplacementRules.Apply( Utility.RegexReplace( aLine, @"//.*$", "" ) );
-
-        if ( ( lAdjustedLine.Contains( "(" ) || lAdjustedLine.Contains( ")" ) )
-          && !HasMatchingParentheses( lAdjustedLine ) )
+        if ( ( aLine.Contains( "(" ) || aLine.Contains( ")" ) ) && !HasMatchingParentheses( aLine ) )
         {
-          throw new ParseError( "Found unmatched parenthesis in \"{0}\"", lAdjustedLine );
-        }
-
-        // Get rid of whitespace.
-        lAdjustedLine = Utility.RegexReplace( lAdjustedLine, @"\s+", "" );
-
-        // Skip empty lines.
-        if ( lAdjustedLine.Length == 0 )
-          continue;
-
-        if ( lAdjustedLine.IsBinaryOperator() || lAdjustedLine.Matches( Therefore ) )
-        {
-          lConnective = lAdjustedLine;
-          continue;
+          throw new ParseError( "Found unmatched parenthesis in \"{0}\"", aLine );
         }
 
         if ( lConnective == null )
-          lAntecedents.Add( lAdjustedLine );
+          lAntecedents.Add( aLine );
         else
-          lConsequents.Add( lAdjustedLine );
+          lConsequents.Add( aLine );
       }
 
       if ( lConnective != null )
@@ -152,6 +126,10 @@ namespace Logic
     private static Regex StartsWithNecessarily = StartsWith( @"\[\]" );
     private static Regex StartsWithTwoTermProposition = StartsWith( @"~?[A-Z][aeiouy]~?[A-Z]'?" );
 
+    private const string BinaryBooleanOperator = @"(&|\||!|\^|->|<=>|-<)";
+    private static Regex StartsWithBinaryBooleanOperator = StartsWith( BinaryBooleanOperator );
+    private static Regex EndsWithBinaryBooleanOperator = EndsWith( BinaryBooleanOperator );
+
 
     private static bool AreUnariesFollowedByAQuantifier( IEnumerable<string> aExpressions )
     {
@@ -179,6 +157,11 @@ namespace Logic
     private static Regex StartsWith( string aPattern )
     {
       return new Regex( string.Format( "^{0}", aPattern ) );
+    }
+
+    private static Regex EndsWith( string aPattern )
+    {
+      return new Regex( string.Format( "{0}$", aPattern ) );
     }
 
     private static Regex StartsWithButIsNotFollowedBy( string aPattern1, string aPattern2 )
@@ -271,6 +254,32 @@ namespace Logic
       }
 
       throw new ParseError( "Couldn't parse a token from \"{0}\"", aString );
+    }
+
+    private static bool HasUnclosedParentheses( this string aString )
+    {
+      int lCount = 0;
+      bool lHasParentheses = false;
+      for ( int i = 0; i < aString.Length; i++ )
+      {
+        char lChar = aString[ i ];
+
+        switch ( lChar )
+        {
+          case '(':
+            lCount++;
+            lHasParentheses = true;
+            break;
+          case ')':
+            lCount--;
+            break;
+        }
+
+        if ( lCount < 0 )
+          return false;
+
+      }
+      return lHasParentheses && lCount > 0;
     }
 
     private static bool HasMatchingParentheses( this string aString )
@@ -559,10 +568,12 @@ namespace Logic
 
       if ( aExpression.Matches( ParenthesizedExpression ) )
       {
-        return Parse(
-          aExpression.Substring( 1, aExpression.Length - 2 ).GetSubexpressions(),
-          aCollectedItems,
-          aBoundVariables );
+        string[] lSubexpressions = aExpression.Substring( 1, aExpression.Length - 2 ).GetSubexpressions();
+
+        if ( lSubexpressions.Length == 0 )
+          throw new ParseError( "No subexpressions found in \"{0}\".", aExpression );
+
+        return Parse( lSubexpressions, aCollectedItems, aBoundVariables );
       }
 
       throw new ParseError( "Expected predication or parenthesized expression, found \"{0}\"", aExpression );
@@ -602,6 +613,72 @@ namespace Logic
       
       // The program should never reach this point.
       throw new Exception();
+    }
+
+    private static IEnumerable<string> Preprocess( IEnumerable<string> aFileContents )
+    {
+      ReplacementRules lReplacementRules = new ReplacementRules();
+
+      foreach ( string aLine in aFileContents )
+      {
+        // Collect commands to replace strings with other strings.
+        if ( aLine.StartsWith( "#" ) )
+        {
+          if ( ReplacementRules.IsReplacementDirective( aLine ) )
+          {
+            lReplacementRules.Add( aLine );
+            continue;
+          }
+          else
+          {
+            throw new ParseError( "Invalid replacement directive: {0}", aLine );
+          }
+        }
+
+        // Remove comments and perform text replacements.
+        string lAdjustedLine = lReplacementRules.Apply( Utility.RegexReplace( aLine, @"//.*$", "" ) );
+
+        // Remove whitespace.
+        lAdjustedLine = Utility.RegexReplace( lAdjustedLine, @"\s+", "" );
+
+        // Skip empty lines.
+        if ( lAdjustedLine.Length != 0 )
+          yield return lAdjustedLine;
+      }
+    }
+
+    private static bool IsMajorOperator( this string aLine )
+    {
+      return aLine.Matches( Therefore ) || aLine.IsBinaryOperator();
+    }
+
+    private static IEnumerable<string> ConnectStatementsAcrossLines( IEnumerable<string> aPreprocessedLines )
+    {
+      if ( aPreprocessedLines.Count() == 0 )
+        yield break;
+
+      string lCurrentString = aPreprocessedLines.First();
+
+      foreach( string lLine in aPreprocessedLines.Skip(1) )
+      {
+        if ( lLine.IsMajorOperator()
+          || lCurrentString.IsMajorOperator()
+          || ( !lCurrentString.HasUnclosedParentheses()
+            && !lCurrentString.Matches( EndsWithBinaryBooleanOperator )
+            && !lLine.Matches( StartsWithBinaryBooleanOperator ) ) )
+        {
+          if ( lCurrentString.Length > 0 )
+          {
+            yield return lCurrentString;
+            lCurrentString = "";
+          }
+        }
+
+        lCurrentString += lLine;
+      }
+
+      if ( lCurrentString.Length > 0 )
+        yield return lCurrentString;
     }
   }
 }

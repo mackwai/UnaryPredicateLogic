@@ -36,9 +36,11 @@
 
 <h2 id="introduction">Introduction</h2>
 
-<p>This web application (hereinafter referred to as &quot;the software&quot; or &quot;application&quot;) decides the validity/satisfiablity/inconsistency of certain kinds of statements in symbolic logic.</p>
+<p>This web application (herein referred to as &quot;the software&quot; or &quot;application&quot;) decides the validity/satisfiablity/inconsistency of certain kinds of statements in symbolic logic.</p>
 
 <p>Most of the software is written in C# and translated into JavaScript with <a href="http://www.saltarelle-compiler.com/" target="_blank">Saltarelle</a>.  The source code is on <a href="https://github.com/mackwai/UnaryPredicateLogic" target="_blank">GitHub</a>.  <a href="https://github.com/mdaines/viz.js/">Viz.js</a> is used to generate diagrams.  The truth table feature is adapted from <a href="https://github.com/mrieppel/TruthTableGenerator" target="_blank">code</a> written by Michael Rieppel.</p>
+
+<p>Thanks to Maximiliano Paesani for his help in translating the web application into Spanish.  <em>Gracias a Maximiliano Paesani para su ayuda en la traducción de esta aplicación.</em></p>
 
 <h2 id="instructions">Instructions</h2>
 
@@ -80,9 +82,9 @@ If you want to evaluate a statement that contains binary predicates (relations),
   <li><a href="#language_universal_generalization">Universal generalizations</a>, <a href="#language_existential_quantification">existential quantifications</a> and <a href="#language_definite_description">definite descriptions</a></li>
   <li><a href="#language_identity">Identity</a></li>
   <li><a href="#language_modal_operators">The modal operators for necessity and possibility</a></li>
-  <li><a href="#language_two_term_propositions">Two-term Propositions</a></li>
+  <li><a href="#language_two_term_propositions">Two-term propositions</a></li>
   <li><a href="#language_assertions_of_number">Some simple assertions of number</a></li>
-  <li><a href="#text_replacements">Text Replacements</a></li>
+  <li><a href="#text_replacements">Text replacements</a></li>
   <li><a href="#language_therefore">A "therefore" symbol</a></li>
 </ul>
 
@@ -328,7 +330,26 @@ Ms</pre>
 
 <pre class="symbolic">( (Hx-&gt;Mx) &amp; Hs ) -&gt; (Ms)</pre>
 
-<p>This enables you to express a logical argument - several premises followed by a conclusion - in a familiar way, or test if one set of statements is equivalent to another set of statements without cramming them all on one line.</p>
+<p>This enables you to express a logical argument - several premises followed by a conclusion - in a familiar way, or test if one set of statements is equivalent to another set of statements without putting them all on one line.</p>
+
+<p>Long statements can be broken up across several lines.  The software will interpret text on several lines as one statement according to the following rules:</p>
+<ul>
+  <li>If a line starts between opening and closing parentheses, it will be joined with the preceding line.</li>
+  <li>If a line ends with a binary operator, it will be joined to the next line.</li>
+  <li>If a line begins with a binary operator, it will be joined with the preceding line.</li>
+<p>For example, the following text blocks are all interpreted the same way:</p>
+
+<ul>
+  <li><pre class="symbolic">x,Ax|Bx|Cx</pre></li>
+  <li><pre class="symbolic">x,Ax
+|Bx
+|Cx</pre></li>
+<li><pre class="symbolic">x,Ax|
+Bx|
+Cx</pre></li>
+  <li><pre class="symbolic">(x,
+Ax|Bx|Cx)</pre></li>
+</ul>
 
 <h4>Whitespace</h4>
 
@@ -361,8 +382,8 @@ Ms     // Socrates is mortal.</pre>
 
 <ul>
   <li>The language should only use basic ASCII characters which are available on a standard English keyboard, so typing expressions in the language is easy.</li>
-  <li>The language should be terse in such a way that it is fast to type but not generally difficult to read.</li>
-  <li>The language should enable a person to arrange expressions in such a way that they are readable.</li>
+  <li>The language's constructs should use few characters so they can be typed quickly.</li>
+  <li>The language should enable a person to arrange statement in such a way that it is easy to read.</li>
   <li>The symbols defined in the language should have a precedent in other languages.  The symbols in this language are borrowed from conventional symbolic logic, conventional mathematical notation, and the C programming language.</li>
 </ul>
 
