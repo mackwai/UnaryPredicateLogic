@@ -40,14 +40,14 @@ namespace UnitTests
     private static void LaunchTreeProofGeneratorPage( string aStatement )
     {
       System.Diagnostics.Process.Start(
-        string.Format( "http://www.umsu.de/logik/trees/?f={0}",
+        string.Format( "http://www.umsu.de/logik/trees/#{0}",
         Parser.Parse( aStatement.Split( '\n' ) ).TreeProofGeneratorInput ) );
     }
 
     private static void ConfirmExceptionThrown( string aStatement )
     {
       System.Diagnostics.Process.Start(
-        string.Format( "http://www.umsu.de/logik/trees/?f={0}",
+        string.Format( "http://www.umsu.de/logik/trees/#{0}",
         Parser.Parse( aStatement.Split( '\n' ) ).TreeProofGeneratorInput ) );
     }
 
@@ -84,7 +84,13 @@ namespace UnitTests
     [TestMethod]
     public void Test_LaunchNecessity()
     {
-      TestEngineExceptionThrown( "[]Y" );
+      LaunchTreeProofGeneratorPage( "[]Y" );
+    }
+
+    [TestMethod]
+    public void Test_LaunchPossibility()
+    {
+      LaunchTreeProofGeneratorPage( "<>Y" );
     }
   }
 }

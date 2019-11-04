@@ -661,7 +661,7 @@ namespace Logic
 
       foreach( string lLine in aPreprocessedLines.Skip(1) )
       {
-        if ( lLine.IsMajorOperator()
+        if ( ( lLine.IsMajorOperator() && !lCurrentString.HasUnclosedParentheses() )
           || lCurrentString.IsMajorOperator()
           || ( !lCurrentString.HasUnclosedParentheses()
             && !lCurrentString.Matches( EndsWithBinaryBooleanOperator )

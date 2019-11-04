@@ -68,7 +68,7 @@ namespace Logic
     {
       get
       {
-        return string.Format( @"(\neg {0})", mInnerMatrix.TreeProofGeneratorInput );
+        return string.Format( @"(%C2%AC{0})", mInnerMatrix.TreeProofGeneratorInput );
       }
     }
   }

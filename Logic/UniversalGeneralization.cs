@@ -133,7 +133,7 @@ namespace Logic
 
     public override string TreeProofGeneratorInput
     {
-      get { return String.Format( @"(\forall {0} {1})", mVariable, mInnerMatrix.TreeProofGeneratorInput ); }
+      get { return String.Format( @"(%E2%88%80{0}({1}))", mVariable, mInnerMatrix.TreeProofGeneratorInput ); }
     }
 
     public override string ToString()

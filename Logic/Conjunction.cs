@@ -37,7 +37,7 @@ namespace Logic
 
     protected override string TreeProofGeneratorConnector
     {
-      get { return @"\land"; }
+      get { return @"%E2%88%A7"; }
     }
 
     internal override string DOTLabel

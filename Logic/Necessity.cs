@@ -108,5 +108,13 @@ namespace Logic
     {
       return new Necessity( mInnerMatrix.Substitute( aVariable, aReplacement ) );
     }
+
+    public override string TreeProofGeneratorInput
+    {
+      get
+      {
+        return string.Format( "%E2%96%A1{0}", mInnerMatrix.TreeProofGeneratorInput );
+      }
+    }
   }
 }

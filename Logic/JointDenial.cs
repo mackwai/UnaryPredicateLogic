@@ -55,7 +55,7 @@ namespace Logic
 
     public override string TreeProofGeneratorInput
     {
-      get { return String.Format( @"(neg\( {0} \lor {1}) ))", Left.TreeProofGeneratorInput, Right.TreeProofGeneratorInput ); }
+      get { return String.Format( @"(%C2%AC({0}%E2%88%A8{1})))", Left.TreeProofGeneratorInput, Right.TreeProofGeneratorInput ); }
     }
 
     protected override string TreeProofGeneratorConnector

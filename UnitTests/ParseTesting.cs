@@ -283,6 +283,21 @@ namespace UnitTests
          "(~p->~q)",
          ".'.",
          "~q" } ).ToString() );
+
+      Assert.AreEqual(
+        @"(A<=>A)",
+        Logic.Parser.Parse( new string[] {
+         "( A",
+         "<=>",
+         "A )" } ).ToString() );
+
+      Assert.AreEqual(
+        @"(A<=>A)",
+        Logic.Parser.Parse( new string[] {
+         "( A",
+         "<=>",
+         "A ",
+         ")" } ).ToString() );
     }
 
     [TestMethod]

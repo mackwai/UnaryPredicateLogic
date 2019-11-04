@@ -65,7 +65,7 @@ namespace Logic
       get
       {
         return String.Format(
-          "({0} {1} {2})",
+          "({0}{1}{2})",
           Left.TreeProofGeneratorInput,
           TreeProofGeneratorConnector,
           Right.TreeProofGeneratorInput );
