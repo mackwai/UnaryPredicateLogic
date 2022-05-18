@@ -27,10 +27,13 @@ namespace Logic
   internal class Necessity : UnaryOperator
   {
     private sbyte[] mTruthValues = null;
+    private readonly bool Memoizible;
 
     internal Necessity( Matrix aMatrix )
       : base( aMatrix )
     {
+      Memoizible = !mInnerMatrix.ContainsModalities && !this.FreeVariables.Any();
+
       if ( Memoizible )
         mTruthValues = Utility.CreateSByteArray( 1 << 16 );
 
@@ -60,11 +63,6 @@ namespace Logic
           mInnerMatrix.MaxmimumNumberOfModalitiesInIdentifications,
           mInnerMatrix.FreeModalities.Intersect( mInnerMatrix.ModalitiesInIdentifications ).Count() );
       }
-    }
-
-    private bool Memoizible
-    {
-      get { return !mInnerMatrix.ContainsModalities && !this.FreeVariables.Any(); }
     }
 
     internal override int DepthOfLoopNesting
@@ -98,11 +96,11 @@ namespace Logic
     {
       throw new EngineException( "Prover9 does not support modal logic." );
     }
-	  
-	  public override string ToString()
-	  {
-	    return string.Format( "[]{0}", mInnerMatrix );
-	  }
+    
+    public override string ToString()
+    {
+      return string.Format( "[]{0}", mInnerMatrix );
+    }
 
     internal override Matrix Substitute( Variable aVariable, Variable aReplacement )
     {

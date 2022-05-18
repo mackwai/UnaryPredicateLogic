@@ -24,16 +24,16 @@ namespace Logic
   /// <summary>
   /// a factory which controls the creation of Variables, Predicates and Matrices.
   /// </summary>
-	public class Factory
-	{
-	  /// <summary>
-	  /// Create a variable with a letter assigned to it, so a string representation can be created for it.
-	  /// </summary>
+  public class Factory
+  {
+    /// <summary>
+    /// Create a variable with a letter assigned to it, so a string representation can be created for it.
+    /// </summary>
     /// <param name="aLetter">a lowercase letter that stands for the variable</param>
-	  public static Variable Variable( char aLetter )
-	  {
-	    return new Variable( aLetter );
-	  }
+    public static Variable Variable( char aLetter )
+    {
+      return new Variable( aLetter );
+    }
 
     /// <summary>
     /// Create a Binary predicate.
@@ -43,15 +43,15 @@ namespace Logic
     {
       return new BinaryPredicate( aLetter );
     }
-	  
-	  /// <summary>
-	  /// Create a unary predicate.
-	  /// </summary>
+    
+    /// <summary>
+    /// Create a unary predicate.
+    /// </summary>
     /// <param name="aLetter">A capital letter that stands for the predicate</param>
-	  public static UnaryPredicate UnaryPredicate( char aLetter )
-	  {
-	    return new UnaryPredicate( aLetter );
-	  }
+    public static UnaryPredicate UnaryPredicate( char aLetter )
+    {
+      return new UnaryPredicate( aLetter );
+    }
 
     /// <summary>
     /// Create a null predicate.
@@ -61,17 +61,17 @@ namespace Logic
     {
       return new NullPredicate( aLetter );
     }
-	  
-	  /// <summary>
-	  /// Create a predication on a single variable.
-	  /// </summary>
-	  /// <param name="aPredicate">a predicate</param>
-	  /// <param name="aVariable">a variable</param>
-	  /// <returns>a new predication</returns>
-	  public static Matrix Predication( UnaryPredicate aPredicate, Variable aVariable )
-	  {
-	    return new UnaryPredication( aPredicate, aVariable );
-	  }
+    
+    /// <summary>
+    /// Create a predication on a single variable.
+    /// </summary>
+    /// <param name="aPredicate">a predicate</param>
+    /// <param name="aVariable">a variable</param>
+    /// <returns>a new predication</returns>
+    public static Matrix Predication( UnaryPredicate aPredicate, Variable aVariable )
+    {
+      return new UnaryPredication( aPredicate, aVariable );
+    }
 
     /// <summary>
     /// Create a predication on two variables.
@@ -144,8 +144,8 @@ namespace Logic
     /// <param name="aOthers">more matrices to conjoin with aLeft and aRight</param>
     public static Matrix And( Matrix aLeft, Matrix aRight, params Matrix[] aOthers )
     {
-      //	    if ( aOthers.Length == 0 )
-      //	      return Nor( Not( aLeft ), Not( aRight ) );
+      //      if ( aOthers.Length == 0 )
+      //        return Nor( Not( aLeft ), Not( aRight ) );
       if ( aOthers.Length == 0 )
         return new Conjunction( aLeft, aRight );
       else
@@ -173,8 +173,8 @@ namespace Logic
     /// </summary>
     public static Matrix Or( Matrix aLeft, Matrix aRight, params Matrix[] aOthers )
     {
-      //	    if ( others.Length == 0 )
-      //	      return Not( Nor( aLeft, aRight ) );
+      //      if ( others.Length == 0 )
+      //        return Not( Nor( aLeft, aRight ) );
       if ( aOthers.Length == 0 )
         return new Disjunction( aLeft, aRight );
       else

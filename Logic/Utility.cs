@@ -18,7 +18,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#if SALTARELLE
 using System.Runtime.CompilerServices;
+#endif
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -33,6 +35,11 @@ namespace Logic
   /// </summary>
   public static class Utility
   {
+    public static IEnumerable<T> AtIndices<T>( this IEnumerable<T> aSequence, IEnumerable<int> aIndices )
+    {
+      return aSequence.Where( ( fItem, fIndex ) => aIndices.Contains( fIndex ) );
+    }
+
     public static bool IsOneOf<T>( this T aItem, params T[] aItems )
     {
       return aItems.Any( fItem => fItem.Equals( aItem ) );
@@ -46,6 +53,16 @@ namespace Logic
     public static bool Intersects<T>( this IEnumerable<T> aSet1, IEnumerable<T> aSet2 )
     {
       return aSet1.Intersect( aSet2 ).Count() > 0;
+    }
+
+    public static int Product( this IEnumerable<int> aNumbers )
+    {
+      return aNumbers.Aggregate( 1, (f1,f2) => f1*f2, fResult => fResult );
+    }
+
+    public static int Sum( this IEnumerable<int> aNumbers )
+    {
+      return aNumbers.Aggregate( 0, (f1,f2) => f1+f2, fResult => fResult );
     }
 
     public static T[] Subarray<T>( this T[] aArray, int aStartingIndex, int aLength )

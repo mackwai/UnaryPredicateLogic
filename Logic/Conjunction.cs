@@ -59,5 +59,10 @@ namespace Logic
     {
       return new Conjunction( Left.Substitute( aVariable, aReplacement ), Right.Substitute( aVariable, aReplacement ) );
     }
+
+    internal override CoefficientVector CoefficientVectorForOperator
+    {
+      get { return Logic.CoefficientVector.AND; }
+    }
   }
 }

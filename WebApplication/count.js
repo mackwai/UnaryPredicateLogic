@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2016 MacKenzie Cumings
+// Copyright (C) 2016, 2019 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,8 +15,6 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-var initialReferrer = document.referrer;
-
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -24,8 +22,3 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
 ga('create', 'UA-56050397-1', 'auto');
 ga('send', 'pageview', location.pathname);
-
-if ( initialReferrer.length > 0 && !initialReferrer.match(/^https?:\/\/(www\.)?somerby\.net\/mack/i) )
-{
-	ga('send', 'event', 'Real', 'referrer', initialReferrer);
-}

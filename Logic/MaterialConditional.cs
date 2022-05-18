@@ -62,5 +62,10 @@ namespace Logic
         this.Left.MakeProver9Formulas( aTranslatedVariableNames ),
         this.Right.Prover9InputHelper( aTranslatedVariableNames ) );
     }
+
+    internal override CoefficientVector CoefficientVectorForOperator
+    {
+      get { return Logic.CoefficientVector.IMPL; }
+    }
   }
 }

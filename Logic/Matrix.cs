@@ -30,8 +30,8 @@ namespace Logic
   /// from Quine's book, <i>Mathematical Logic</i>, though he defines it as a string of symbols that signifies some proposition.
   /// In this program, a matrix is a data structure.  
   /// </summary>
-	public abstract class Matrix : NamedObject
-	{
+  public abstract class Matrix : NamedObject
+  {
     private uint? mLastExampleFound = null;
     private bool mExampleMightBe = true;
     private uint? mLastCounterexampleFound = null;
@@ -528,7 +528,7 @@ namespace Logic
       get { yield break; }
     }
 
-    internal abstract IEnumerable<NullPredicate> NullPredicates { get; }	
+    internal abstract IEnumerable<NullPredicate> NullPredicates { get; }  
 
     internal abstract IEnumerable<UnaryPredicate> UnaryPredicates { get; }
 
@@ -563,7 +563,20 @@ namespace Logic
     }
 
     internal abstract Matrix Substitute( Variable aVariable, Variable aReplacement );
-	}
+
+    internal virtual CoefficientVector CoefficientVectorHelper( NullPredicate[] aNullPredicates )
+    {
+      throw new NotImplementedException( "Coefficient vectors are only defined for statements that only have nullary predicates and truth-functional operators." );
+    }
+
+    public CoefficientVector CoefficientVector
+    {
+      get
+      {
+        return CoefficientVectorHelper( NullPredicates.OrderBy( fPredicate => fPredicate.ToString() ).ToArray() );
+      }
+    }
+  }
 
   /// <summary>
   /// possible alethic modalities

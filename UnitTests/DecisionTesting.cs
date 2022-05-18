@@ -489,13 +489,13 @@ namespace UnitTests
     [TestMethod]
     public void Test_NumberedPropositions()
     {
-      TestPropositionIs( Logic.Alethicity.Necessary, @"0AB	<=>	(~A&~B)" );
-      TestPropositionIs( Logic.Alethicity.Necessary, @"1AB	<=>	((~A&B)|(A&~B))" );
-      TestPropositionIs( Logic.Alethicity.Necessary, @"2AB	<=>	(A&B)" );
-      TestPropositionIs( Logic.Alethicity.Necessary, @"0ABC	<=>	((~A&~B)&~C)" );
-      TestPropositionIs( Logic.Alethicity.Necessary, @"1ABC	<=>	((((~A&~B)&C)|((~A&B)&~C))|((A&~B)&~C))" );
-      TestPropositionIs( Logic.Alethicity.Necessary, @"2ABC	<=>	((((~A&B)&C)|((A&~B)&C))|((A&B)&~C))" );
-      TestPropositionIs( Logic.Alethicity.Necessary, @"3ABC	<=>	((A&B)&C)" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"0AB  <=>  (~A&~B)" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"1AB  <=>  ((~A&B)|(A&~B))" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"2AB  <=>  (A&B)" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"0ABC  <=>  ((~A&~B)&~C)" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"1ABC  <=>  ((((~A&~B)&C)|((~A&B)&~C))|((A&~B)&~C))" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"2ABC  <=>  ((((~A&B)&C)|((A&~B)&C))|((A&B)&~C))" );
+      TestPropositionIs( Logic.Alethicity.Necessary, @"3ABC  <=>  ((A&B)&C)" );
     }
 
     [TestMethod]

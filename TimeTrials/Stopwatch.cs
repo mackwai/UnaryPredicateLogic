@@ -19,11 +19,11 @@ using System;
 
 namespace Logic
 {
-	/// <summary>
-	/// A class that encapsulates simple functionality for measuring elapsed time within the code.
-	/// </summary>
-	public class Stopwatch
-	{
+  /// <summary>
+  /// A class that encapsulates simple functionality for measuring elapsed time within the code.
+  /// </summary>
+  public class Stopwatch
+  {
     /// <summary>
     /// the time at which the stopwatch was last started
     /// </summary>
@@ -48,5 +48,5 @@ namespace Logic
         return DateTime.Now - oStartTime;
       }
     }
-	}
+  }
 }

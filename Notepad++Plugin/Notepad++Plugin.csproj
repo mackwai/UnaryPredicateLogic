@@ -28,7 +28,7 @@
     <RootNamespace>Logic</RootNamespace>
     <AssemblyName>Notepad++Plugin</AssemblyName>
     <OutputPath>bin\Debug\</OutputPath>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -81,6 +81,9 @@
     </Compile>
     <Compile Include="..\Logic\BinaryPredication.cs">
       <Link>BinaryPredication.cs</Link>
+    </Compile>
+    <Compile Include="..\Logic\CoefficientVector.cs">
+      <Link>CoefficientVector.cs</Link>
     </Compile>
     <Compile Include="..\Logic\Conjunction.cs">
       <Link>Conjunction.cs</Link>
@@ -217,6 +220,7 @@
   <Import Project="$(MSBuildProjectDirectory)\DllExport\NppPlugin.DllExport.targets" />
   <PropertyGroup>
     <PreBuildEvent>echo "$(Platform)"
+echo "Parameters for DllExportTask in NppPlugin.DllExport.targets"
 echo "$(PlatformTarget)"
 echo "$(CpuType)"
 echo "$(DebugSymbols)"

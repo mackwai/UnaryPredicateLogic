@@ -14,14 +14,16 @@ REM
 REM  You should have received a copy of the GNU General Public License along
 REM  with this program; if not, write to the Free Software Foundation, Inc.,
 REM  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+set PLUGIN_NAME=SymbolicLogic
 
 cd WebApplication
 del "Notepad++Plugin.zip"
 mkdir Plugin\Config
-copy "..\Notepad++Plugin\bin\Release\Notepad++Plugin.dll" .\Plugin\SymbolicLogic.dll
+mkdir Plugin\%PLUGIN_NAME%
+copy "..\Notepad++Plugin\bin\Release\Notepad++Plugin.dll" .\Plugin\%PLUGIN_NAME%\%PLUGIN_NAME%.dll
 copy "C:\Program Files (x86)\Notepad++\plugins\Config\Decide.bmp" .\Plugin\Config\Decide.bmp
 cd Plugin
-"C:\Program Files\7-Zip\7z.exe" u "..\Notepad++Plugin.zip" SymbolicLogic.dll Config
+"C:\Program Files\7-Zip\7z.exe" u "..\Notepad++Plugin.zip" %PLUGIN_NAME% Config
 cd ..
 rmdir /Q /S Plugin
 cd ..

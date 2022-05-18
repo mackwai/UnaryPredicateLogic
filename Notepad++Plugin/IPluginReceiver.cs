@@ -1,5 +1,5 @@
 // somerby.net/mack/logic
-// Copyright (C) 2015 MacKenzie Cumings
+// Copyright (C) 2015, 2019 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -41,9 +41,12 @@ namespace Logic
     /// application to depict the selected text in the application's active document as a graph</param>
     /// <param name="aExecuteProver9OnActiveDocument">an action that the application should execute when the user commands the
     /// application to try to prove the contents of the active buffer with Prover9.</param>
+    /// <param name="aCalculateCoefficientVector">an action that the application should execute when the user commands the
+    /// application to calculate a coefficient vector for a propositional formula.</param>
     void Install(
       Action aDecideContentsOfActiveDocument,
       Action aDecideSelectedText,
+      Action aCalculateCoefficientVector,
       Action aDepictContentsOfActiveDocument,
       Action aDepictSelectedText,
       Action aExecuteProver9OnActiveDocument );

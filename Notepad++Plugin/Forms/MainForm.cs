@@ -63,6 +63,7 @@ namespace Logic
       mApplication.Install(
         DecideActiveBuffer,
         DecideSelectedText,
+        CalculateCoefficientVector,
         lDepictionAvailable ? DepictActiveBuffer : (Action) null,
         lDepictionAvailable ? DepictSelectedText : (Action) null,
         lProver9Available ? ExecuteProver9OnActiveBuffer : (Action) null );
@@ -87,6 +88,18 @@ namespace Logic
         string lActiveFileName = mApplication.NameOfActiveDocument;
         this.Log( "Deciding {0}...", lActiveFileName );
         this.Log( Logic.Utility.StatementOfResult( Logic.Parser.Parse( mApplication.ContentsOfActiveDocument.Split( '\n' ) ) ) );
+      } );
+    }
+
+    private void CalculateCoefficientVector()
+    {
+      ActOnDialog( () =>
+      {
+        string lActiveFileName = mApplication.NameOfActiveDocument;
+        this.Log( "Calculating coefficients for {0}...", lActiveFileName );
+        CoefficientVector lCoefficientVector = Parser.Parse( mApplication.ContentsOfActiveDocument.Split( '\n' ) ).CoefficientVector;
+        this.Log( lCoefficientVector.ToString() );
+        this.Log( lCoefficientVector.Formula );
       } );
     }
 

@@ -108,6 +108,7 @@
     <Compile Include="Equivalence.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="Predicates.cs" />
+    <Compile Include="CoefficientVector.cs" />
     <Compile Include="ReferenceComparer.cs" />
     <Compile Include="Term.cs" />
     <Compile Include="UniversalGeneralization.cs" />

@@ -8,7 +8,7 @@ found at http://www.somerby.net/mack/logic/
 
 INSTRUCTIONS FOR BUILDING THE SOFTWARE
 
-1. Install Microsoft Visual Studio Express 2013 for Windows Desktop or
+1. Install Microsoft Visual Studio Community 2022 for Windows Desktop or
    some equivalent.
 
 2. Open the Visual Studio solution file named "Logic.sln".
@@ -25,6 +25,14 @@ INSTRUCTIONS FOR BUILDING THE SOFTWARE
 > Install-Package Saltarelle.Compiler
 > Install-Package Saltarelle.Runtime
 > Install-Package Saltarelle.Web
+
+4. For Saltarelle to work, you may need to install Microsoft.Build.dll and
+   Microsoft.Build.Framework.dll in the GAC.  To do this, open a command prompt
+   in administrator mode and use gacutil.exe to install them, e.g.:
+
+> cd "C:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin"
+> "C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools\gacutil.exe" /i Microsoft.Build.dll
+> "C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools\gacutil.exe" /i Microsoft.Build.Framework.dll
  
 
 CONTENTS

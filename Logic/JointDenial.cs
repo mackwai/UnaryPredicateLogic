@@ -23,14 +23,14 @@ namespace Logic
   /// <summary>
   /// a joint denial
   /// </summary>
-	internal class JointDenial : BinaryOperator
-	{
+  internal class JointDenial : BinaryOperator
+  {
     internal JointDenial( Matrix aLeft, Matrix aRight )
       : base( aLeft, aRight )
     {
     }
 
-	  protected override string Connector
+    protected override string Connector
     {
       get { return "!"; }
     }
@@ -39,11 +39,11 @@ namespace Logic
     {
       get { return "<Joint Denial<BR/><B><FONT FACE=\"MONOSPACE\">!</FONT></B>>"; }
     }
-	
-		internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
-		{
+  
+    internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
+    {
       return !Left.TrueIn( aInterpretation, aKindOfWorld, aPredicates ) && !Right.TrueIn( aInterpretation, aKindOfWorld, aPredicates );
-		}
+    }
 
     internal override string Prover9InputHelper( Dictionary<char, string> aTranslatedVariableNames )
     {
@@ -67,5 +67,10 @@ namespace Logic
     {
       return new JointDenial( Left.Substitute( aVariable, aReplacement ), Right.Substitute( aVariable, aReplacement ) );
     }
-	}
+
+    internal override CoefficientVector CoefficientVectorForOperator
+    {
+      get { return Logic.CoefficientVector.NOR; }
+    }
+  }
 }

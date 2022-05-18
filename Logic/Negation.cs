@@ -71,5 +71,12 @@ namespace Logic
         return string.Format( @"(%C2%AC{0})", mInnerMatrix.TreeProofGeneratorInput );
       }
     }
+
+    internal override CoefficientVector CoefficientVectorHelper( NullPredicate[] aNullPredicates )
+    {
+      return Logic.CoefficientVector.Apply(
+        Logic.CoefficientVector.NOT,
+        mInnerMatrix.CoefficientVectorHelper( aNullPredicates ) );
+    }
   }
 }

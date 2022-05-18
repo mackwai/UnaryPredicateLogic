@@ -24,14 +24,13 @@
 <title>A Logic Calculator</title>
 <meta name="description" content="a web application that decides statements in symbolic logic including modal logic, propositional logic and unary predicate logic">
 
-<link rel="stylesheet" href="screen.css" type="text/css" media="Screen" />
-<link rel="stylesheet" href="mobile.css" type="text/css" media="handheld" />
+<link rel="stylesheet" href="style.css" type="text/css" />
 
 <script type="text/javascript">
   var language = navigator.language || navigator.userLanguage;
-  document.location.href = language.startsWith( "es-" )
+  document.location.href = ( language.startsWith( "es-" )
    ? "./es/index.html"
-   : "./en/index.html";  
+   : "./en/index.html" ) + location.search;
 </script>
 
 </head>
@@ -43,6 +42,8 @@
 
 <div id="main">
 [<a href="./en/index.html">English</a>|<a href="./es/index.html">Español</a>]
+</div>
+
 </div>
 
 </body>

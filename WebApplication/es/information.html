@@ -21,232 +21,225 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>Documentation for somerby.net/mack/logic</title>
+<title>Información por somerby.net/mack/logic</title>
 
-<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" href="../style.css" type="text/css" />
 
 </head>
 <body onload="sgnimuc()">
 
 <div id="text_column">
 
-<h3><a href="index.html">&#8666; home</a></h3>
+<h3><a href="index.html">&#8666; Inicio</a></h3>
 
 <h1>somerby.net/mack/logic</h1>
 
-<h2 id="introduction">Introduction</h2>
+<h2 id="introduction">Introducción</h2>
 
-<p>This web application (hereinafter referred to as &quot;the software&quot; or &quot;application&quot;) decides the validity/satisfiablity/inconsistency of certain kinds of statements in symbolic logic.</p>
+<p>Esta aplicación web (en lo sucesivo denominada "el software" o "la aplicación") decide la validez / satisfacibilidad / inconsistencia de ciertos tipos de expresiones de la lógica simbólica.</p>
 
-<p>Most of the software is written in C# and translated into JavaScript with <a href="http://www.saltarelle-compiler.com/" target="_blank">Saltarelle</a>.  The source code is on <a href="https://github.com/mackwai/UnaryPredicateLogic" target="_blank">GitHub</a>.  <a href="https://github.com/mdaines/viz.js/">Viz.js</a> is used to generate diagrams.  The truth table feature is adapted from <a href="https://github.com/mrieppel/TruthTableGenerator" target="_blank">code</a> written by Michael Rieppel.</p>
+<p>La mayor parte del software está escrito en C# y traducido a JavaScript con <a href="http://www.saltarelle-compiler.com/" target="_blank">Saltarelle</a>.  El código fuente está en <a href="https://github.com/mackwai/UnaryPredicateLogic" target="_blank">GitHub</a>.  Se utiliza <a href="https://github.com/mdaines/viz.js/">Viz.js</a> para generar los diagramas.  La función que hace tablas de verdad está adaptada del <a href="https://github.com/mrieppel/TruthTableGenerator" target="_blank">código</a> escrito por Michael Rieppel.</p>
 
-<h2 id="instructions">Instructions</h2>
+<p>Agradezco a Maximiliano Paesani su ayuda en la traducción de la aplicación web al español.</em></p>
 
-<p>To use this application, type a logical statement into the textbox on the main page, then click the "Decide" button.
-If the application can decide the statement, it will.  Otherwise, it will show some kind of error message describing what went wrong.
-The <a href="#the_language">language section</a> explains how to write logical statements for this application.
-If you're looking for examples of statements, click on any of the buttons under the heading entitled "Examples" and the application will fill the text box with an example statement, ready to be decided.</p>
+<h2 id="instructions">Instrucciones</h2>
 
-<p>If you click "Depict" button, the application will draw a diagram that shows how the application interprets the statement in the textbox.
-This diagram is a graphical representation of the data structure that the application actually uses to decide the statement.</p>
+<p>Para usar esta aplicación, escriba una expresión lógica en el cuadro de texto de la página principal. Luego haga clic en el botón "Decidir". Si la expresión es decidible en la aplicación, se obtendrá un resultado. De lo contrario, mostrará algún tipo de mensaje de error explicando cuál es el error. La sección <a href="#the_language">'El lenguaje'</a> explica cómo escribir expresiones lógicas para esta aplicación. Si está buscando ejemplos de expresiones, haga clic en cualquiera de los botones bajo el encabezado titulado "Ejemplos", y la aplicación llenará el cuadro de texto con algún ejemplo de expresión listo para ser decidido.</p>
 
-<p>If there is a syntactically valid propositional logic statement in the textbox, the "Truth Table" button will be enabled.
-Clicking this button will cause the application to draw a <a href="http://en.wikipedia.org/wiki/Truth_table" target="_blank">truth table</a> for the statement.</p>
+<p>Si hace clic en el botón "Diagramar", la aplicación mostrará un diagrama que explicita cómo la aplicación interpreta la expresión escrita en el cuadro de texto. El diagrama es una representación gráfica de la estructura de datos que la aplicación está usando efectivamente para decidir la expresión.</p>
 
-<p>Clicking the "Example" button will cause the application to attempt to find a kind of world where the statement is true.
-If it succeeds, it will show a description of that kind of world.</p>
+<p>Si en el cuadro de texto hay una expresión sintácticamente válida perteneciente a la lógica proposicional, se habilitará el botón "Tabla de verdad". Al hacer clic en este botón, la aplicación generará una <a href="http://en.wikipedia.org/wiki/Truth_table" target="_blank">tabla de verdad</a> para esa expresión.</p>
 
-<p>Clicking the "Counterexample" button will cause the application to attempt to find a kind of world where the statement is false.
-If it succeeds, it will show a description of that kind of world.</p>
+<p>Al hacer clic en el botón "Ejemplo", la aplicación intentará encontrar un tipo de mundo en el que la expresión sea verdadera. Si tiene éxito, mostrará una descripción de ese tipo de mundo.</p>
 
-<p>Clicking the "Tree Proof" button will pass the statement to wo's <a href="http://www.umsu.de/logik/trees" target="_blank">Tree Proof Generator</a>.
-It is a web application that uses Semantic Tableaux to check the validity of a statement, and provides a proof if it finds that the statement is valid.
-The "Tree Proof" button will be enabled whenever there is a syntactically valid statement in the text box that does not contain identifications or modal operators.
-If you want to evaluate a statement that contains binary predicates (relations), use the Tree Proof Generator.</p>
+<p>Al hacer clic en el botón "Contraejemplo", la aplicación intentará encontrar una especie de mundo en el que la expresión sea falsa. Si tiene éxito, mostrará una descripción de ese tipo de mundo.</p>
 
-<h2 id="the_language">The Language</h2>
+<p>Al hacer clic en el botón "árbol semántico" redirigirá la expresión al <a href="http://www.umsu.de/logik/trees" target="_blank">generador de árboles semánticos</a>(Tree Proof Generator) de wo.
+Es una aplicación web que usa tablas semánticas (árboles) para verificar la validez de una expresión, y proporciona una prueba si decide que es válida. El botón "árbol semántico" se habilitará siempre que haya una expresión sintácticamente válida en el cuadro de texto que no contenga identificaciones u operadores modales. Si desea evaluar una expresión que contiene predicados binarios (relaciones), use el Generador de árboles semánticos.</p>
 
-<h3>Elements of the Language</h3>
+<h2 id="the_language">El lenguaje</h2>
 
-<p>The language has these elements:</p>
+<h3>Elementos del lenguaje</h3>
+
+<p>El lenguaje tiene estos elementos:</p>
 
 <ul>
-  <li><a href="#language_logical_operators">Unary and binary logical operators</a></li>
+  <li><a href="#language_logical_operators">Operadores lógicos unarios y binarios</a></li>
   <li><a href="#language_variable">Variables</a></li>
-  <li><a href="#language_constant">Constants</a></li>
-  <li>Predicates on <a href="#language_unary_predicate">one variable</a> (properties) and predicates on <a href="#language_nullary_predicate">zero variables</a> (propositions)</li>
-  <li>Predicates on <a href="#language_binary_predicate">two variables</a> (relations)</li>
-  <li><a href="#language_grouping">Grouping</a> with parentheses</li>
-  <li><a href="#language_universal_generalization">Universal generalizations</a>, <a href="#language_existential_quantification">existential quantifications</a> and <a href="#language_definite_description">definite descriptions</a></li>
-  <li><a href="#language_identity">Identity</a></li>
-  <li><a href="#language_modal_operators">The modal operators for necessity and possibility</a></li>
-  <li><a href="#language_two_term_propositions">Two-term Propositions</a></li>
-  <li><a href="#language_assertions_of_number">Some simple assertions of number</a></li>
-  <li><a href="#text_replacements">Text Replacements</a></li>
+  <li><a href="#language_constant">Constantes</a></li>
+  <li>Predicados sobre <a href="#language_unary_predicate">una variable</a> y predicados sobre <a href="#language_nullary_predicate">cero variables</a> (proposiciones)</li>
+  <li>Predicados sobre <a href="#language_binary_predicate">dos variables</a> (relaciones)</li>
+  <li><a href="#language_grouping">Agrupación</a> mediante paréntesis</li>
+  <li><a href="#language_universal_generalization">Generalizaciones universales</a>, <a href="#language_existential_quantification">cuantificaciones existenciales</a> y <a href="#language_definite_description">y descripciones definidas</a></li>
+  <li><a href="#language_identity">Identidad</a></li>
+  <li><a href="#language_modal_operators">Los operadores modales de necesidad y posibilidad</a></li>
+  <li><a href="#language_two_term_propositions">Proposiciones de dos términos</a></li>
+  <li><a href="#language_assertions_of_number">Algunas afirmaciones simples sobre números</a></li>
+  <li><a href="#text_replacements">Reemplazos de texto</a></li>
+  <li><a href="#language_therefore">Un símbolo de "por lo tanto"</a></li>
 </ul>
 
-<h4 id="language_logical_operators">Logical Operators</h4>
+<h4 id="language_logical_operators">Operadores lógicos</h4>
 
-<p>The logical operators recognized by the software are:</p>
+<p>Los operadores lógicos que el software reconoce son:</p>
 
 <table>
-  <tr><th>Operator</th><th>Symbol</th><th>Description</th></tr>
-  <tr><td>negation</td>             <td><span class="symbolic">~</span></td>        <td>Logical NOT</td></tr>
-  <tr><td>conjunction</td>          <td><span class="symbolic">&amp;</span></td>    <td>Logical AND</td></tr>
-  <tr><td>disjunction</td>          <td><span class="symbolic">|</span></td>        <td>Logical OR</td></tr>
-  <tr><td>material conditional</td> <td><span class="symbolic">-&gt;</span></td>    <td>if &hellip; then &hellip;</td></tr>
-  <tr><td>biconditional</td>        <td><span class="symbolic">&lt;=&gt;</span></td><td>Logical equivalence</td></tr>
-  <tr><td>joint denial</td>         <td><span class="symbolic">!</span></td>        <td>Logical NOR</td></tr>
-  <tr><td>exclusive disjunction</td><td><span class="symbolic">^</span></td>        <td>Logical XOR</td></tr>
-  <tr><td>strict implication</td><td><span class="symbolic">-&lt;</span></td>        <td>necessarily if &hellip; then &hellip;</td></tr>
+  <tr><th>Operador</th><th>Símbolo</th><th>Descripción</th></tr>
+  <tr><td>negación</td>             <td><span class="symbolic">~</span></td>        <td>"no" lógico</td></tr>
+  <tr><td>conjunción</td>          <td><span class="symbolic">&amp;</span></td>    <td>"y" lógico</td></tr>
+  <tr><td>disyunción</td>          <td><span class="symbolic">|</span></td>        <td>"o" lógico</td></tr>
+  <tr><td>condicional material</td> <td><span class="symbolic">-&gt;</span></td>    <td>Si &hellip; entonces &hellip;</td></tr>
+  <tr><td>bicondicional</td>        <td><span class="symbolic">&lt;=&gt;</span></td><td>Equivalencia lógica</td></tr>
+  <tr><td>negación conjunta</td>         <td><span class="symbolic">!</span></td>        <td>"nor" lógico</td></tr>
+  <tr><td>disyunción excluyente</td><td><span class="symbolic">^</span></td>        <td>"Xor" lógico</td></tr>
+  <tr><td>implicación estricta</td><td><span class="symbolic">-&lt;</span></td>        <td>necesariamente si &hellip; entonces &hellip;</td></tr>
 </table>
 
-<p>The binary logical operators all are left-associative and have the following precedences:</p>
+<p>Todos los operadores lógicos binarios son asociativos por la izquierda y tienen las siguientes precedencias:</p>
 
 <table>
-  <tr><th>Precedence</th><th>Operators</th></tr>
-  <tr><td>highest</td>  <td><span class="symbolic">&amp;</span>, <span class="symbolic">!</span></td></tr>
+  <tr><th>Precedencia</th><th>Operadores</th></tr>
+  <tr><td>superior</td>  <td><span class="symbolic">&amp;</span>, <span class="symbolic">!</span></td></tr>
   <tr><td>&hellip;</td> <td><span class="symbolic">|</span></td></tr>
   <tr><td>&hellip;</td> <td><span class="symbolic">-&gt;</span>, <span class="symbolic">-&lt;</span></td></tr>
-  <tr><td>lowest</td>   <td><span class="symbolic">&lt;=&gt;</span>, <span class="symbolic">^</span></td></tr>
+  <tr><td>inferior</td>   <td><span class="symbolic">&lt;=&gt;</span>, <span class="symbolic">^</span></td></tr>
 </table>
 
-<p>For example,</p>
+<p>Por ejemplo,</p>
 
 <pre class="symbolic">A|B&amp;C-&gt;D</pre>
 
-<p>is interpreted the same way as</p>
+<p>se interpreta como significando lo mismo que</p>
 
 <pre class="symbolic">(A|(B&amp;C))-&gt;D</pre>
 
-<p>Negation is right-associative and has higher precedence than any of the binary operators, so</p>
+<p>La negación es asociativa a la derecha y tiene precede a cualquiera de los operadores binarios, por lo que</p>
 
 <pre class="symbolic">~P &amp; ~Q</pre>
 
-<p>is interpreted the same way as</p>
+<p>se interpreta como significando lo mismo que</p>
 
 <pre class="symbolic">(~P) &amp; (~Q)</pre>
 
 <h4 id="language_variable">Variables</h4>
-<p>Variables are single lowercase letters that represent some object.  Each variable is bound by a quantifier.  Any single lowercase letter not bound by a quantifier will be interpreted as a <a href="#language_constant">constant</a>.</p>
+<p>Las variables son letras minúsculas únicas que representan algún objeto. Cada variable está ligada por un cuantificador. Cualquier letra minúscula que no esté ligada por un cuantificador se interpretará como una <a href="#language_constant">constante</a>.</p>
 
-<h4 id="language_constant">Constants</h4>
-<p>Constants, like <a href="#language_variable">variables</a>, are single lowercase letters that represent some fixed object.  Any single lowercase letter that is not bound by a quantifier will be interpreted as a constant.  I think that constants in a symbolic logic are strictly unnecessary.  This argument:</p>
+<h4 id="language_constant">Constantes</h4>
+<p>Las constantes, como las <a href="#language_variable">variables</a>, son letras minúsculas únicas que representan algún objeto fijo. Cualquier letra minúscula que no esté limitada por un cuantificador se interpretará como una constante. Creo que las constantes son completamente innecesarias en la lógica simbólica. El siguiente argumento:</p>
 
-<pre class="symbolic">Hx-&gt;Mx // All men are mortal.
-Hs     // Socrates is a man.
--&gt;     // Therefore
-Ms     // Socrates is mortal.</pre>
+<pre class="symbolic">Hx-&gt;Mx // Todo hombre es mortal.
+Hs     // Socrates es hombre.
+-&gt;     // Por lo tanto
+Ms     // Socrates es mortal.</pre>
 
-<p>could also be represented without constants as</p>
+<p>podría también representarse sin constantes como</p>
 
-<pre class="symbolic">Hx-&gt;Mx                                   // All men are mortal.
-(3x,Sx) &amp; ([]x,Sx-&gt;y,Sy-&gt;x=y) &amp; x,Sx->Hx // Socrates is a man.
--&gt;                                       // Therefore
-x,Sx->Mx                                 // Socrates is mortal.</pre>
+<pre class="symbolic">Hx-&gt;Mx                                   // Todo hombre es mortal.
+(3x,Sx) &amp; ([]x,Sx-&gt;y,Sy-&gt;x=y) &amp; x,Sx->Hx // Socrates es hombre.
+-&gt;                                       // Por lo tanto
+x,Sx->Mx                                 // Socrates es mortal.</pre>
 
-<p>which, though more complicated, is in a way better because it makes explicit what we typically assume about Socrates, which is that he exists and he is, by definition, a unique individual.  Even so, I think constants are too convenient a feature to be omitted from the software.  The use of a constant implies that the object denoted by the constant actually exists.  This isn't the only way to interpret constants, but it's the easiest one to implement in this software.  Because of this interpretation, the software will decide that <span class="symbolic">3x,x=g</span> is necessarily true.  Possible objects (ones which may or may not exist) and impossible objects (ones which could never exist), can be represented with unary predicates.</p>
+<p>lo cual, aunque más complicado, es en cierto modo mejor, porque hace explícito lo que típicamente suponemos acerca de Sócrates: que existió y que era, por definición, un individuo único. Aun así, creo que las constantes son una característica demasiado útil para excluirlas del software. El uso de una constante implica que el objeto denotado por ella realmente existe. Esta no es la única forma de interpretar constantes, pero es la más fácil de implementar en este software. Debido a esta interpretación, el software decidirá que <span class="symbolic">3x,x=g</span> es necesariamente cierto. Los objetos posibles (aquellos que pueden o no existir) y los objetos imposibles (los que nunca podrían existir) se pueden representar con predicados unarios.</p>
 
-<p>Since I have not yet found a satisfactory way to <a href="#decide">decide</a> statements which contain both modal operators and constants, the software rejects any statement that contains both modal operators and constants.</p>
+<p>Como todavía no he encontrado una manera satisfactoria de <a href="#decide">decidir</a> expresiones que contienen tanto operadores modales como constantes, el software rechaza cualquier expresión de este tipo.</p>
 
-<h4 id="language_nullary_predicate">Predicates on Zero Variables</h4>
+<h4 id="language_nullary_predicate">Predicados sobre cero variables</h4>
 
-<p>A predicate on zero variables, which can be thought of as representing a true/false proposition, is represented by a single letter.</p>
+<p>Un predicado de cero variables, que se puede considerar como una proposición verdadero/falso, se representa con una sola letra.</p>
 
-<h4 id="language_unary_predicate">Predicates on One Variable</h4>
+<h4 id="language_unary_predicate">Predicados en una variable</h4>
 
-<p>A predication on one variable, which can be thought of as the assertion that an object has some property, is represented by a single capital letter (the predicate) followed by a single lowercase letter (the variable).  You can use the same capital letter as a predicate over one variable and as a predicate over zero variables in the same statement and the software will treat them as distinct predicates, for example</p>
+<p>Una predicación sobre una variable, que puede considerarse como la afirmación de que un objeto tiene alguna propiedad, se representa con una sola letra mayúscula (el predicado) seguida de una sola letra minúscula (la variable). Se puede usar la misma letra mayúscula como predicado sobre una variable y como predicado sobre cero variables en la misma expresión y el software las tratará como predicados distintos, por ejemplo</p>
 
 <pre class="symbolic">x,Fx-&gt;F</pre>
 
-<p>will be interpreted in the same way as</p>
+<p>será interpretado de la misma manera que</p>
 
 <pre class="symbolic">x,Fx-&gt;P</pre>
 
-<p>because the first &quot;<span class="symbolic">F</span>&quot; is interpreted as a unary predicate and the second &quot;<span class="symbolic">F</span>&quot; is interpreted as a nullary predicate.</p>
+<p>porque la primera &quot;<span class="symbolic">F</span>&quot; se interpreta como un predicado unario y la segunda &quot;<span class="symbolic">F</span>&quot; se interpreta como un predicado nulo.</p>
 
-<h4 id="language_binary_predicate">Predicates on Two Variables</h4>
+<h4 id="language_binary_predicate">Predicados en dos variables</h4>
 
-<p>A predication on two variables, which can be thought of as the assertion that two objects have some relation to each other, is represented by a single capital letter (the predicate) followed by two lowercase letters (the variables).
-The decision algorithm does not support predicates on two variables, and will usually reject a statement that contains them.
-Statements that have predicates on two variables can, however, be evaluated with the Tree Proof Generator, if they do not also contain <a href="#language_modal_operators">modal operators</a> or <a href="#language_identity">identifications</a>.</p>
+<p>Una predicación sobre dos variables, que puede considerarse como la afirmación de que dos objetos tienen alguna relación entre sí, se representa con una sola letra mayúscula (el predicado) seguida de dos letras minúsculas (las variables). El algoritmo de decisión no admite predicados sobre dos variables y, por lo general, rechazará una expresión que las contenga. Sin embargo, las expresiones que tienen predicados en dos variables pueden evaluarse con el Generador de árboles semánticos, si no contienen también <a href="#language_modal_operators">operadores modales</a> o <a href="#language_identity">identificaciones</a>.</p>
 
-<h4 id="grouping">Grouping</h4>
+<h4 id="grouping">Agrupación</h4>
 
-<p>Expressions can be grouped together with parentheses.  They work just like parentheses do in algebra or in other symbolic logics.</p>
+<p>Las expresiones se pueden agrupar con paréntesis. Funcionan igual que los paréntesis en álgebra o en otras lógicas simbólicas.</p>
 
-<h4 id="language_universal_generalization">Universal Generalizations</h4>
+<h4 id="language_universal_generalization">Generalizaciones universales</h4>
 
-<p>A universal generalization is a variable followed by a comma followed by the expression the generalization applies to.  So you could type
+<p>Una generalización universal es una variable seguida de una coma y seguida de la expresión a la que se aplica la generalización. De acuerdo con esto, se podría escribir
 
 <pre class="symbolic">x,Ax</pre>
 
-<p>to mean "everything is awesome".  The generalization will apply to everything in the expression that follows the comma, up until an enclosing parenthesis or the end of the line of text that the generalization is on.  So</p>
+<p>para decir "todo es asombroso". La generalización liga toda la expresión que sigue a la coma, hasta un paréntesis de cierre o el final de la línea de texto en la que se encuentra la generalización. Así</p>
 
 <pre class="symbolic">x,Fx &amp; y,Jy</pre>
 
-<p>is a generalization over</p>
+<p>generaliza sobre la sub-expresión</p>
 
 <pre class="symbolic">Fx &amp; y,Jy</pre>
 
-<p>and not just a generalization over <span class="symbolic">Fx</span>.  I recommend adding parentheses to make things clear, like</p>
+<p>en vez de ser sólo una generalización sobre <span class="symbolic">Fx</span>.  Se recomienda añadir paréntesis a los fines de mayor claridad. Por ejemplo:</p>
 
 <pre class="symbolic">(x, Fx &amp; (y,Jy))</pre>
 
-<p>A variable is always bound to the nearest enclosing generalization, so for</p>
+<p>Una variable siempre está ligada a la generalización delimitante más próxima, por ello en</p>
 
 <pre class="symbolic">x, (x,F-&gt;Px) &amp; Jx</pre>
 
-<p>the <span class="symbolic">x</span> in <span class="symbolic">Px</span> is bound to the second universal generalization and the <span class="symbolic">x</span> in <span class="symbolic">Jx</span> is bound to the first universal generalization.</p>
+<p>la <span class="symbolic">x</span> en <span class="symbolic">Px</span> está ligada por la segunda generalización universal y la x en Jx está ligada por la primera.</p>
 
+<h4 id="language_existential_quantification">Cuantificación existencial</h4>
 
-<h4 id="language_existential_quantification">Existential Quantifications</h4>
-
-<p>An existential quantification is a "<span class="symbolic">3</span>" followed by a variable followed by a comma followed by the expression that the quantification applies to.  For example,</p>
+<p>Una cuantificación existencial es un símbolo "<span class="symbolic">3</span>" seguido de una variable, seguida de una coma y, finalmente, seguida de una expresión a la cual se aplica la cuantificación. Por ejemplo,</p>
 
 <pre class="symbolic">3x, Fx &amp; Bx</pre>
 
-<p>Could mean "There is a fountain filled with blood".  The same rules for applicability and binding of variables that apply to universal generalizations also apply to existential quantifications.</p>
+<p>Podría significar "Hay una fuente llena de sangre". Las mismas reglas de aplicabilidad y vinculación de variables definidas para las generalizaciones universales se aplican también a las cuantificaciones existenciales.</p>
 
-<h4 id="language_definite_description">Definite Description</h4>
+<h4 id="language_definite_description">Descripciones definidas</h4>
 
-<p>A definite description is a "<span class="symbolic">1</span>" followed by a variable followed by a comma followed by an expression that is supposed to describe exactly one object.  For example,</p>
+<p>Una descripción definida es un "<span class="symbolic">1</span>" seguido de una variable, seguida de una coma, seguida de una expresión que, se supone, describe exactamente un objeto. Por ejemplo,</p>
 
 <pre class="symbolic">1x,Rx</pre>
 
-<p>Could mean "there is only one Roy Orbison"</p>
+<p>Podría significar "existe sólo un Roy Orbison".</p>
 
-<h4 id="language_identity">Identity</h4>
+<h4 id="language_identity">Identidad</h4>
 
-<p>An identification of two objects is just a lowercase letter followed by an equals sign followed by another lowercase letter, for example</p>
+<p>Una identidad entre dos objetos consiste en una letra minúscula seguida de un signo igual seguido de otra letra minúscula, por ejemplo</p>
 
 <pre class="symbolic">x,y, (Fx &amp; x=y) -&gt; Fy</pre>
 
-<p>is a statement where "<span class="symbolic">x=y</span>" means <span class="symbolic">x</span> is the same object as <span class="symbolic">y</span>.</p>
+<p>es una afirmación donde "<span class="symbolic">x=y</span>" significa <span class="symbolic">x</span> es el mismo objeto que <span class="symbolic">y</span>.</p>
 
-<h4 id="language_modal_operators">Modal Operators</h4>
+<h4 id="language_modal_operators">Operadores modales</h4>
 
-<p>The software recognizes two modal operators, "<span class="symbolic">[]</span>" for necessity and "<span class="symbolic">&lt;&gt;</span>" for possibility.  They are right-associative and have the same precedence as negation.  The kind of modality represented by these operators is <a href="http://en.wikipedia.org/wiki/Alethic_modality">alethic</a> modality.</p>
+<p>El software reconoce dos operadores modales, "<span class="symbolic">[]</span>" para necesidad y "<span class="symbolic">&lt;&gt;</span>" para posibilidad.  Son asociativos por la derecha y tienen la misma precedencia que la negación. El tipo de modalidad representada por estos operadores es la modalidad <a href="http://en.wikipedia.org/wiki/Alethic_modality">alética</a>.</p>
 
-<h4 id="language_two_term_propositions">Two-term Propositions</h4>
+<h4 id="language_two_term_propositions">Proposiciones de dos términos</h4>
 
-<p>The software recognizes the two-term propositions of what is variously called <a href="http://en.wikipedia.org/wiki/Term_logic" target="_blank">"term", "Aristotelian" or "traditional" logic</a>.  It treats two-term propositions as shorthand statements of unary predicate logic.  They are a capital letter representing the subject term, followed by a lower-case letter representing the proposition's form, followed by a capital letter representing the predicate term.</p>
+<p>El software reconoce proposiciones de dos términos en lo que se suele denominarse <a href="http://en.wikipedia.org/wiki/Term_logic" target="_blank">lógica "de términos", "aristotélica" o "tradicional"</a>.  Trata las proposiciones de dos términos como enunciados abreviados de la lógica de predicados unarios. Son una letra mayúscula que representa el término del sujeto, seguida de una letra minúscula que representa la forma de la proposición, seguida de una letra mayúscula que representa el término predicado.</p>
 
 <table>
-  <tr><th>Symbol</th><th>Proposition</th><th>Definition</th></tr>
-  <tr><td><span class="symbolic">SaP</span></td><td>All S are P</td>                      <td><span class="symbolic">(x,Sx-&gt;Px)&amp;(3x,Sx)</span></td></tr>
-  <tr><td><span class="symbolic">SeP</span></td><td>No S are P</td>                       <td><span class="symbolic">x,Sx-&gt;~Px</span></td></tr>
-  <tr><td><span class="symbolic">SiP</span></td><td>Some S is P</td>                      <td><span class="symbolic">3x,Sx&amp;Px</span></td></tr>
-  <tr><td><span class="symbolic">SoP</span></td><td>Not all S are P</td>                  <td><span class="symbolic">(3x,Sx&amp;~Px)|(~3x,Sx)</span></td></tr>
-  <tr><td><span class="symbolic">SuP</span></td><td>Either all S are P or no S are P </td><td><span class="symbolic">(x,Sx-&gt;Px)|(x,Sx-&gt;~Px)</span></td></tr>
-  <tr><td><span class="symbolic">SyP</span></td><td>Some S are P and some S are not P</td><td><span class="symbolic">(3x,Sx&amp;Px)&amp;(3x,Sx&amp;~Px)</span></td></tr>
+  <tr><th>Símbolo</th><th>Proposición</th><th>Definición</th></tr>
+  <tr><td><span class="symbolic">SaP</span></td><td>Todo S es P</td>                      <td><span class="symbolic">(x,Sx-&gt;Px)&amp;(3x,Sx)</span></td></tr>
+  <tr><td><span class="symbolic">SeP</span></td><td>Ningún S es P</td>                       <td><span class="symbolic">x,Sx-&gt;~Px</span></td></tr>
+  <tr><td><span class="symbolic">SiP</span></td><td>Algún S es P</td>                      <td><span class="symbolic">3x,Sx&amp;Px</span></td></tr>
+  <tr><td><span class="symbolic">SoP</span></td><td>No todo S es P</td>                  <td><span class="symbolic">(3x,Sx&amp;~Px)|(~3x,Sx)</span></td></tr>
+  <tr><td><span class="symbolic">SuP</span></td><td>O bien Todo S es P o Ningún S es P</td><td><span class="symbolic">(x,Sx-&gt;Px)|(x,Sx-&gt;~Px)</span></td></tr>
+  <tr><td><span class="symbolic">SyP</span></td><td>Algún S es P y Algún S no es P</td><td><span class="symbolic">(3x,Sx&amp;Px)&amp;(3x,Sx&amp;~Px)</span></td></tr>
 </table>
 
-<p>In order to make the traditional <a href="http://en.wikipedia.org/wiki/Square_of_opposition" target="_blank">Square of Opposition</a> hold true, the A-form proposition is given existential import and the O-form proposition is denied existential import, per what was argued by <a href="http://plato.stanford.edu/entries/square/" target="_blank">Terence Parsons</a>.  It also recognizes the U-form and Y-form of the <a href="http://en.wikipedia.org/wiki/Logical_hexagon">Hexagon of Opposition</a>.</p>
+<p>Para hacer que el tradicional <a href="https://es.wikipedia.org/wiki/Cuadro_de_oposici%C3%B3n_de_los_juicios" target="_blank">Cuadro de oposición</a> sea verdadero, las proposiciones de tipo A se definen con significado existencial y las proposiciones de tipo O se definen sin significado existencial, siguiendo los argumentos de <a href="http://plato.stanford.edu/entries/square/" target="_blank">Terence Parsons</a>.  También reconoce la forma de U y la forma de Y del <a href="http://en.wikipedia.org/wiki/Logical_hexagon">Hexágono de Oposición</a>.</p>
 
-<p>Either term in a proposition can be negated by adding the "<span class="symbolic">~</span>" symbol, for instance, "<span class="symbolic">~Aa~B</span>" will be interpreted as "all non-A are non-B".  A "<span class="symbolic">~</span>" at the front of the expression attaches to the first term and not to the whole expression, so "<span class="symbolic">~Aa~B</span>" is interpreted the same way as "<span class="symbolic">(~Aa~B)</span>" and not the same as "<span class="symbolic">~(Aa~B)</span>".</p>
+<p>Cualquiera de los términos en una proposición se pueden negar agregando el símbolo "<span class="symbolic">~</span>" por ejemplo, "<span class="symbolic">~Aa~B</span>" se interpretará como "todo no A es no B". Un "<span class="symbolic">~</span>" al principio de la expresión se adjunta al primer término y no a la expresión completa, por lo que "<span class="symbolic">~Aa~B</span>" no se interpreta como "<span class="symbolic">~(Aa~B)</span>" sino como "<span class="symbolic">(~Aa~B)</span>".</p>
 
-<h4 id="language_assertions_of_number">Assertions of Number</h4>
+<h4 id="language_assertions_of_number">Aserciones numéricas</h4>
+
+<h3><b><i>(Perdón, la traducción no está completo...)</b></i></h3>
 
 <p>The language includes a means to make some simple assertions of number.  I added them to the language just for convenience; they sometimes help when codifying the logic in certain logic puzzles.  They don't belong to any symbolic logic that I know of.</p>
 
@@ -272,7 +265,7 @@ Statements that have predicates on two variables can, however, be evaluated with
 #replace man H
 #replace mortal M
 #replace socrates s
-#replace therefore ->
+#replace therefore .'.
 
 x, man x => mortal x
 man socrates
@@ -284,10 +277,14 @@ mortal socrates</pre>
 <pre class="symbolic">
 x, H x -> M x
 M s
-->
+.'.
 M s</pre>
 
 <p>before parsing it.</p>
+
+<h4 id="language_therefore">The "Therefore" Symbol</h4>
+
+<p>The "therefore" symbol, "<span class="symbolic">.'.</span>" (period apostrophe period) can be used to test logical arguments.  It will be evaluated the same way as the <a href="#material_conditional">material conditional</a>, but the result displayed will be different.  Instead of indicating if the argument is necessarily true, contingent, or impossible, the software will indicate if the argument is valid (necessarily true) or invalid (not necessarily true).  Additionally, if the argument is valid, the software will indicate if the premises are inconsistent or the conclusion is tautological.</p>
 
 <h3>Valid Expressions</h3>
 
@@ -302,28 +299,47 @@ Hs
 -&gt;
 Ms</pre>
 
-<p>If it is a single line, the software interprets that line as a statement and decides whether it is valid, satisfiable, or self-contradictory.  If it is multiple lines, the software joins those lines to be a single expression and decides that statement.  The software treats each line that is a statement as if it were conjoined to the other lines that are statements with a logical AND.  This enables you to spread a long statement across multiple lines. For example,</p>
+<p>If it is a single line, the software interprets the line as a statement and decides whether it is valid, satisfiable, or self-contradictory.  If it is multiple lines, the software joins those lines to be a single expression and decides that statement.  The software treats each line that is a statement as if it were conjoined to the other lines that are statements with a logical AND.  This enables you to spread a long statement across multiple lines. For example,</p>
 
 <pre class="symbolic">P-&gt;Q
 Q-&gt;R
 P</pre>
 
-<p>is interpreted the same way as</p>
+<p>is interpreted to mean the same as</p>
 
 <pre class="symbolic">(P-&gt;Q)&amp;(Q-&gt;R)&amp;P</pre>
 
-<p>If an expression has several lines and exactly one of them is a single binary logical operator, the software will join the lines before the operator with a logical AND, join the lines after the operator with a logical AND, and then join these two conjuncts with the single logical operator.  For example,</p>
+<p>If an expression has several lines and exactly one of them is a single binary logical operator or the "therefore" symbol, the software will join the lines before the operator with a logical AND, join the lines after the operator with a logical AND, and then join these two conjuncts with the single logical operator.  For example,</p>
 
 <pre class="symbolic">Hx-&gt;Mx
 Hs
 -&gt;
 Ms</pre>
 
-<p>is interpreted the same way as</p>
+<p>is interpreted to mean the same as</p>
 
 <pre class="symbolic">( (Hx-&gt;Mx) &amp; Hs ) -&gt; (Ms)</pre>
 
-<p>This enables you to express a logical argument - one with several premises and a conclusion - in a familiar way.</p>
+<p>This enables you to express a logical argument - several premises followed by a conclusion - in a familiar way, or test if one set of statements is equivalent to another set of statements without putting them all on one line.</p>
+
+<p>Long statements can be broken up across several lines.  The software will interpret text on several lines as one statement according to the following rules:</p>
+<ul>
+  <li>If a line starts between opening and closing parentheses, it will be joined with the preceding line.</li>
+  <li>If a line ends with a binary operator, it will be joined to the next line.</li>
+  <li>If a line begins with a binary operator, it will be joined with the preceding line.</li>
+<p>For example, the following text blocks are all interpreted the same way:</p>
+
+<ul>
+  <li><pre class="symbolic">x,Ax|Bx|Cx</pre></li>
+  <li><pre class="symbolic">x,Ax
+|Bx
+|Cx</pre></li>
+<li><pre class="symbolic">x,Ax|
+Bx|
+Cx</pre></li>
+  <li><pre class="symbolic">(x,
+Ax|Bx|Cx)</pre></li>
+</ul>
 
 <h4>Whitespace</h4>
 
@@ -347,7 +363,7 @@ Ms</pre>
 
 <pre class="symbolic">Hx-&gt;Mx // All men are mortal.
 Hs     // Socrates is a man.
--&gt;     // Therefore
+.'.     // Therefore
 Ms     // Socrates is mortal.</pre>
 
 <h3>Criteria for the Design of the Language</h3>
@@ -356,8 +372,8 @@ Ms     // Socrates is mortal.</pre>
 
 <ul>
   <li>The language should only use basic ASCII characters which are available on a standard English keyboard, so typing expressions in the language is easy.</li>
-  <li>The language should be terse in such a way that it is fast to type but not generally difficult to read.</li>
-  <li>The language should enable a person to arrange expressions in such a way that they are readable.</li>
+  <li>The language's constructs should use few characters so they can be typed quickly.</li>
+  <li>The language should enable a person to arrange statement in such a way that it is easy to read.</li>
   <li>The symbols defined in the language should have a precedent in other languages.  The symbols in this language are borrowed from conventional symbolic logic, conventional mathematical notation, and the C programming language.</li>
 </ul>
 
@@ -432,7 +448,7 @@ Ms       // Socrates is mortal.
 
 <p>To evaluate a negation, the software evaluates the negated proposition.  If it is true, the negation is false.  If it is false, the negation is true.</p>
 
-<h4>Evaluation of a Material Conditional</h4>
+<h4 id="material_conditional">Evaluation of a Material Conditional</h4>
 
 <p>To evaluate a material conditional, the software evaluates its antecedent and its consequent.  If the antecedent is true and the consequent is false, then the material conditional is false.  In all other cases, the material conditional is true.</p>
 
@@ -492,7 +508,7 @@ Ms       // Socrates is mortal.
   <li>The words "unary" and "predicate" both have their roots in Latin.  The word "monadic" has its roots in Greek.  So calling it a "monadic predicate" mixes linguistic roots, but calling it a "unary predicate" does not.</li>
 </ol>
 
-<p>A Unary predicate is about the same thing as a property.  In this documentation, the two are used interchangeably, except that a unary predicate "is true of" an object or "is not true of" an boejct, whereas an object "has" or "does not have" a property.</p>
+<p>A Unary predicate is about the same thing as a property.  In this document, the two are used interchangeably, except that a unary predicate "is true of" an object or "is not true of" an boejct, whereas an object "has" or "does not have" a property.</p>
 
 <p>It may be important to note that "predicate" and "predication" are two different things.  A <em>predicate</em> is a proposition, property, or relation; a <em>predication</em> is the application of a predicate to some number of variables.</p>
 
@@ -502,7 +518,7 @@ Ms       // Socrates is mortal.
 
 <h4>Proposition</h4>
 
-<p>In this documentation, the word "proposition" is used three different ways, one to mean a <a href="#nullary_predicate">nullary predicate</a>, another to mean any idea that must be true or false, and another to mean a data structure <a href="#parsing">constructed by the software</a> that captures some of the logical content of the idea it is supposed to represent.</p>
+<p>In this document, the word "proposition" is used three different ways, one to mean a <a href="#nullary_predicate">nullary predicate</a>, another to mean any idea that must be true or false, and another to mean a data structure <a href="#parsing">constructed by the software</a> that captures some of the logical content of the idea it is supposed to represent.</p>
 
 <h4 id="possible_world">Possible World</h4>
 
@@ -651,7 +667,7 @@ x, Rx & (Px -> []y, Ry -> Py)
 <ul>
   <li>bugs or errors in the software,</li>
   <li>incorrect decisions made by the software, or</li>
-  <li>unclear or or incorrect statements in the documentation.</li>
+  <li>unclear or or incorrect statements in this document.</li>
 </ul>
 
 <p>Also,</p>

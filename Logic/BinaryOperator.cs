@@ -25,8 +25,8 @@ namespace Logic
   /// a binary operator that represents a function of the truth values of two matrices
   /// </summary>
   public abstract class BinaryOperator : Matrix
-	{
-	  private readonly Matrix mLeft;
+  {
+    private readonly Matrix mLeft;
     private readonly Matrix mRight;
 
     internal BinaryOperator( Matrix aLeft, Matrix aRight )
@@ -220,6 +220,16 @@ namespace Logic
     {
       return Left.GetHashCode() ^ Right.GetHashCode();
     }
-	}
+
+    internal abstract CoefficientVector CoefficientVectorForOperator { get; }
+
+    internal override CoefficientVector CoefficientVectorHelper( NullPredicate[] aNullPredicates )
+    {
+      return CoefficientVector.Apply(
+        CoefficientVectorForOperator,
+        Left.CoefficientVectorHelper( aNullPredicates ),
+        Right.CoefficientVectorHelper( aNullPredicates ) );
+    }
+  }
 }
 

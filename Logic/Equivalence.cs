@@ -55,5 +55,10 @@ namespace Logic
     {
       return new Equivalence( Left.Substitute( aVariable, aReplacement ), Right.Substitute( aVariable, aReplacement ) );
     }
+
+    internal override CoefficientVector CoefficientVectorForOperator
+    {
+      get { return Logic.CoefficientVector.EQUIV; }
+    }
   }
 }

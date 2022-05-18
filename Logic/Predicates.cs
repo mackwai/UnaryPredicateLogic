@@ -36,6 +36,20 @@ namespace Logic
     private readonly ulong mBitsNeeded;
     private readonly bool mModalitiesPresent;
     private readonly int mDistinguishableWorldsWithinAKind;
+
+    #if SALTARELLE
+    private static ulong TwoToThe( int aPower )
+    {
+      return aPower > 31
+        ? 0x100000000UL * (ulong)( 1 << ( aPower - 32 ) )
+        : (ulong) ( 1 << aPower );
+    }
+    #else
+    private static ulong TwoToThe( int aPower )
+    {
+      return 1UL << aPower;
+    }
+    #endif
     
     public Predicates(
       IEnumerable<NullPredicate> aNullPredicates,
@@ -51,7 +65,7 @@ namespace Logic
         mBitsNeededToRepresentObjectsOfAKind * NumberOfCombinationsOfUnaryPredicates + NumberOfNullPredicates;
       mDistinguishableWorldsWithinAKind = Math.Max( aMaximumNumberOfModalitiesInvolvedInIdentifications, 1 );
       mBitsNeeded = aModalitiesPresent
-        ? 1UL << mBitsNeededToDistinguishWorlds
+        ? TwoToThe( mBitsNeededToDistinguishWorlds )
         : (ulong) mBitsNeededToDistinguishWorlds;
       mModalitiesPresent = aModalitiesPresent;
 
@@ -279,7 +293,7 @@ namespace Logic
     }
     
     private uint DistinguishableInstancesOfThisPredicateCombination( uint aKindOfWorld, int aKindOfObject )
-		{
+    {
 #if SALTARELLE
       uint lBitMask = (uint) ( ( 1 << mBitsNeededToRepresentObjectsOfAKind ) - 1 );
 #else
@@ -290,7 +304,7 @@ namespace Logic
         return ( ( aKindOfWorld >> NumberOfNullPredicates ) & lBitMask ) + 1;
       else
         return ( aKindOfWorld >> ( mBitsNeededToRepresentObjectsOfAKind * aKindOfObject + NumberOfNullPredicates ) ) & lBitMask;
-		}
+    }
 
     private int NumberOfCombinationsOfUnaryPredicates
     {

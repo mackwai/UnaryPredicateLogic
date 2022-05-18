@@ -37,6 +37,7 @@ namespace Logic
 
     private static Action mDecideContentsOfActiveDocument = null;
     private static Action mDecideSelectedText = null;
+    private static Action mCalculateCoefficientVector = null;
     private static Action mDepictContentsOfActiveDocument = null;
     private static Action mDepictSelectedText = null;
     private static Action mExecuteProver9OnActiveBuffer = null;
@@ -52,12 +53,13 @@ namespace Logic
 
       PluginBase.SetCommand( 0, "Decide", DecideContentsOfActiveDocument, new ShortcutKey( true, false, false, Keys.NumPad0 ) );
       PluginBase.SetCommand( 1, "Decide Selected Text", DecideSelectedText, new ShortcutKey( true, true, false, Keys.NumPad0 ) );
+      PluginBase.SetCommand( 2, "Calculate Coefficient Vector", CalculateCoefficientVector );
       if ( mDepictContentsOfActiveDocument != null )
-        PluginBase.SetCommand( 2, "Depict", DepictContentsOfActiveDocument, new ShortcutKey( false, true, false, Keys.G ) );
+        PluginBase.SetCommand( 3, "Depict", DepictContentsOfActiveDocument, new ShortcutKey( false, true, false, Keys.G ) );
       if ( mDepictSelectedText != null )
-        PluginBase.SetCommand( 3, "Depict Selected Text", DepictSelectedText, new ShortcutKey( false, true, true, Keys.G ) );
+        PluginBase.SetCommand( 4, "Depict Selected Text", DepictSelectedText, new ShortcutKey( false, true, true, Keys.G ) );
       if ( mExecuteProver9OnActiveBuffer != null )
-        PluginBase.SetCommand( 4, "Evaluate with Prover9/Mace4", ExecuteProver9OnActiveBuffer );
+        PluginBase.SetCommand( 5, "Evaluate with Prover9/Mace4", ExecuteProver9OnActiveBuffer );
     }
 
     internal static void SetToolBarIcon()
@@ -89,6 +91,12 @@ namespace Logic
         mDecideSelectedText();
     }
 
+    private static void CalculateCoefficientVector()
+    {
+      if ( mCalculateCoefficientVector != null )
+        mCalculateCoefficientVector();
+    }
+
     private static void DepictContentsOfActiveDocument()
     {
       if ( mDepictContentsOfActiveDocument != null )
@@ -111,12 +119,14 @@ namespace Logic
     public void Install(
       Action aDecideContentsOfActiveDocument,
       Action aDecideSelectedText,
+      Action aCalculateCoefficientVector,
       Action aDepictContentsOfActiveDocument,
       Action aDepictSelectedText,
       Action aExecuteProver9OnActiveBuffer )
     {
       mDecideContentsOfActiveDocument = aDecideContentsOfActiveDocument;
       mDecideSelectedText = aDecideSelectedText;
+      mCalculateCoefficientVector = aCalculateCoefficientVector;
       mDepictContentsOfActiveDocument = aDepictContentsOfActiveDocument;
       mDepictSelectedText = aDepictSelectedText;
       mExecuteProver9OnActiveBuffer = aExecuteProver9OnActiveBuffer;

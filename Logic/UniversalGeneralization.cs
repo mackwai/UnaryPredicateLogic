@@ -21,18 +21,18 @@ using System.Linq;
 
 namespace Logic
 {
-	/// <summary>
-	/// a universal quantification
-	/// </summary>
-	internal class UniversalGeneralization : UnaryOperator
-	{
-		private readonly Variable mVariable;
-		
-		internal UniversalGeneralization( Variable aVariable,  Matrix aInnerProposition )
-		  : base( aInnerProposition )
-		{
-			mVariable = aVariable;
-		}
+  /// <summary>
+  /// a universal quantification
+  /// </summary>
+  internal class UniversalGeneralization : UnaryOperator
+  {
+    private readonly Variable mVariable;
+    
+    internal UniversalGeneralization( Variable aVariable,  Matrix aInnerProposition )
+      : base( aInnerProposition )
+    {
+      mVariable = aVariable;
+    }
 
     internal override IEnumerable<Tuple<UniversalGeneralization, Matrix>> ClosedPredications
     {
@@ -74,9 +74,9 @@ namespace Logic
     }
 
     internal Variable Variable
-		{
-			get { return mVariable; }
-		}
+    {
+      get { return mVariable; }
+    }
 
     internal override void AssignModality( Necessity aNecessity )
     {
@@ -84,8 +84,8 @@ namespace Logic
       mInnerMatrix.AssignModality( aNecessity );
     }
 
-		internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
-		{
+    internal override bool TrueIn( uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
+    {
       if ( aPredicates.NoDistinguishableObjects )
         return mInnerMatrix.TrueIn( aInterpretation, aKindOfWorld, aPredicates );
 
@@ -102,8 +102,8 @@ namespace Logic
       //return aPredicates
       //  .GetKindsOfObjectsIn( aKindOfWorld )
       //  .All( fPredicateCombination => TrueInInstance( fPredicateCombination, aInterpretation, aKindOfWorld, aPredicates ) );
-		}
-		
+    }
+    
     //private bool TrueInInstance( string aKindOfObject, uint aInterpretation, uint aKindOfWorld, Predicates aPredicates )
     //{
     //  Variable.Instantiate( aKindOfObject );
@@ -155,5 +155,5 @@ namespace Logic
     {
       return base.GetHashCode();
     }
-	}
+  }
 }

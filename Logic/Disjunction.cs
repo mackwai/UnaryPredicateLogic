@@ -50,5 +50,10 @@ namespace Logic
     {
       return new Disjunction( Left.Substitute( aVariable, aReplacement ), Right.Substitute( aVariable, aReplacement ) );
     }
+
+    internal override CoefficientVector CoefficientVectorForOperator
+    {
+      get { return Logic.CoefficientVector.OR; }
+    }
   }
 }

@@ -16,6 +16,7 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Logic
 {
@@ -101,6 +102,11 @@ namespace Logic
     public override string TreeProofGeneratorInput
     {
       get { return mDescription.ToLower(); }
+    }
+
+    internal override CoefficientVector CoefficientVectorHelper( NullPredicate[] aNullPredicates )
+    {
+      return new CoefficientVector( this.ToString(), aNullPredicates.Select( fPredicate => fPredicate.ToString() ) );
     }
   }
 }
