@@ -1,3 +1,6 @@
+en
+es
+
 A Logic Calculator
 Calculador Lógico
 
@@ -29,7 +32,7 @@ Cancel
 Cancela
 
 Information:
-Información (Inglés):
+Información:
 
 What is this?
 ¿Qué es ésto?
@@ -44,13 +47,13 @@ The Algorithm
 El algoritmo
 
 Updates
-Versiones Actualizadas
+Versiones Actualizadas (Inglés)
 
 Contact
 Contacto
 
 Downloads
-Descargas de Software
+Descargas de Software (Inglés)
 
 Examples:
 Ejemplos:
@@ -205,11 +208,11 @@ No pudo analizar sintácticamente "{0}"
 Expected predication or parenthesized expression, found "{0}"
 Predicación o expresión entre paréntesis requerida, pero se encontró "{0}"
 
-This proposition can't be evaluated; it contains both constants and modal operators.
-Esta proposición no puede ser evaluada; contiene constantes y operadores modales.
+This proposition can't be evaluated; it contains both individual constants and modal operators.
+Esta proposición no puede ser evaluada; contiene constantes individuales y operadores modales.
 
-This proposition can't be decided; it contains both constants and modal operators.
-Esta proposición no puede ser decidido; contiene constantes y operadores modales.
+This proposition can't be decided; it contains both individual constants and modal operators.
+Esta proposición no puede ser decidido; contiene constantes individuales y operadores modales.
 
 Can't generate input for Tree Proof Generator from this proposition.
 No se puede generar una entrada para Tree Proof Generator a partir de esta proposición.
@@ -397,8 +400,8 @@ No encontró subexpresiones en {0}."
 // This is an existential quantification.\n\n3x, Px // \"There is an x such that Px is true.\"
 // Ésta es una cuantificación existencial.\n\n3x, Px // \"Para al menos un x, Px es cierto.\"
 
-// Constants and Variables\n\nx,Px // This \"x\" is a variable.\n// It is part of a quantification \"for all x, x is P\".\n// It represents many things.\n\nPx // This \"x\" is a constant.\n// It is not part of a quantification.\n// It represents just one thing.
-// Constantes y variables\n\nx,Px // Este \"x\" es una variable.\n// Es parte de una cuantificación \"para todo x, x es P\".\n// Representa muchas cosas.\n\nPx // Este \"x\" es un constante.\n// No es parte de una cuantificación.\n// Representa solo una cosa.
+// Variables and Individual Constants\n\nx,Px // This \"x\" is a variable.\n// It is part of a quantification \"for all x, x is P\".\n// It represents many things.\n\nPx // This \"x\" is an individual constant.\n// It is not part of a quantification.\n// It represents just one thing.
+// Variables y constantes individuales\n\nx,Px // Este \"x\" es una variable.\n// Es parte de una cuantificación \"para todo x, x es P\".\n// Representa muchas cosas.\n\nPx // Este \"x\" es un constante individual.\n// No es parte de una cuantificación.\n// Representa solo una cosa.
 
 // A Categorial Syllogism\n\n// All men are mortal.\nx,Hx->Mx\n// Socrates is a man.\nHs\n// Therefore,\n.'.\n// Socrates is mortal.\nMs\n\n// This argument is a syllogism, expressed with predicates.\n// It has two premises and one conclusion.\n// It is valid.
 // Un silogismo categórico\n\n// Todo hombre es mortal.\nx,Hx->Mx\n// Sócrates es hombre.\nHs\n// Por lo tanto,\n.'.\n// Sócrates es mortal.\nMs\n\n// Este argumento es un silogismo, expresado con predicados.\n// Tiene dos premisas y una conclusión.\n// Es válido.
@@ -436,8 +439,8 @@ No encontró subexpresiones en {0}."
 // Barbara\n\nSaR // All squares are rectangles.\nRaP // All rectangles are parallelograms.\n.'. // Therefore,\nSaP // All squares are parallelograms.
 // Barbara\n\nCaR // Todos los cuadrados son rectángulos.\nRaP // Todos los rectángulos son paralelogramos.\n.'. // Por lo tanto,\nCaP // Todos los cuadrados son paralelogramos.
 
-// Celarent\n\nReT // No rectangles are trapezoids.\nSat // All squares are rectangles.\n.'.\nSeT // No squares are trapezoids.
-// Celarent\n\nReT // Ningún rectángulo es trapecio.\nCat // Todos los cuadrados son rectángulos.\n.'.\nCeT // Ningún cuadrado es trapecio.
+// Celarent\n\nReT // No rectangles are trapezoids.\nSaT // All squares are rectangles.\n.'.\nSeT // No squares are trapezoids.
+// Celarent\n\nReT // Ningún rectángulo es trapecio.\nCaT // Todos los cuadrados son rectángulos.\n.'.\nCeT // Ningún cuadrado es trapecio.
 
 // Darii\n\nSaR // All squares are rhombuses.\nPiS // Some parallelograms are squares.\n.'.\nPiR // Some parallelograms are rhombuses.
 // Darii\n\nCaR // Todos los cuadrados son rombos.\nPiC // Algunos paralelogramos son cuadrados.\n.'.\nPiR // Algunos paralelogramos son rombos.

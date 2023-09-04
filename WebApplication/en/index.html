@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   somerby.net/mack/logic
-  Copyright (C) 2015, 2019 MacKenzie Cumings
+  Copyright (C) 2015, 2023 MacKenzie Cumings
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -18,16 +18,26 @@
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
 
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=1086, height=480, initial-scale=1" />
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6S95F5FJRM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6S95F5FJRM');
+</script>
+
 <title>A Logic Calculator</title>
 <meta name="description" content="a web application that decides statements in symbolic logic including modal logic, propositional logic and unary predicate logic">
 
 <link rel="stylesheet" href="../style.css" type="text/css" />
 
 <script type="text/javascript" src="./Servant.js"></script>
-<script type="text/javascript" src="../count.js"></script>
 
 </head>
 <body>
@@ -150,7 +160,7 @@ examples.PredicateLogic = new ExampleSet(
   "// This is predication on two terms.\n\nxRy\n\n// x and y are objects and R is a relation.\n// The \"Decide\" operation doesn't work for statements that contain\n// relations, but the \"Tree Proof\" operation usually does.",
   "// This is a universal generalization.\n\nx,Px // \"For all x, Px is true.\"",
   "// This is an existential quantification.\n\n3x, Px // \"There is an x such that Px is true.\"",
-  "// Constants and Variables\n\nx,Px // This \"x\" is a variable.\n// It is part of a quantification \"for all x, x is P\".\n// It represents many things.\n\nPx // This \"x\" is a constant.\n// It is not part of a quantification.\n// It represents just one thing.",
+  "// Variables and Individual Constants\n\nx,Px // This \"x\" is a variable.\n// It is part of a quantification \"for all x, x is P\".\n// It represents many things.\n\nPx // This \"x\" is an individual constant.\n// It is not part of a quantification.\n// It represents just one thing.",
   "// A Categorial Syllogism\n\n// All men are mortal.\nx,Hx->Mx\n// Socrates is a man.\nHs\n// Therefore,\n.'.\n// Socrates is mortal.\nMs\n\n// This argument is a syllogism, expressed with predicates.\n// It has two premises and one conclusion.\n// It is valid.",
   "// Ordering Drinks\n\n// Everyone will order tea or coffee, but not both.\nx, Tx^Cx\n// Either Jay or Kay will order coffee, but not both.\nCj^Ck\n// If Jay orders coffee, Elle will order tea.\nCj->Tl\n// Elle and Kay will not both order tea.\n~(Tl&Tk)\n//Therefore:\n.'.\n// Jay won't order coffee.\n~Cj\n// Kay won't order tea.\n~Tk\n\n// This is a more complicated argument, expressed with predicates.\n// It has four premises and two conclusions.\n// It is valid.",
   "// A Formal Fallacy\n\n// Every person is a ray of sunshine.\nx,Px->Rx\n// Every person is a being of light and shade.\nx,Px->(Lx&Sx)\n// Therefore,\n.'.\n// every being of light and shade is a ray of sunshine.\nx,(Lx&Sx)->Rx\n\n// This is an example of an invalid argument; the conclusion\n// may be false even if the premises are all true.\n// It's attributed to Bertrand Russell.",
@@ -165,7 +175,7 @@ examples.ModalLogic = new ExampleSet(
   "// Here, but Not Here\n\n// It's possible for something to be here but not here.\n<>3x,Hx&~Hx" );
 examples.TermLogic = new ExampleSet(
   "// Barbara\n\nSaR // All squares are rectangles.\nRaP // All rectangles are parallelograms.\n.'. // Therefore,\nSaP // All squares are parallelograms.",
-  "// Celarent\n\nReT // No rectangles are trapezoids.\nSat // All squares are rectangles.\n.'.\nSeT // No squares are trapezoids.",
+  "// Celarent\n\nReT // No rectangles are trapezoids.\nSaT // All squares are rectangles.\n.'.\nSeT // No squares are trapezoids.",
   "// Darii\n\nSaR // All squares are rhombuses.\nPiS // Some parallelograms are squares.\n.'.\nPiR // Some parallelograms are rhombuses.",
   "// Ferio\n\nSeT // No squares are trapezoids.\nQiS // Some quadrilaterals are squares.\n.'.\nQoT // Some quadrilaterals are not trapezoids.",
   "// Baroco\n\nSaR // All squares are rectangles.\nPoR // Some parallelograms are not rectangles.\n.'.\nPoS // Some parallelograms are not squares.",
@@ -219,7 +229,7 @@ function constructProposition( statement )
     lastStatement = "";
     lastProposition = null;
   }
-  if ( statement != lastStatement )
+  if ( statement != lastStatement || statement == "" )
   {
     lastProposition = global.Logic.Parser.parse( statement.split( "\n" ) );
     // lastStatement won't be set if the statement doesn't parse.
@@ -346,9 +356,12 @@ function sendToTreeProofGenerator( input )
 {
   if ( input !== undefined )
   {
-    // If we try to open the site as a new page, some browsers will block it as a pop-up,  
-    // so open it in the current tab.  
-    window.location = "http://www.umsu.de/logik/trees/#" + input;
+    // Try to open the site as a new window or tab.  
+    Object.assign(document.createElement('a'), {
+      target: '_blank',
+      rel: 'noopener noreferrer',
+      href: "http://www.umsu.de/logik/trees/#" + input,
+    }).click();
   }
 }
 

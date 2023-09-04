@@ -1,4 +1,4 @@
-// Maybe being the value of a constant shouldn't imply existence,
+// Maybe being the value of an individual constant shouldn't imply existence,
 // but in classical logic, it does.  See http://plato.stanford.edu/entries/logic-classical
 (3x,x=g) -> Lg
 3y,Lx

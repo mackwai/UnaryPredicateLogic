@@ -264,6 +264,11 @@ p
   text-indent: 2em;
 }
 
+p.continuation
+{
+  text-indent: 0em;
+}
+
 #text_column>p
 {
   font-family: serif;

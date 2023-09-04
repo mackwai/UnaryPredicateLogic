@@ -53,6 +53,7 @@ namespace UnitTests
       Assert.AreEqual( GetFormula( "(p<=>q)|(r<=>s)" ), "1 - pr - qr + 2pqr - ps - qs + 2pqs + 2prs + 2qrs - 4pqrs" );
       System.Console.WriteLine("formula...");
       Assert.AreEqual( GetFormula( "(p<=>q)|(r<=>s)|(r&p)" ), "1 - qr + pqr - ps - qs + 2pqs + prs + 2qrs - 3pqrs" );
+      System.Console.WriteLine( GetFormula( "(p&~p)|~q" ) );
     }
   }
 }

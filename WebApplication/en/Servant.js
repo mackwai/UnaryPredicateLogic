@@ -53,12 +53,10 @@
           this.functionResultHandlers = new Object();
           this.constructWorker();
           ref = this.scripts;
-          var UrlExists = function (url)
+          var UrlExists = async function (url)
           {
-              var http = new XMLHttpRequest();
-              http.open('HEAD', url, false);
-              http.send();
-              return http.status!=404;
+            var response = await fetch(url);
+            return response.status!=404;
           };
           for (i = 0, len = ref.length; i < len; i++) {
             script = ref[i];
@@ -84,12 +82,10 @@
         };
 
         Servant.prototype.constructWorker = function() {
-          var UrlExists = function (url)
+          var UrlExists = async function (url)
           {
-              var http = new XMLHttpRequest();
-              http.open('HEAD', url, false);
-              http.send();
-              return http.status!=404;
+            var response = await fetch(url);
+            return response.status!=404;
           };
           if ( !UrlExists("Servant.js") )
             alert( "Servant.js" + " not found!" );
@@ -168,16 +164,14 @@
       })();
     }
   } else {
-    window.importScripts = function() {
+    window.importScripts = async function() {
       var i, len, request, scriptElement, src;
       for (i = 0, len = arguments.length; i < len; i++) {
         src = arguments[i];
-        request = new XMLHttpRequest();
-        request.open("GET", src, false);
-        request.send("");
+        var response = await fetch(url);
         scriptElement = document.createElement("script");
         scriptElement.type = "text/javascript";
-        scriptElement.text = request.responseText;
+        scriptElement.text = await response.text();
         document.getElementsByTagName("head")[0].appendChild(scriptElement);
       }
     };

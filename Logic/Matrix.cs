@@ -97,7 +97,7 @@ namespace Logic
     public Counterexample FindNextExample()
     {
       if ( this.FreeVariables.Any() && ContainsModalities )
-        throw new EngineException( "This proposition can't be evaluated; it contains both constants and modal operators." );
+        throw new EngineException( "This proposition can't be evaluated; it contains both individual constants and modal operators." );
 
       Matrix lNegation = Factory.Not( this );
       lNegation = Factory.Bind( FreeVariables, lNegation, Factory.ForAll );
@@ -165,7 +165,7 @@ namespace Logic
     public Counterexample FindNextCounterexample()
     {
       if ( this.FreeVariables.Any() && ContainsModalities )
-        throw new EngineException( "This proposition can't be evaluated; it contains both constants and modal operators." );
+        throw new EngineException( "This proposition can't be evaluated; it contains both individual constants and modal operators." );
 
       Matrix lProposition = this;
       if ( lProposition.FreeVariables.Any() )
@@ -306,7 +306,7 @@ namespace Logic
       if ( this.FreeVariables.Any() )
       {
         if ( ContainsModalities )
-          throw new EngineException( "This proposition can't be decided; it contains both constants and modal operators." );
+          throw new EngineException( "This proposition can't be decided; it contains both individual constants and modal operators." );
         else
           return DecideForFreeVariables();
       }

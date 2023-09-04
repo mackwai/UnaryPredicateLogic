@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   somerby.net/mack/logic
-  Copyright (C) 2015, 2018 MacKenzie Cumings
+  Copyright (C) 2015, 2023 MacKenzie Cumings
  
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -18,9 +18,10 @@
   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 -->
 
-<html>
+<html lang="es">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Información por somerby.net/mack/logic</title>
 
 <link rel="stylesheet" href="../style.css" type="text/css" />
@@ -38,23 +39,23 @@
 
 <p>Esta aplicación web (en lo sucesivo denominada "el software" o "la aplicación") decide la validez / satisfacibilidad / inconsistencia de ciertos tipos de expresiones de la lógica simbólica.</p>
 
-<p>La mayor parte del software está escrito en C# y traducido a JavaScript con <a href="http://www.saltarelle-compiler.com/" target="_blank">Saltarelle</a>.  El código fuente está en <a href="https://github.com/mackwai/UnaryPredicateLogic" target="_blank">GitHub</a>.  Se utiliza <a href="https://github.com/mdaines/viz.js/">Viz.js</a> para generar los diagramas.  La función que hace tablas de verdad está adaptada del <a href="https://github.com/mrieppel/TruthTableGenerator" target="_blank">código</a> escrito por Michael Rieppel.</p>
+<p>El software, en su parte principal, está escrito en C# y traducido a JavaScript con <a href="http://www.saltarelle-compiler.com/" target="_blank">Saltarelle</a>.  El código fuente se encuentra en <a href="https://github.com/mackwai/UnaryPredicateLogic" target="_blank">GitHub</a>.  Se utiliza <a href="https://github.com/mdaines/viz.js/">Viz.js</a> para generar los diagramas.  La función que hace tablas de verdad está adaptada del <a href="https://github.com/mrieppel/TruthTableGenerator" target="_blank">código</a> escrito por Michael Rieppel.</p>
 
 <p>Agradezco a Maximiliano Paesani su ayuda en la traducción de la aplicación web al español.</em></p>
 
 <h2 id="instructions">Instrucciones</h2>
 
-<p>Para usar esta aplicación, escriba una expresión lógica en el cuadro de texto de la página principal. Luego haga clic en el botón "Decidir". Si la expresión es decidible en la aplicación, se obtendrá un resultado. De lo contrario, mostrará algún tipo de mensaje de error explicando cuál es el error. La sección <a href="#the_language">'El lenguaje'</a> explica cómo escribir expresiones lógicas para esta aplicación. Si está buscando ejemplos de expresiones, haga clic en cualquiera de los botones bajo el encabezado titulado "Ejemplos", y la aplicación llenará el cuadro de texto con algún ejemplo de expresión listo para ser decidido.</p>
+<p>Para usar esta aplicación, escriba una expresión lógica en el cuadro de texto de la página principal. Luego haga clic en el botón "Decidir". Si la expresión es decidible en la aplicación, se mostrará el resultado. De lo contrario, mostrará algún tipo de mensaje explicando cuál es el error. La sección <a href="#the_language">'El lenguaje'</a> especifica cómo escribir expresiones lógicas para la aplicación. Si está buscando ejemplos de expresiones, haga clic en cualquiera de los botones bajo el encabezado titulado "Ejemplos", y la aplicación llenará el cuadro de texto con alguna expresión a decidir.</p>
 
 <p>Si hace clic en el botón "Diagramar", la aplicación mostrará un diagrama que explicita cómo la aplicación interpreta la expresión escrita en el cuadro de texto. El diagrama es una representación gráfica de la estructura de datos que la aplicación está usando efectivamente para decidir la expresión.</p>
 
-<p>Si en el cuadro de texto hay una expresión sintácticamente válida perteneciente a la lógica proposicional, se habilitará el botón "Tabla de verdad". Al hacer clic en este botón, la aplicación generará una <a href="http://en.wikipedia.org/wiki/Truth_table" target="_blank">tabla de verdad</a> para esa expresión.</p>
+<p>Si en el cuadro de texto hay una expresión sintácticamente válida perteneciente a la lógica proposicional, se habilitará el botón "Tabla de verdad". Al hacer clic allí, la aplicación generará la <a href="http://en.wikipedia.org/wiki/Truth_table" target="_blank">tabla de verdad</a> correspondiente.</p>
 
 <p>Al hacer clic en el botón "Ejemplo", la aplicación intentará encontrar un tipo de mundo en el que la expresión sea verdadera. Si tiene éxito, mostrará una descripción de ese tipo de mundo.</p>
 
-<p>Al hacer clic en el botón "Contraejemplo", la aplicación intentará encontrar una especie de mundo en el que la expresión sea falsa. Si tiene éxito, mostrará una descripción de ese tipo de mundo.</p>
+<p>El botón "Contraejemplo", inicia la búsqueda de un tipo de mundo que haga falsa la expresión, y si lo encuentra m su descripción.</p>
 
-<p>Al hacer clic en el botón "árbol semántico" redirigirá la expresión al <a href="http://www.umsu.de/logik/trees" target="_blank">generador de árboles semánticos</a>(Tree Proof Generator) de wo.
+<p>El botón "árbol semántico" redirigirá la expresión al <a href="http://www.umsu.de/logik/trees" target="_blank">generador de árboles semánticos</a>(Tree Proof Generator) de wo.
 Es una aplicación web que usa tablas semánticas (árboles) para verificar la validez de una expresión, y proporciona una prueba si decide que es válida. El botón "árbol semántico" se habilitará siempre que haya una expresión sintácticamente válida en el cuadro de texto que no contenga identificaciones u operadores modales. Si desea evaluar una expresión que contiene predicados binarios (relaciones), use el Generador de árboles semánticos.</p>
 
 <h2 id="the_language">El lenguaje</h2>
@@ -66,7 +67,7 @@ Es una aplicación web que usa tablas semánticas (árboles) para verificar la v
 <ul>
   <li><a href="#language_logical_operators">Operadores lógicos unarios y binarios</a></li>
   <li><a href="#language_variable">Variables</a></li>
-  <li><a href="#language_constant">Constantes</a></li>
+  <li><a href="#language_constant">Constantes Individuales</a></li>
   <li>Predicados sobre <a href="#language_unary_predicate">una variable</a> y predicados sobre <a href="#language_nullary_predicate">cero variables</a> (proposiciones)</li>
   <li>Predicados sobre <a href="#language_binary_predicate">dos variables</a> (relaciones)</li>
   <li><a href="#language_grouping">Agrupación</a> mediante paréntesis</li>
@@ -113,7 +114,7 @@ Es una aplicación web que usa tablas semánticas (árboles) para verificar la v
 
 <pre class="symbolic">(A|(B&amp;C))-&gt;D</pre>
 
-<p>La negación es asociativa a la derecha y tiene precede a cualquiera de los operadores binarios, por lo que</p>
+<p>La negación es asociativa por derecha y precede a cualquier operador binario, por ello</p>
 
 <pre class="symbolic">~P &amp; ~Q</pre>
 
@@ -122,26 +123,31 @@ Es una aplicación web que usa tablas semánticas (árboles) para verificar la v
 <pre class="symbolic">(~P) &amp; (~Q)</pre>
 
 <h4 id="language_variable">Variables</h4>
-<p>Las variables son letras minúsculas únicas que representan algún objeto. Cada variable está ligada por un cuantificador. Cualquier letra minúscula que no esté ligada por un cuantificador se interpretará como una <a href="#language_constant">constante</a>.</p>
+<p>Las variables son letras minúsculas únicas que representan algún objeto. Cada variable está ligada por un cuantificador. Cualquier letra minúscula que no esté ligada por un cuantificador se interpretará como una <a href="#language_constant">constante individual</a>.</p>
 
-<h4 id="language_constant">Constantes</h4>
-<p>Las constantes, como las <a href="#language_variable">variables</a>, son letras minúsculas únicas que representan algún objeto fijo. Cualquier letra minúscula que no esté limitada por un cuantificador se interpretará como una constante. Creo que las constantes son completamente innecesarias en la lógica simbólica. El siguiente argumento:</p>
+<h4 id="language_constant">Constantes individuales</h4>
+<p>Las constantes individuales, como las <a href="#language_variable">variables</a>, son letras minúsculas únicas. Representan algún objeto fijo. Cualquier letra minúscula que no esté limitada por un cuantificador se interpretará como una constante individual. Creo que las constantes no son completamente necesarias en la lógica simbólica. El siguiente argumento:</p>
 
 <pre class="symbolic">Hx-&gt;Mx // Todo hombre es mortal.
 Hs     // Socrates es hombre.
 -&gt;     // Por lo tanto
 Ms     // Socrates es mortal.</pre>
 
-<p>podría también representarse sin constantes como</p>
+<p class="continuation">podría también representarse sin constantes individuales como</p>
 
 <pre class="symbolic">Hx-&gt;Mx                                   // Todo hombre es mortal.
 (3x,Sx) &amp; ([]x,Sx-&gt;y,Sy-&gt;x=y) &amp; x,Sx->Hx // Socrates es hombre.
 -&gt;                                       // Por lo tanto
 x,Sx->Mx                                 // Socrates es mortal.</pre>
 
-<p>lo cual, aunque más complicado, es en cierto modo mejor, porque hace explícito lo que típicamente suponemos acerca de Sócrates: que existió y que era, por definición, un individuo único. Aun así, creo que las constantes son una característica demasiado útil para excluirlas del software. El uso de una constante implica que el objeto denotado por ella realmente existe. Esta no es la única forma de interpretar constantes, pero es la más fácil de implementar en este software. Debido a esta interpretación, el software decidirá que <span class="symbolic">3x,x=g</span> es necesariamente cierto. Los objetos posibles (aquellos que pueden o no existir) y los objetos imposibles (los que nunca podrían existir) se pueden representar con predicados unarios.</p>
+<p class="continuation">lo cual, aunque más complicado, es en cierto modo mejor, porque hace explícito lo que típicamente suponemos acerca de Sócrates: que existió y que era, por definición, un individuo único.
+Aun así, creo que las constantes individuales son una característica demasiado útil para excluirlas del software.
+El uso de una constante individual implica que el objeto denotado por ella realmente existe.
+Esta no es la única forma de interpretar constantes individuales, pero es la más fácil de implementar en este software.
+Debido a esta interpretación, el software decidirá que <span class="symbolic">3x,x=g</span> es necesariamente cierto.
+Los objetos posibles (aquellos que pueden o no existir) y los objetos imposibles (los que nunca podrían existir) se pueden representar con predicados unarios.</p>
 
-<p>Como todavía no he encontrado una manera satisfactoria de <a href="#decide">decidir</a> expresiones que contienen tanto operadores modales como constantes, el software rechaza cualquier expresión de este tipo.</p>
+<p>Como todavía no he encontrado una manera satisfactoria de <a href="#decide">decidir</a> expresiones que contienen tanto operadores modales como constantes individuales, el software rechaza cualquier expresión de este tipo.</p>
 
 <h4 id="language_nullary_predicate">Predicados sobre cero variables</h4>
 
@@ -153,11 +159,11 @@ x,Sx->Mx                                 // Socrates es mortal.</pre>
 
 <pre class="symbolic">x,Fx-&gt;F</pre>
 
-<p>será interpretado de la misma manera que</p>
+<p class="continuation">será interpretado de la misma manera que</p>
 
 <pre class="symbolic">x,Fx-&gt;P</pre>
 
-<p>porque la primera &quot;<span class="symbolic">F</span>&quot; se interpreta como un predicado unario y la segunda &quot;<span class="symbolic">F</span>&quot; se interpreta como un predicado nulo.</p>
+<p class="continuation">porque la primera &quot;<span class="symbolic">F</span>&quot; se interpreta como un predicado unario y la segunda &quot;<span class="symbolic">F</span>&quot; se interpreta como un predicado nulo.</p>
 
 <h4 id="language_binary_predicate">Predicados en dos variables</h4>
 
@@ -173,15 +179,15 @@ x,Sx->Mx                                 // Socrates es mortal.</pre>
 
 <pre class="symbolic">x,Ax</pre>
 
-<p>para decir "todo es asombroso". La generalización liga toda la expresión que sigue a la coma, hasta un paréntesis de cierre o el final de la línea de texto en la que se encuentra la generalización. Así</p>
+<p class="continuation">para decir "todo es asombroso". La generalización liga toda la expresión que sigue a la coma, hasta un paréntesis de cierre o el final de la línea de texto en la que se encuentra la generalización. Así</p>
 
 <pre class="symbolic">x,Fx &amp; y,Jy</pre>
 
-<p>generaliza sobre la sub-expresión</p>
+<p class="continuation">generaliza sobre la sub-expresión</p>
 
 <pre class="symbolic">Fx &amp; y,Jy</pre>
 
-<p>en vez de ser sólo una generalización sobre <span class="symbolic">Fx</span>.  Se recomienda añadir paréntesis a los fines de mayor claridad. Por ejemplo:</p>
+<p class="continuation">en vez de ser sólo una generalización sobre <span class="symbolic">Fx</span>.  Se recomienda añadir paréntesis a los fines de mayor claridad. Por ejemplo:</p>
 
 <pre class="symbolic">(x, Fx &amp; (y,Jy))</pre>
 
@@ -189,7 +195,7 @@ x,Sx->Mx                                 // Socrates es mortal.</pre>
 
 <pre class="symbolic">x, (x,F-&gt;Px) &amp; Jx</pre>
 
-<p>la <span class="symbolic">x</span> en <span class="symbolic">Px</span> está ligada por la segunda generalización universal y la x en Jx está ligada por la primera.</p>
+<p class="continuation">la <span class="symbolic">x</span> en <span class="symbolic">Px</span> está ligada por la segunda generalización universal y la x en Jx está ligada por la primera.</p>
 
 <h4 id="language_existential_quantification">Cuantificación existencial</h4>
 
@@ -197,7 +203,7 @@ x,Sx->Mx                                 // Socrates es mortal.</pre>
 
 <pre class="symbolic">3x, Fx &amp; Bx</pre>
 
-<p>Podría significar "Hay una fuente llena de sangre". Las mismas reglas de aplicabilidad y vinculación de variables definidas para las generalizaciones universales se aplican también a las cuantificaciones existenciales.</p>
+<p class="continuation">podría significar "Hay una fuente llena de sangre". Las mismas reglas de aplicabilidad y ligación de variables definidas para las generalizaciones universales se aplican también a las cuantificaciones existenciales.</p>
 
 <h4 id="language_definite_description">Descripciones definidas</h4>
 
@@ -205,7 +211,7 @@ x,Sx->Mx                                 // Socrates es mortal.</pre>
 
 <pre class="symbolic">1x,Rx</pre>
 
-<p>Podría significar "existe sólo un Roy Orbison".</p>
+<p class="continuation">podría significar "existe sólo un Roy Orbison".</p>
 
 <h4 id="language_identity">Identidad</h4>
 
@@ -213,7 +219,7 @@ x,Sx->Mx                                 // Socrates es mortal.</pre>
 
 <pre class="symbolic">x,y, (Fx &amp; x=y) -&gt; Fy</pre>
 
-<p>es una afirmación donde "<span class="symbolic">x=y</span>" significa <span class="symbolic">x</span> es el mismo objeto que <span class="symbolic">y</span>.</p>
+<p class="continuation">es una afirmación donde "<span class="symbolic">x=y</span>" significa <span class="symbolic">x</span> es el mismo objeto que <span class="symbolic">y</span>.</p>
 
 <h4 id="language_modal_operators">Operadores modales</h4>
 
@@ -239,40 +245,38 @@ x,Sx->Mx                                 // Socrates es mortal.</pre>
 
 <h4 id="language_assertions_of_number">Aserciones numéricas</h4>
 
-<h3><b><i>(Perdón, la traducción no está completo...)</b></i></h3>
+<p>El lenguaje incluye un medio para hacer algunas afirmaciones simples de número. Los agregué al idioma solo por conveniencia; a veces ayudan a codificar la lógica en ciertos acertijos lógicos. No pertenecen a ninguna lógica simbólica que yo sepa.</p>
 
-<p>The language includes a means to make some simple assertions of number.  I added them to the language just for convenience; they sometimes help when codifying the logic in certain logic puzzles.  They don't belong to any symbolic logic that I know of.</p>
+<p>Un número entero no negativo <em>n</em> seguido de una sola letra mayúscula <em>P</em> es una afirmación de que exactamente <em>n</em> objetos tienen la propiedad <em>P</em> .</p>
 
-<p>A nonnegative integer <em>n</em> followed by a single capital letter <em>P</em>is an assertion that exactly <em>n</em> objects have the property <em>P</em>.
-
-<p>A nonnegative integer <em>n</em> followed by more than one capital letter <em>P, Q, &hellip;</em> is an assertion that exactly <em>n</em>  of the propositions <em>P, Q, &hellip;</em> are true.
+<p>Un número entero no negativo <em>n</em> seguido de más de una letra mayúscula <em>P, Q, &hellip;</em> es una afirmación de que exactamente <em>n</em> de las proposiciones <em> P, Q, &hellip;</em> son verdaderas.</p>
 
 <table>
-  <tr><th>Example</th><th>Meaning</th></tr>
-  <tr><td><span class="symbolic">0P</span></td><td>No objects are P</td></tr>
-  <tr><td><span class="symbolic">1P</span></td><td>Exactly 1 object is P</td></tr>
-  <tr><td><span class="symbolic">2P</span></td><td>Exactly 2 objects are P</td></tr>
-  <tr><td><span class="symbolic">0PQR</span></td><td>None of P, Q and R are true</td></tr>
-  <tr><td><span class="symbolic">1PQR</span></td><td>Only one of P, Q and R is true</td></tr>
-  <tr><td><span class="symbolic">2PQR</span></td><td>Exactly 2 of P, Q and R are true</td></tr>
+  <tr><th>Ejemplo</th><th>Significación</th></tr>
+  <tr><td><span class="symbolic">0P</span></td><td>Ningún objeto es P</td></tr>
+  <tr><td><span class="symbolic">1P</span></td><td>Exactamente 1 objeto es P</td></tr>
+  <tr><td><span class="symbolic">2P</span></td><td>Exactamente 2 objetos son P</td></tr>
+  <tr><td><span class="symbolic">0PQR</span></td><td>Ninguna de P, Q y R son ciertas</td></tr>
+  <tr><td><span class="symbolic">1PQR</span></td><td>Solo uno de P, Q y R es cierta</td></tr>
+  <tr><td><span class="symbolic">2PQR</span></td><td>Exactamente 2 de P, Q y R son ciertas</td></tr>
 </table>
 
-<h4 id="text_replacements">Text Replacements</h4>
+<h4 id="text_replacements">Reemplazos de texto</h4>
 
-<p>A line that begins with "<span class="symbolic">#replace</span>" will be interpreted as a directive to replace one string of letters or symbols with another in the lines below the directive.  It's a way to define your own operator symbols or give meaningful names to predicates and variables. For example, when given the text</p>
+<p>Una línea que comienza con "<span class="symbolic">#replace</span>" se interpretará como una directiva para reemplazar una cadena de letras o símbolos con otra en las líneas debajo de la directiva. Es una forma de definir sus propios símbolos de operador o dar nombres significativos a predicados y variables. Por ejemplo, cuando se le da el texto</p>
 
 <pre class="symbolic">#replace => ->
-#replace man H
+#replace hombre H
 #replace mortal M
 #replace socrates s
-#replace therefore .'.
+#replace porlotanto .'.
 
-x, man x => mortal x
-man socrates
-therefore
+x, hombre x => mortal x
+hombre socrates
+porlotanto
 mortal socrates</pre>
 
-<p>the application will convert it to</p>
+<p class="continuation">la aplicación lo convertirá en</p>
 
 <pre class="symbolic">
 x, H x -> M x
@@ -280,54 +284,54 @@ M s
 .'.
 M s</pre>
 
-<p>before parsing it.</p>
+<p class="continuation">antes de analizarlo sintácticamente.</p>
 
-<h4 id="language_therefore">The "Therefore" Symbol</h4>
+<h4 id="language_therefore">El símbolo "Por lo tanto"</h4>
 
-<p>The "therefore" symbol, "<span class="symbolic">.'.</span>" (period apostrophe period) can be used to test logical arguments.  It will be evaluated the same way as the <a href="#material_conditional">material conditional</a>, but the result displayed will be different.  Instead of indicating if the argument is necessarily true, contingent, or impossible, the software will indicate if the argument is valid (necessarily true) or invalid (not necessarily true).  Additionally, if the argument is valid, the software will indicate if the premises are inconsistent or the conclusion is tautological.</p>
+<p>El símbolo "por lo tanto", "<span class="simbólico">.'.</span>" (punto, apóstrofe, punto) se puede utilizar para probar argumentos lógicos. Se evaluará de la misma manera que el <a href="#material_conditional">material condicional</a>, pero el resultado mostrado será diferente. En lugar de indicar si el argumento es necesariamente cierto, contingente o imposible, el software indicará si el argumento es válido (necesariamente cierto) o inválido (no necesariamente cierto). Además, si el argumento es válido, el software indicará si las premisas son inconsistentes o la conclusión es tautológica.</p>
 
-<h3>Valid Expressions</h3>
+<h3>Expresiones válidas</h3>
 
-<p>A valid expression in this language is just a true/false statement.  It may be a single line, like</p>
+<p>En este idioma, una expresión válida es solo una declaración de verdadero/falso. Puede ser una sola línea, como</p>
 
 <pre class="symbolic">P&amp;Q-&gt;R</pre>
 
-<p>or it may be multiple lines, like</p>
+<p class="continuation">o pueden ser varias líneas, como</p>
 
 <pre class="symbolic">Hx-&gt;Mx
 Hs
 -&gt;
 Ms</pre>
 
-<p>If it is a single line, the software interprets the line as a statement and decides whether it is valid, satisfiable, or self-contradictory.  If it is multiple lines, the software joins those lines to be a single expression and decides that statement.  The software treats each line that is a statement as if it were conjoined to the other lines that are statements with a logical AND.  This enables you to spread a long statement across multiple lines. For example,</p>
+<p>Si es una sola línea, el software interpreta la línea como una afirmación y decide si es válida, consistente o contradictoria. Si son varias líneas, el software une estas líneas para formar una sola expresión y decide esta declaración. El software trata cada línea que es una declaración como si estuviera unida a las otras líneas que son declaraciones con un AND lógico. Esto le permite distribuir una declaración larga en varias líneas. Por ejemplo,</p>
 
 <pre class="symbolic">P-&gt;Q
 Q-&gt;R
 P</pre>
 
-<p>is interpreted to mean the same as</p>
+<p class="continuation">se interpreta que significa lo mismo que</p>
 
 <pre class="symbolic">(P-&gt;Q)&amp;(Q-&gt;R)&amp;P</pre>
 
-<p>If an expression has several lines and exactly one of them is a single binary logical operator or the "therefore" symbol, the software will join the lines before the operator with a logical AND, join the lines after the operator with a logical AND, and then join these two conjuncts with the single logical operator.  For example,</p>
+<p>Si una expresión tiene varias líneas y exactamente una de ellas es un solo operador lógico binario o el símbolo "por lo tanto", el software unirá las líneas antes del operador con un "y" lógico, unirá las líneas después del operador con un "y" lógico y luego une estos dos conjuntos con el único operador lógico. Por ejemplo,</p>
 
 <pre class="symbolic">Hx-&gt;Mx
 Hs
 -&gt;
 Ms</pre>
 
-<p>is interpreted to mean the same as</p>
+<p class="continuation">se interpreta que significa lo mismo que</p>
 
 <pre class="symbolic">( (Hx-&gt;Mx) &amp; Hs ) -&gt; (Ms)</pre>
 
-<p>This enables you to express a logical argument - several premises followed by a conclusion - in a familiar way, or test if one set of statements is equivalent to another set of statements without putting them all on one line.</p>
+<p>Esto le permite expresar un argumento lógico (varias premisas seguidas de una conclusión) de una manera familiar, o probar si un conjunto de declaraciones es equivalente a otro conjunto de declaraciones sin ponerlas todas en una sola línea.</p>
 
-<p>Long statements can be broken up across several lines.  The software will interpret text on several lines as one statement according to the following rules:</p>
+<p>Las declaraciones largas se pueden dividir en varias líneas. El software interpretará el texto en varias líneas como una declaración de acuerdo con las siguientes reglas:</p>
 <ul>
-  <li>If a line starts between opening and closing parentheses, it will be joined with the preceding line.</li>
-  <li>If a line ends with a binary operator, it will be joined to the next line.</li>
-  <li>If a line begins with a binary operator, it will be joined with the preceding line.</li>
-<p>For example, the following text blocks are all interpreted the same way:</p>
+  <li>Si una línea comienza entre paréntesis de apertura y cierre, se unirá con la línea anterior.</li>
+  <li>Si una línea termina con un operador binario, se unirá a la línea siguiente.</li>
+  <li>Si una línea comienza con un operador binario, se unirá con la línea anterior.</li>
+<p>Por ejemplo, los siguientes bloques de texto se interpretan todos de la misma manera:</p>
 
 <ul>
   <li><pre class="symbolic">x,Ax|Bx|Cx</pre></li>
@@ -341,285 +345,281 @@ Cx</pre></li>
 Ax|Bx|Cx)</pre></li>
 </ul>
 
-<h4>Whitespace</h4>
+<h4>El espacio en blanco</h4>
 
-<p>Tabs, spaces and empty lines are always ignored.  You could type this:</p>
+<p>Los tabuladores, los espacios y las líneas vacías siempre se ignoran. Podrías escribir esto:</p>
 
 <pre class="symbolic">((A   |B|C)-&gt;J )&lt;=&gt;x,F    x&amp;             y,Ix</pre>
 
-<p>or this:</p>
+<p>o esto:</p>
 
 <pre class="symbolic">(  (A | B |C      )-&gt;J)&lt;=&gt;         x  ,Fx&amp;y,I     x</pre>
 
-<p>and expect the same result.  Whitespace can be used to make expressions easier to read.  But would probably want to type this instead:</p>
+<p class="continuation">y esperar el mismo resultado. Los espacios en blanco se pueden utilizar para facilitar la lectura de las expresiones. Pero probablemente querría escribir esto en su lugar:</p>
 
 <pre class="symbolic">((A|B|C) -&gt; J ) &lt;=&gt; x, Fx &amp; y,Ix</pre>
 
-<p>because it's easier to read.</p>
+<p class="continuation">porque es más fácil de leer.</p>
 
-<h3>Comments</h3>
+<h3>Comentarios</h3>
 
-<p>A "<span class="symbolic">//</span>" and anything following it on a line is ignored by the software.  This enables you to add helpful comments to expressions, like</p>
+<p>El software ignora un "<span class="symbolic">//</span>" y todo lo que le sigue en una línea. Esto le permite agregar comentarios útiles a las expresiones, como</p>
 
-<pre class="symbolic">Hx-&gt;Mx // All men are mortal.
-Hs     // Socrates is a man.
-.'.     // Therefore
-Ms     // Socrates is mortal.</pre>
+<pre class="symbolic">Hx-&gt;Mx // Todos los humanos son mortales.
+Hs     // Sócrates es humano.
+.'.    // Por lo tanto,
+Ms     // Sócrates es mortal.</pre>
 
-<h3>Criteria for the Design of the Language</h3>
+<h3>Criterios para el diseño del lenguaje</h3>
 
-<p>The language this tool uses is a kind of symbolic logic.  It was designed with these criteria in mind:</p>
+<p>El lenguaje que utiliza esta aplicación es una especie de lógica simbólica. Fue diseñado con estos criterios en mente:</p>
 
 <ul>
-  <li>The language should only use basic ASCII characters which are available on a standard English keyboard, so typing expressions in the language is easy.</li>
-  <li>The language's constructs should use few characters so they can be typed quickly.</li>
-  <li>The language should enable a person to arrange statement in such a way that it is easy to read.</li>
-  <li>The symbols defined in the language should have a precedent in other languages.  The symbols in this language are borrowed from conventional symbolic logic, conventional mathematical notation, and the C programming language.</li>
+  <li>El idioma solo debe usar caracteres ASCII básicos que están disponibles en un teclado estándar en inglés, por lo que es fácil para un usuario escribir expresiones.</li>
+  <li>Las construcciones del lenguaje deben estar hechas de pocos caracteres para que puedan escribirse rápidamente.</li>
+  <li>El lenguaje debe permitir que una persona organice la declaración de tal manera que sea fácil de leer.</li>
+  <li>Los símbolos definidos en el idioma deben tener un precedente en otros idiomas. Los símbolos de este lenguaje se toman prestados de la lógica simbólica convencional, la notación matemática convencional y el lenguaje de programación C.</li>
 </ul>
 
-<h2 id="the_algorithm">The Algorithm</h2>
+<h2 id="the_algorithm">El algoritmo</h2>
 
-<p>When the software is <a href="#decide">decides</a> a proposition, it does not operate on symbolic statements.  It operates on a <a href="http://en.wikipedia.org/wiki/Tree_%28data_structure%29">tree</a>-like data structure that is meant to represent the proposition.  In this &quot;tree&quot;, each node is an element in the proposition (a predicate, a variable, a quantifier, etc.) and each edge is a dependency between an element and its subordinate elements (e.g. a logical AND is a node with edges pointing to the two elements on either side of it).</p>
+<p>Cuando el software <a href="#decide">decide</a> una proposición, no opera sobre sentencias simbólicas. Opera en una estructura de datos similar a un <a href="http://en.wikipedia.org/wiki/Tree_%28data_structure%29">árbol</a> que la estructura lógica de la proposición. En este "árbol", cada nodo es un elemento de la proposición (un predicado, una variable, un cuantificador, etc.) y cada arista es una dependencia entre un elemento y sus elementos subordinados (por ejemplo, un AND lógico es un nodo con bordes que apuntan a los dos elementos a cada lado de la misma).</p>
 
-<h3 id="parsing">Parsing</h3>
+<h3 id="parsing">Analizando sintácticamente</h3>
 
-<p>The first step the software takes is to read the text given to it and attempt to convert it to a &quot;tree&quot;.  If it succeeds, the text is a well-formed statement within the software's symbolic language and the software can <a href="#decide">decide</a> the tree.  There is more than one way this parsing could be done, so the details are not important, as long as the resulting tree is correct.</p>
+<p>El primer paso que toma el software es leer el texto que se le da e intentar convertirlo en un "árbol". Si tiene éxito, el texto es una declaración bien formada dentro del lenguaje simbólico del software y el software puede <a href="#decide">decidir</a> el árbol. Hay más de una forma en que se puede realizar este análisis, por lo que los detalles no son importantes, siempre que el árbol resultante sea correcto.</p>
 
-<p>The exact choice of language isn't important to the decision process, either.  So long as a language only represents logical elements that are supported by the software and the language does not allow any logical element to depend on itself, directly or indirectly (e.g. no Liar's Paradoxes), that language could replace the language that is recognized by this software and the decision algorithm would work the same way.</p>
+<p>La elección exacta del idioma tampoco es importante para el proceso de decisión. Siempre que un lenguaje solo represente elementos lógicos que son compatibles con el software y el lenguaje no permita que ningún elemento lógico dependa de sí mismo, directa o indirectamente (por ejemplo, sin la Paradojas de Mentiroso), este lenguaje podría reemplazar el lenguaje reconocido por este. el software y el algoritmo de decisión funcionarían de la misma manera.</p>
 
-<p id="replacement">For certain elements which can be defined in terms of other elements, the software makes substitutions:</p>
+<p id="replacement">Para algunos elementos que se pueden definir en términos de otros elementos, el software realiza sustituciones:</p>
 
 <table id="substitutions">
-  <caption>Substitutions</caption>
-  <tr><th></th><th>Element</th><th>Replacement</th></tr>
-  <tr><td><span class="symbolic">3x,...</span></td><td>existential quantification</td><td><span class="symbolic">(~x,~...)</span></td></tr>
-  <tr><td><span class="symbolic">1x,...</span></td><td>definite description</td><td><span class="symbolic">(3y,x, x=y &lt;=&gt; ...)</span></td></tr>
-  <tr><td><span class="symbolic">&lt;&gt;...</span></td><td>possibility</td><td><span class="symbolic">(~[]~...)</span></td></tr>
-  <tr><td><span class="symbolic">...^...</span></td><td>exclusive disjunction</td><td><span class="symbolic">~(...&lt;=&gt;...)</span></td></tr>
+  <caption>Sustituciones</caption>
+  <tr><th></th><th>Elemento</th><th>Reemplazo</th></tr>
+  <tr><td><span class="symbolic">3x,...</span></td><td>cuantificador existencial</td><td><span class="symbolic">(~x,~...)</span></td></tr>
+  <tr><td><span class="symbolic">1x,...</span></td><td>descripción definitiva</td><td><span class="symbolic">(3y,x, x=y &lt;=&gt; ...)</span></td></tr>
+  <tr><td><span class="symbolic">&lt;&gt;...</span></td><td>posibilidad</td><td><span class="symbolic">(~[]~...)</span></td></tr>
+  <tr><td><span class="symbolic">...^...</span></td><td>disyunción exclusiva</td><td><span class="symbolic">~(...&lt;=&gt;...)</span></td></tr>
 </table>
 
-<p>It might be helpful to show some symbolic statements and what their corresponding trees look like.  For the statement <span class="symbolic">w,Xw-&gt;Tw</span>, which might be interpreted as "all my exes live in Texas", the software creates a tree like this:</p>
+<p>Podría ser útil mostrar algunas declaraciones simbólicas y cómo se ven sus árboles correspondientes. Para la declaración <span class="symbolic">w,Xw-&gt;Tw</span>, que podría interpretarse como "todos mis ex viven en Texas", el software crea un árbol como este:</p>
 
-<img src="ExesInTexas.png" alt="graph of 'All my exes live in Texas.'" />
+<img src="../ExesInTexas.png" alt="graph of 'All my exes live in Texas.'" />
 
-<p>The elements of the statement are all there: a universal generalization, a material implication beneath it, and two predications beneath that.  The whole declares a logical relationship between being George Strait's ex and living in Texas.</p>
+<p>Los elementos de la declaración están todos aquí: una generalización universal, una implicación material debajo de ella y dos predicaciones debajo de esto. El conjunto declara una relación lógica entre ser ex de George Strait y vivir en Texas.</p>
 
-<p>More complicated statements have more complicated trees.  For the syllogism</p>
+<p>Las declaraciones más complicadas tienen árboles más complicados. Para el silogismo</p>
 
-<pre class="symbolic">
-x,Hx-&gt;Mx // All men are mortal;
-Hs       // Socrates is a man;
--&gt;       // therefore
-Ms       // Socrates is mortal.
-</pre>
+<pre class="symbolic">Hx-&gt;Mx // Todos los humanos son mortales.
+Hs     // Sócrates es humano.
+.'.    // Por lo tanto,
+Ms     // Sócrates es mortal.</pre>
 
-<p>the software creates this tree:</p>
+<p class="continuation">el software crea este árbol:</p>
 
-<img src="Socrates.png" alt="graph of a syllogism" />
+<img src="../Socrates.png" alt="graph of a syllogism" />
 
-<p>The argument has been converted to a single proposition; the software will decide whether or not the argument is valid by deciding whether or not this proposition is necessarily true.</p>
+<p>El argumento se ha convertido en una sola proposición; el software decidirá si el argumento es válido o no al decidir si esta proposición es cierta necesariamente o no.</p>
 
-<h3 id="decision">Decision</h3>
+<h3 id="decision">Decisión</h3>
 
-<p>The software operates on trees like the ones described above.  To decide a proposition, for each <a href="#kind_of_world">kind of world</a>, and sometimes for each kind of world in each <a href="#interpretation">interpretation</a>, the software determines whether the proposition represented by the tree is true or false. If is is found to be true in each kind of world, it is decided to be necessary.  If it is found to be false in each kind of world, it is decided to be impossible.  If it is found to be true in some kind of world and false in another, it is decided to be contingent.  The software works from the top down.  Each node in the tree is <a href="#evaluate">evaluated</a> by evaluating its subordinate nodes; they in turn are evaluated by evaluating their subordinate nodes.  The procedure for evaluating a node depends on what kind of logical element it represents; each logical element has its own procedure.  The following sections define procedures followed for each logical element.</p>
+<p>El software opera en árboles como los descritos anteriormente. Para decidir una proposición, para cada <a href="#kind_of_world">tipo de mundo</a>, y a veces para cada tipo de mundo en cada <a href="#interpretation">interpretación</a>, el software determina si la proposición representada por el árbol es cierta o equivocada. Si se encuentra que es cierta en cada tipo de mundo, se decide que es necesaria. Si se encuentra que es equivocada en cada tipo de mundo, se decide que es imposible. Si se encuentra que es cierta en algún tipo de mundo y equivocada en otro, se decide que es contingente. El software funciona de arriba hacia abajo. Cada nodo en el árbol es <a href="#evaluate">evaluado</a> por evaluando sus nodos subordinados; ellos a su vez son evaluados por evaluando sus nodos subordinados. El procedimiento para evaluar un nodo depende de qué tipo de elemento lógico representa; cada elemento lógico tiene su propio procedimiento. Las siguientes secciones definen los procedimientos seguidos para cada elemento lógico.</p>
 
-<p>If the proposition does not contain any <a href="#modality">modalities</a> or constants, the proposition is decided by evaluating the tree for each kind of world.  This effectively tests the proposition in every <a href="#possible_world">possible world</a>, and therefore is sufficient to decide whether the proposition is necessarily true, contingent, or impossible.</p>
+<p>Si la proposición no contiene ninguna <a href="#modality">modalidad</a> o constante individual, la proposición se decide evaluando el árbol para cada tipo de mundo. Esto prueba efectivamente la proposición en todos los <a href="#possible_world">mundos posibles</a> y, por lo tanto, es suficiente para decidir si la proposición es necesariamente verdadera, contingente o imposible.</p>
 
-<p>If the proposition contains constants, the proposition is decided by deciding two other propositions.  The first proposition is formed by binding all constants in the original proposition with universal generalizations.  If this proposition is true, then the original proposition is necessarily true.  The second proposition is formed by binding all constants in the original proposition with existential quantifiers.  If this proposition is impossible, then the original proposition is impossible.  In all other cases, the original proposition is contingent.</p>
+<p>Si la proposición contiene constantes individuales, la proposición se decide decidiendo otras dos proposiciones. La primera proposición se forma ligando todas las constantes individuales de la proposición original con generalizaciones universales. Si esta proposición es cierta, entonces la proposición original es necesariamente cierta. La segunda proposición se forma vinculando todas las constantes de la proposición original con cuantificadores existenciales. Si esta proposición es imposible, entonces la proposición original es imposible. En todos los demás casos, la proposición original es contingente.</p>
 
-<p>If the proposition contains modalities (possibility, necessity), the proposition can't simply be decided by evaluating it under every kind of world.  If this were done, it would have the effect of treating each <a href="#nullary_predicate">nullary predicate</a> as if it were a contingent proposition, and every kind of object as a contingent kind of object.  It would have the effect of making the software decide modalities in unexpected ways.  For instance, the software would decide that <span class="symbolic">[]P-&gt;~P</span> is necessarily true, since <span class="symbolic">P</span> here would be assumed always to be a contingent proposition, and therefore never necessarily true.  Instead, the software evaluates the proposition under every interpretation.  If it is true for every kind of world under every <a href="#interpretation">interpretation</a>, then the proposition is necessarily true.</p>
+<p>Si la proposición contiene modalidades (posibilidad, necesidad), la proposición no puede decidirse simplemente evaluándola por todo tipo de mundo. Si se hiciera esto, tendría el efecto de tratar cada <a href="#nullary_predicate">predicado nulo</a> como si fuera una proposición contingente, y cada tipo de objeto como un tipo de objeto contingente. Tendría el efecto de hacer que el software decidiera modalidades de manera inesperada. Por ejemplo, el software decidiría que <span class="symbolic">[]P-&gt;~P</span> es necesariamente cierto, ya que aquí se asumiría <span class="symbolic">P</span> ser siempre una proposición contingente y, por lo tanto, nunca necesariamente cierta. En cambio, el software evalúa la proposición bajo cada interpretación. Si es cierta para todo tipo de mundo bajo cada <a href="#interpretation">interpretación</a>, entonces la proposición es necesariamente cierta.</p>
 
 
-<h4 id="universal_generalization">Evaluation of a Universal Generalization</h4>
+<h4 id="universal_generalization">Evaluación de una generalización universal</h4>
 
-<p>The obvious way to <a href="#evaluate">evaluate</a> a universal generalization is to instantiate its variable with each object in the world and <a href="#evaluate">evaluate</a> each of the resulting propositions; if all instantiations are true, the generalization is true; if any are false, the generalization is false.  The problem with this approach is that a world may have an infinite number of objects in it, so evaluation in a finite amount of time may not be possible.  The software does not try to do this.  It takes a different, but similar approach.</p>
+<p>La manera obvia de <a href="#evaluate">evaluar</a> una generalización universal es instanciar su variable con cada objeto en el mundo y <a href="#evaluate">evaluar</a> cada uno de los proposiciones resultantes; si todas las instanciación son ciertas, la generalización es cierta; si alguna es falsa, la generalización es falsa. El problema con este enfoque es que un mundo puede tener una cantidad infinita de objetos, por lo que la evaluación en una cantidad de tiempo finita puede no ser posible. El software no intenta hacer esto. Se necesita un enfoque diferente, pero similar.</p>
 
-<p>Suppose all of the objects in a world can be grouped into a finite number of kinds.  Suppose further that these kinds are defined in such a way that, if a universal generalization is instantiated with any object of a kind, the resulting proposition is logically equivalent to the proposition that would result from an instantiation with any other object of the same kind.  If all that is true, then the universalization is <a href="#decide">decidable</a>.  And all that <em>is</em> true.  The logical elements supported by the software allow for possible worlds to be grouped this way (how this grouping is done is defined <a href="#kind_of_object">elsewhere</a>). To evaluate a universal generalization, the software instantiates the universal generalization with each <a href="#kind_of_object">kind of object</a> until all kinds of object have been tried or until one instantiation is found to be false.  If all instantiations are true, the universal generalization is true, if any instantiations are false, the universal generalization is false.</p>
+<p>Supongamos que todos los objetos de un mundo se pueden agrupar en un número finito de tipos. Supongamos además que estos tipos se definen de tal manera que, si se instancia una generalización universal con cualquier objeto de un tipo, la proposición resultante es lógicamente equivalente a la proposición que resultaría de una instanciación con cualquier otro objeto del mismo tipo. Si todo esto es cierto, entonces la universalización es <a href="#decide">decidible</a>. Y todo esto <em>es</em> cierto. Los elementos lógicos admitidos por el software permiten que los mundos posibles se agrupen de esta manera (la forma en que se realiza esta agrupación se define <a href="#kind_of_object">en otro lugar</a>). Para evaluar una generalización universal, el software instancia la generalización universal con cada <a href="#kind_of_object">tipo de objeto</a> hasta que se hayan probado todos los tipos de objetos o hasta que se encuentre que una instancia es falsa. Si todas las instancias son ciertas, la generalización universal es cierta, si alguna instancia es falsa, la generalización universal es falsa.</p>
 
-<h4>Evaluation of a Conjunction (logical AND)</h4>
+<h4>Evaluación de una conjunción ("y" lógico)</h4>
 
-<p>To evaluate a conjunction, the software evaluates the conjoined propositions.  If both are true, the conjunction is true.  If either is false, the conjunction is false.</p>
+<p>Para evaluar una conjunción, el software evalúa las proposiciones conjuntas. Si ambos son ciertas, la conjunción es cierta. Si alguna es falsa, la conjunción es falsa.)</p>
 
-<h4>Evaluation of a Disjunction (logical OR)</h4>
+<h4>Evaluación de una disyunción ("o" lógico)</h4>
 
-<p>To evaluate a disjunction, the software evaluates the disjoined propositions.  If both are false, the disjunction is false.  If either is true, the disjunction is true.</p>
+<p>Para evaluar una disyunción, el software evalúa las proposiciones separadas. Si ambas son falsas, la disyunción es falsa. Si una o otra de las dos es cierta, la disyunción es cierta.</p>
 
-<h4>Evaluation of a Negation (logical NOT)</h4>
+<h4>Evaluación de una negación ("no" lógico)</h4>
 
-<p>To evaluate a negation, the software evaluates the negated proposition.  If it is true, the negation is false.  If it is false, the negation is true.</p>
+<p>Para evaluar una negación, el software evalúa la proposición negada. Si es cierta, la negación es falsa. Si es falsa, la negación es cierta.</p>
 
-<h4 id="material_conditional">Evaluation of a Material Conditional</h4>
+<h4 id="material_conditional">Evaluación de un condicional material</h4>
 
-<p>To evaluate a material conditional, the software evaluates its antecedent and its consequent.  If the antecedent is true and the consequent is false, then the material conditional is false.  In all other cases, the material conditional is true.</p>
+<p>Para evaluar un condicional material, el software evalúa su antecedente y su consecuente. Si el antecedente es cierta y el consecuente falso, entonces el condicional material es falso. En todos los demás casos, el condicional material es cierta.</p>
 
-<h4>Evaluation of an Equivalence</h4>
+<h4>Evaluación de una equivalencia</h4>
 
-<p>To evaluate an equivalence, the software evaluates both sides of the equivalence.  If they have the same truth value, the equivalence is true.  If they have different truth values, the equivalence is false.</p>
+<p>Para evaluar una equivalencia, el software evalúa ambos lados de la equivalencia. Si tienen el mismo valor de verdad, la equivalencia es cierta. Si tienen diferentes valores de verdad, la equivalencia es falsa.</p>
 
-<h4>Evaluation of a Joint Denial</h4>
+<h4>Evaluación de una negación conjunta</h4>
 
-<p>To evaluate a joint denial, the software evaluates the denied propositions.  If they are both false, the joint denial is true.  If either are true, the joint denial is false.</p>
+<p>Para evaluar una denegación conjunta, el software evalúa las proposiciones denegadas. Si ambas son falsas, la negación conjunta es cierta. Si cualquiera de las dos es cierta, la negación conjunta es falsa.</p>
 
-<h4>Evaluation of other Logical Elements</h4>
+<h4>Evaluación de otros elementos lógicos</h4>
 
-<p>The software <a href="#replacement">replaces</a> all other logical elements supported by the language with equivalent combinations of elements, and so does not need additional processes to evaluate them.</p>
+<p>El software <a href="#replacement">reemplaza</a> todos los demás elementos lógicos admitidos por el lenguaje con combinaciones equivalentes de elementos, por lo que no necesita procesos adicionales para evaluarlos.</p>
 
-<h4 id="evaluation_of_a_necessity">Evaluation of a Necessity</h4>
+<h4 id="evaluation_of_a_necessity">Evaluación de una necesidad</h4>
 
-<p>Whether or not a proposition is necessarily true is determined by evaluating the proposition in each <a href="#kind_of_world">kind of world</a> that is possible under the current <a href="#interpretation">interpretation</a> of the predicates in the proposition.  If it is true for all such <a href="#kind_of_world">kinds of worlds</a>, then it is necessarily true.  If it is false under any such kind of world, then it is not necessarily true.  Proof: If the proposition is true in all <a href="#kind_of_world">kinds of worlds</a>, then it is true in all <a href="#possible_world">possible worlds</a>, and therefore necessarily true.  If the proposition is false in any <a href="#kind_of_world">kind of world</a>, then it is false in some <a href="#possible_world">possible world</a>, and therefore not necessarily true.</p>
+<p>Si una proposición es necesariamente cierta, se determina evaluando la proposición en cada <a href="#kind_of_world">tipo de mundo</a> que es posible bajo la <a href="#interpretation">interpretación</ actual. a> de los predicados en la proposición. Si es cierta para todos estos <a href="#kind_of_world">tipos de mundos</a>, entonces es necesariamente cierta. Si es falsa en tal tipo de mundo, no es necesariamente cierta. Prueba: Si la proposición es cierta en todos los <a href="#kind_of_world">tipos de mundos</a>, entonces es cierta en todos los <a href="#possible_world">mundos posibles</a>, y por lo tanto necesariamente cierta. Si la proposición es falsa en cualquier <a href="#kind_of_world">tipo de mundo</a>, entonces es falsa en algún <a href="#possible_world">mundo posible</a>, y por lo tanto no necesariamente cierta.</p>
 
-<h4>Evaluation of a Predication on One Variable</h4>
+<h4>Evaluación de una predicación sobre una variable</h4>
 
-<p>Whenever the software evaluates a <a href="#unary_predicate">unary predication</a>, it has already instantiated the predication's variable with one <a href="#kind_of_object">kind of object</a> or another.  Proof: Since the software rejects propositions with unbound variables, and defines all quantifications in terms of universal generalizations, if a proposition is being evaluated, all variables in that proposition are bound by universal generalizations.  Since the software proceeds from the top of the tree downward, a predication on a variable is only evaluated in order to evaluate the universal generalization further up the tree that binds that variable.  Because of the process of evaluating universal generalizations, that variable has always been instantiated by the software by the time the predication is evaluated.</p>
+<p>Cada vez que el software evalúa una <a href="#unary_predicate">predicación unaria</a>, ya ha instanciado la variable de la predicación con un <a href="#kind_of_object">tipo de objeto</a> u otro. Prueba: dado que el software rechaza las proposiciones con variables no ligadas y define todas las cuantificaciones en términos de generalizaciones universales, si se evalúa una proposición, todas las variables de esta proposición están ligadas por generalizaciones universales. Dado que el software procede desde la parte superior del árbol hacia abajo, una predicación sobre una variable solo se evalúa para evaluar la generalización universal más arriba en el árbol que liga esta variable. Debido al proceso de evaluación de generalizaciones universales, el software siempre ha instanciado esta variable en el momento en que se evalúa la predicación.</p>
 
-<p>The predication is true if the predicate is true of the instantiated <a href="#kind_of_object">kind of object</a>, and false if the predicate is not true that kind of object.</p>
+<p>La predicación es cierta si el predicado es cierto del <a href="#kind_of_object">tipo de objeto</a> instanciado, y falsa si el predicado no es cierto para este tipo de objeto.</p>
 
-<h4 id="nullary_predicate">Evaluation of a Predication on No Variables (a Nullary Predicate)</h4> 
+<h4 id="nullary_predicate">Evaluación de una predicación sin variables (un predicado nulo)</h4> 
 
-<p>The <a href="#kind_of_world">kind of world</a> under which the software is currently evaluating the nullary predicate determines whether that nullary predicate is true or false.  Which kind of world it is depends on the nearest <a href="#evaluation_of_a_necessity">necessity</a> above the predication in the tree.  If there is no necessity above the predication, then the kind of world is chosen as a part of the overall <a href="#decision">decision</a> process.</p>
+<p>El <a href="#kind_of_world">tipo de mundo</a> en cual el software evalúa actualmente el predicado nulo determina si este predicado nulo es cierto o falso. El tipo de mundo depende de la <a href="#evaluation_of_a_necessity">necesidad</a> más cercana por encima de la predicación en el árbol. Si no hay necesidad por encima de la predicación, el tipo de mundo se elige como parte del proceso general de <a href="#decision">decisión</a>.</p>
 
-<h4>Evaluation of an Identification</h4>
+<h4>Evaluación de una identificación</h4>
 
-<p>Whenever the software evaluates an identification, it has already instantiated each of the identification's variables with one <a href="#kind_of_object">kind of object</a> or another.  Proof: Since the software rejects propositions with unbound variables, and defines all quantifications in terms of universal generalizations, if a proposition is being evaluated, all variables in that proposition are bound by universal generalizations.  Since the software proceeds from the top of the tree downward, an identification of two variables is only evaluated in order to evaluate the universal generalizations further up the tree that bind those variables.  Because of the process of evaluating universal generalizations, those variables have always been instantiated by the software by the time the predication is evaluated.</p>
+<p>Cada vez que el software evalúa una identificación, ya ha instanciado cada una de las variables de la identificación con un <a href="#kind_of_object">tipo de objeto</a> u otro. Prueba: dado que el software rechaza las proposiciones con variables no ligadas y define todas las cuantificaciones en términos de generalizaciones universales, si se evalúa una proposición, todas las variables de esta proposición están ligadas por generalizaciones universales. Dado que el software procede de la parte superior del árbol hacia abajo, la identificación de dos variables solo se evalúa para evaluar las generalizaciones universales más arriba en el árbol que unen estas variables. Debido al proceso de evaluación de generalizaciones universales, el software siempre ha instanciado estas variables en el momento en que se evalúa la predicación.</p>
 
-<p>The identification is true if its variables have been instantiated with the same kind of object, and false if they have been instantiated with two different kinds of object.  The software assumes that transworld identity of indiscernibles is impossible; it always considers two objects to be different kinds of objects if they are from two different kinds of universes.  A proof that transworld identity of indiscernibles is impossible can be found <a href="http://mackwai.blogspot.com/2014/08/transworld-identity-of-indiscserables.html" target="_blank">here</a>.</p>
+<p>La identificación es cierta si sus variables han sido instanciadas con el mismo tipo de objeto, y falsa si han sido instanciadas con dos tipos de objetos diferentes. El software asume que la identidad transmundial de los indiscernibles es imposible; siempre considera que dos objetos son tipos diferentes de objetos si son de dos tipos diferentes de mundos. <a href="http://mackwai.blogspot.com/2014/08/transworld-identity-of-indiscserables.html" target="_blank">aquí</ a>.</p>
 
-<h3>Definitions</h3>
+<h3>Definiciones</h3>
 
-<h4 id="evaluate">Evaluate</h4>
+<h4 id="evaluate">Evaluar</h4>
 
-<p>When the software <em>evaluates</em> a proposition, it determines if it is true or false under the current <a href="#interpretation">interpretation</a>, <a href="#kind_of_world">kind of world</a>, and instantiation of variables.</p>
+<p>Cuando el software <em>evalúa</em> una proposición, determina si es cierta o falsa según la <a href="#interpretation">interpretación</a> actual, <a href="#kind_of_world">tipo del mundo</a>, e instanciación de variables.</p>
 
-<h4 id="decide">Decide</h4>
+<h4 id="decide">Decidir</h4>
 
-<p>When the software <em>decides</em> a proposition, it determines if it is necessarily true (valid), contingent (satisfiable but not valid), or impossible (not satisfiable).</p>
+<p>Cuando el software <em>decide</em> una proposición, determina si es necesariamente cierta (válida), contingente (satisfacible pero no válida) o imposible (no satisfacible).</p>
 
-<h4 id="modality">Modality</h4>
+<h4 id="modality">Modalidad</h4>
 
-<p>A proposition governed by a modal operator.  The software supports the <a href="http://en.wikipedia.org/wiki/Alethic_modality">alethic modalities</a> of <a href="http://en.wikipedia.org/wiki/Logical_possibility">possibility</a> and necessity.</p>
+<p>Una proposición gobernada por un operador modal. El software es compatible con las <a href="http://en.wikipedia.org/wiki/Alethic_modality">modalidades aleticas</a> de <a href="http://en.wikipedia.org/wiki/Logical_possibility" >posibilidad</a> y necesidad.</p>
 
-<h4 id="unary_predicate">Unary Predicate</h4>
+<h4 id="unary_predicate">Predicado unario</h4>
 
-<p>A unary predicate is a predicate over one variable; the term "monadic predicate" is synonymous, but I've chosen to use the term "unary predicate" for three reasons:</p>
+<p>Un predicado unario es un predicado sobre una variable; el término "predicado monádico" es sinónimo, pero he elegido usar el término "predicado unario" por tres razones:</p>
 
 <ol>
-  <li>In most programming languages, operators that have one operand (e.g. negation, bit inversion) are called "unary operators".</li>
-  <li>In functional programming, especially in the language Haskell, "monadic" is a significant term, which relates to the <a href="http://en.wikipedia.org/wiki/Monad_%28category_theory%29">monads</a> of category theory and not to predicates on one variable.</li>
-  <li>The words "unary" and "predicate" both have their roots in Latin.  The word "monadic" has its roots in Greek.  So calling it a "monadic predicate" mixes linguistic roots, but calling it a "unary predicate" does not.</li>
+  <li>En la mayoría de los lenguajes de programación, los operadores que tienen un operando (por ejemplo, negación, inversión de bits) se denominan "operadores unarios".</li>
+  <li>En la programación funcional, especialmente en el lenguaje Haskell, "monádico" es un término significativo que se relaciona con las <a href="http://en.wikipedia.org/wiki/Monad_%28category_theory%29">mónadas</a> de la teoría de categorías y no predicar sobre una variable.</li>
+  <li>Las palabras "unario" y "predicado" tienen sus raíces en latín. La palabra "monádico" tiene sus raíces en griego. Entonces, llamarlo "predicado monádico" mezcla raíces lingüísticas, pero llamarlo "predicado unario" no.</li>
 </ol>
 
-<p>A Unary predicate is about the same thing as a property.  In this document, the two are used interchangeably, except that a unary predicate "is true of" an object or "is not true of" an boejct, whereas an object "has" or "does not have" a property.</p>
+<p>Un predicado unario es casi lo mismo que una propiedad. En este documento, los dos se usan indistintamente, excepto que un predicado unario "es cierta por" un objeto o "no es cierta por" un objeto, mientras que un objeto "tiene" o "no tiene" una propiedad.</p>
 
-<p>It may be important to note that "predicate" and "predication" are two different things.  A <em>predicate</em> is a proposition, property, or relation; a <em>predication</em> is the application of a predicate to some number of variables.</p>
+<p>Puede ser importante tener en cuenta que "predicado" y "predicación" son dos cosas diferentes. Un <em>predicado</em> es una proposición, propiedad o relación; una <em>predicación</em> es la aplicación de un predicado a unas variables.</p>
 
-<h4>Nullary Predicate</h4>
+<h4>Predicado nulo</h4>
 
-<p>Nullary predicates are the same as the "propositions" in <a href="http://en.wikipedia.org/wiki/Propositional_calculus">propositional calculus</a>; they are simply true or false within a possible world.  They can be thought of as predicates over zero variables - predicates over nothing - or everything, depending on how you look at it.  Hence the term "nullary predicate".</p>
+<p>Los predicados nulos son los mismos que las "proposiciones" en <a href="http://en.wikipedia.org/wiki/Propositional_calculus">cálculo proposicional</a>; son simplemente ciertas o falsas dentro de un mundo posible. Se pueden considerar como predicados sobre cero variables, predicados sobre nada, o sobre todo, dependiendo de cómo se mire. De ahí el término "predicado nulo".</p>
 
-<h4>Proposition</h4>
+<h4>Proposición</h4>
 
-<p>In this document, the word "proposition" is used three different ways, one to mean a <a href="#nullary_predicate">nullary predicate</a>, another to mean any idea that must be true or false, and another to mean a data structure <a href="#parsing">constructed by the software</a> that captures some of the logical content of the idea it is supposed to represent.</p>
+<p>En este documento, la palabra "proposición" se usa de tres maneras diferentes, una para significar un <a href="#nullary_predicate">predicado nulo</a>, otra para significar cualquier idea que debe ser cierta o equivocada, y otra para significa una estructura de datos <a href="#parsing">construida por el software</a> que captura parte del contenido lógico de la idea que se supone que representa.</p>
 
-<h4 id="possible_world">Possible World</h4>
+<h4 id="possible_world">Mundo posible</h4>
 
-<p>The term chosen by philosophers to denote any way the universe might be, or might have been, had it not been what it is.</p>
+<p>El término elegido por los filósofos para denotar cualquier forma en que el universo podría ser, o podría haber sido, si no hubiera sido lo que es.</p>
 
-<h4 id="kind_of_world">Kinds of Worlds</h4>
+<h4 id="kind_of_world">Tipos de mundos</h4>
 
-<p>To decide a proposition or evaluate a <a href="#modality">modality</a>, all <a href="#possible_world">possible worlds</a> must be grouped into a finite number of kinds of worlds.  The following paragraphs describes how this is done.</p>
+<p>Para decidir una proposición o evaluar una <a href="#modality">modalidad</a>, todos los <a href="#possible_world">mundos posibles</a> deben agruparse en un número finito de clases de mundos. Los siguientes párrafos describen cómo se hace esto.</p>
 
-<p>A nullary predicate is either true or false in a possible world.  A first-order proposition has only a finite number of nullary predicates in it, so with respect to the nullary predicates in a proposition, possible worlds can be grouped into kinds based on which of these nullary predicates are true within a world and which are false.  For a proposition which contains nullary predicates and no other kind of predicates, there are as many kinds of worlds as there are combinations of nullary predicates that can be selected from the nullary predicates in the proposition.  If a proposition contains <em>n</em> nullary predicates, then there are 2<sup><em>n</em></sup> kinds of worlds to evaluate.</p>
+<p>Un predicado nulo es cierto o falso en un mundo posible. Una proposición de primer orden tiene solo un número finito de predicados nulos, por lo que con respecto a los predicados nulos en una proposición, los mundos posibles se pueden agrupar en tipos según cuáles de estos predicados nulos son verdaderos dentro de un mundo y cuáles son falsos. Para una proposición que contiene predicados nulos y ningún otro tipo de predicados, hay tantos tipos de mundos como combinaciones de predicados nulos que se pueden seleccionar de los predicados nulos en la proposición. Si una proposición contiene <em>n</em> predicados nulos, entonces hay 2<sup><em>n</em></sup> tipos de mundos para evaluar.</p>
 
-<p>Either a world has a certain kind of object in it or it doesn't.  If a proposition contains unary predicates and in-world identifications but no nullary predicates, the kinds of worlds it can distinguish are defined in terms of the <a href="#kind_of_object">kinds of objects</a> present or absent in a world.  If the software defines <em>o</em> kinds of objects for such a proposition, then it defines 2<sup><em>o</em></sup>-1 kinds of worlds for that proposition.  One is subtracted from the total number of combinations because the empty world is excluded from evaluation.  The software effectively assumes that there is no such thing as an empty world.  If it didn't, the software would decide that <span class="symbolic">x,Ax&amp;~Ax</span> is possible.  Maybe it should.
+<p>O un mundo tiene un tipo de objeto especifico o no lo tiene. Si una proposición contiene predicados unarios e identificaciones en el mundo pero no predicados nulos, los tipos de mundos que puede distinguir se definen en términos de los <a href="#kind_of_object">tipos de objetos</a> presentes o ausentes en un mundo. Si el software define <em>o</em> tipos de objetos para tal proposición, entonces define 2<sup><em>o</em></sup>-1 tipos de mundos para esa proposición. Uno se resta del número total de combinaciones porque el mundo vacío se excluye de la evaluación. El software efectivamente asume que no existe tal cosa como un mundo vacío. Si no fuera así, el software decidiría que <span class="symbolic">x,Ax&amp;~Ax</span> es posible. Tal vez debería.</p>
 
-<p>If a proposition contains nullary predicates and either unary predicates or in-world identifications, the software must define a kind of world for each combination of nullary predicates verified and combinations of kinds of objects present.  This is just the Cartesian product of the two, so there are up to 2<sup><em>n</em></sup>(2<sup><em>o</em></sup>-1) kinds of worlds that must be evaluated.</p>
+<p>Si una proposición contiene predicados nulos y predicados unarios o identificaciones dentro de un mundo, el software debe definir un tipo de mundo para cada combinación de predicados nulos verificados y combinaciones de tipos de objetos presentes. Este es solo el producto cartesiano de los dos, por lo que hay hasta 2<sup><em>n</em></sup>(2<sup><em>o</em></sup>-1 ) tipos de mundos que deben ser evaluados.</p>
 
-<p>A proposition that contains modalities might involve <em>transworld identifications</em>, i.e. it might involve identifications whose subjects might belong to two different possible worlds.  For example, in &quot;<span class="symbolic">x,P&amp;&lt;&gt;(3y,y=x &amp; ~P)</span>&quot;, <span class="symbolic">y</span> is inside of a modality (<span class="symbolic">&lt;&gt;</span>) that <span class="symbolic">x</span> is outside of, and therefore <span class="symbolic">x</span> and <span class="symbolic">y</span> may belong to different possible worlds when <span class="symbolic">y=x</span> is evaluated. Because of this, the software must define multiple versions of each of the kinds of worlds mentioned in the preceding paragraph.  When there are <em>t</em> such transworld identifications, there are up to 2<sup><em>n</em></sup>(2<sup><em>o</em></sup>&nbsp;-&nbsp;1)&nbsp;&times;&nbsp;<em>t</em> kinds of worlds that must be evaluated.</p>
+<p>Una proposición que contiene modalidades podría involucrar <em>identificaciones transmundiales</em>, es decir, podría involucrar identificaciones cuyos sujetos podrían pertenecer a dos mundos que posible son diferentes. Por ejemplo, en &quot;<span class="symbolic">x,P&amp;&lt;&gt;(3y,y=x &amp; ~P)</span>", <span class="symbolic">y</span> está dentro de una modalidad (<span class="symbolic">&lt;&gt;</span>) de la que <span class="symbolic">x</span> está fuera y, por lo tanto, <span class= "symbolic">x</span> y <span class="symbolic">y</span> pueden pertenecer a mundos posibles que son diferentes cuando se evalúa <span class="symbolic">y=x</span>. Por ello, el software debe definir múltiples versiones de cada uno de los tipos de mundos mencionados en el párrafo anterior. Cuando hay <em>t</em> tales identificaciones transmundiales, hay hasta 2<sup><em>n</em></sup>(2<sup><em>o</em></sup>&nbsp;-&nbsp;1)&nbsp;&times;&nbsp;<em>t</em> tipos de mundos que deben ser evaluados.</p>
 
-<h4 id="kind_of_object">Kinds of Objects</h4>
+<h4 id="kind_of_object">Tipos de objetos</h4>
 
-<p>To evaluate a <a href="#universal_generalization">universal generalization</a>, all objects in the world must be grouped into a finite number of <em>kinds of objects</em>.  The following paragraphs describes how this is done.</p>
+<p>Para evaluar una <a href="#universal_generalization">generalización universal</a>, todos los objetos del mundo deben agruparse en un número finito de <em>tipos de objetos</em>. Los siguientes párrafos describen cómo se hace esto.</p>
 
-<p>If a proposition contains no relations (e.g. identifications, binary predicates), and a finite number of properties, then it cannot distinguish between one object and another, if both of these objects have the same properties.  For example, <span class="symbolic">Xw-&gt;Tw</span> is false if <span class="symbolic">w</span> is instantiated with any of an umlimited number of objects that do not have the property <span class="symbolic">T</span> but have the property <span class="symbolic">X</span>, regardless of what other properties those objects might have.  So for such a proposition, objects can be grouped into kinds based on which of the proposition's unary predicates they verify and falsify.  There will be 2<sup><em>u</em></sup> of these kinds, one for each combination of unary predicates that may be chosen from <em>u</em> unary predicates.</p>
+<p>Si una proposición no contiene relaciones (por ejemplo, identificaciones, predicados binarios) y contiene un número finito de propiedades, no puede distinguir entre un objeto y otro si ambos objetos tienen las mismas propiedades. Por ejemplo, <span class="symbolic">Xw-&gt;Tw</span> es falso si <span class="symbolic">w</span> se instancia con cualquiera de un número ilimitado de objetos que no tienen la propiedad <span class="symbolic">T</span> pero tienen la propiedad <span class="symbolic">X</span>, independientemente de qué otras propiedades puedan tener estos objetos. Entonces, para tal proposición, los objetos se pueden agrupar en tipos según los predicados unarios de la proposición que verifican y falsifican. Habrá 2<sup><em>u</em></sup> de estas clases, una por cada combinación de predicados unarios que se pueda elegir entre <em>u</em> predicados unarios.</p>
 
-<p>If a proposition contains identifications, grouping objects by kinds is more complicated.
-Two objects in a proposition may have the same properties that are mentioned in the proposition and yet not be identical, so defining kinds by properties alone is not enough.
-For identifications, it is assumed that it is sufficient to evaluate each combination of 0 to <em>i</em> of each predicate combination, where <em>i</em> is the maximum number of distinct free variables involved in identifications for any matrix bound by a quantifier within the proposition.
-I don't have proof for this assumption, but it seems to work.</p>
+<p>Si una proposición contiene identificaciones, agrupar objetos por tipos es más complicado.
+Dos objetos en una proposición pueden tener las mismas propiedades que se mencionan en la proposición y, sin embargo, no ser idénticos, por lo que no es suficiente definir clases solo por propiedades.
+Para las identificaciones, se supone que es suficiente evaluar cada combinación de 0 a <em>i</em> de cada combinación de predicados, donde <em>i</em> es el número máximo de variables libres distintas involucradas en las identificaciones para cualquier matriz ligada por un cuantificador dentro de la proposición.
+No tengo pruebas para esta suposición, pero parece funcionar.</p>
 
-<p>Altogether, if there are <em>u</em> unary predicates in a proposition and <em>i</em> is the previously mentioned maximum, then up to <em>i</em>2<sup><em>u</em></sup> kinds of objects must be evaluated.</p>
+<p>En total, si hay <em>u</em> predicados unarios en una proposición y <em>i</em> es el máximo mencionado anteriormente, se deben evaluar hasta <em>i</em>2<sup><em>u</em></sup> tipos de objetos.</p>
 
+<h4 id="interpretation">Interpretaciones</h4>
 
-<h4 id="interpretation">Interpretations</h4>
-
-<p>When deciding a proposition that does not contain any <a href="#modality">modalities</a>, the software defines as many kinds of worlds as are possible under the assumptions that</p>
+<p>Al decidir una proposición que no contiene ninguna <a href="#modality">modalidad</a>, el software define tantos tipos de mundos como sea posible bajo las suposiciones de que</p>
 
 <ul>
-  <li>All nullary predicates are contingent and do not necessarily have any logical relationship with each other.</li>
-  <li>All combinations of properties are possible, e.g. <span class="symbolic">3x,Px&amp;Qx</span> is always possible, so <span class="symbolic">P</span> and <span class="symbolic">Q</span> cannot be interpreted as "awesome" and "not awesome", respectively.</li>
+  <li>Todos los predicados nulos son contingentes y no tienen necesariamente ninguna relación lógica entre sí.</li>
+  <li>Todas las combinaciones de propiedades son posibles. Por ejemplo, <span class="symbolic">3x,Px&amp;Qx</span> siempre es posible, por lo tanto no pueden interpretar <span class="symbolic">P</span> y <span class="symbolic">Q</span> como "rojo" y "no rojo", respectivamente.</li>
 </ul>
 
-<p>This works for propositions that do not contain modalities, but it will not work for propositions that contain modalities.  For propositions that contain modalities, the software must evaluate the proposition under these assumptions, but it must also evaluate the proposition under every other possible set of assumptions about the relationships of nullary predicates to each other and to the kinds of objects in a world.  The software does this by defining <em>interpretations</em>.  An <em>interpretation</em> is a set of <a href="#kind_of_world">kinds of worlds</a>; it contains every kind of world that is possible under a given interpretation of the predicates in the proposition, and no other kind of worlds.  To evaluate a proposition under every possible interpretation, the software simply evaluates the proposition under every nonempty subset of the kinds of worlds that it defines for the proposition.  So, if there are <em>u</em> kinds of worlds for a proposition, then there are 2<sup><em>u</em>-1</sup> interpretations that must be evaluated.</p>
+<p>Esto funciona para proposiciones que no contienen modalidades, pero no funcionará para proposiciones que contienen modalidades. Para proposiciones que contienen modalidades, el software debe evaluar la proposición con estos supuestos, pero también debe evaluar la proposición con cualquier otro conjunto de supuestos que es posible sobre las relaciones de los predicados nulos entre sí y con los tipos de objetos en un mundo. El software hace esto definiendo <em>interpretaciones</em>. Una <em>interpretación</em> es un conjunto de <a href="#kind_of_world">tipos de mundos</a>; contiene todo tipo de mundo que es posible bajo una interpretación dada de los predicados en la proposición, y ningún otro tipo de mundo. Para evaluar una proposición con todas las interpretaciones posibles, el software simplemente evalúa la proposición con cada subconjunto no vacío de los tipos de mundos que define para la proposición. Entonces, si hay tipos de mundos <em>u</em> para una proposición, entonces hay 2<sup><em>u</em>-1</sup> interpretaciones que deben evaluarse.</p>
 
 
-<h2>Notes</h2>
+<h2>Notas</h2>
 
-<h3>Semantics of Quantified Modal Logic</h3>
+<h3>Semántica de la lógica modal cuantificada</h3>
 
-<h4>Transworld Identity</h4>
+<h4>Identidad transmundial</h4>
 
-<p>It seems common in discussions of quantified modal logic to assume that two objects in two different possible worlds can be identical in some way; they are considered to be the same object.
-In all quantified modal logics I have encountered, the equality operator ("<span class="symbolic">=</span>") means this kind of identity.
-<!--As I have argued elsewhere, this identity or sameness cannot be an identity of indiscernibles.-->
-I developed this software's handling of quantified modal logic without knowing that this kind of identity was what was normally used in quantified modal logics, and consequently made "<span class="symbolic">=</span>" indicate the one kind of identity that I knew was well-defined: identity of indiscernibles.
-This makes the software's quantitified modal unusual, but I hope not useless.
-It is possible to represent customary identity in the software's language.
-Consider what it means for two objects in two different worlds to be the same object.
-If I say "If I hadn't felt so sick on Monday, I would have gone to work", I'm talking about two possible worlds: the actual world and a counterfactual world where I went to work on Monday, but I am talking about one person who exists in both worlds.
-But what is it that makes them the same?
-My first guess would be that they share a property in common &mdash; that of being me &mdash; and they each is the only object in its respective world that has that property, but it isn't that simple.
-In some other world, George Washington might not have been the first president of the United States of America.
-If we started writing an alternative history about the USA as it would have been if George Washington had nver been president, we would probably consider the non-presidental George Washington to be the same person as the actual George Washington, but we would not consider whomever else we chose to be the first president to be the same person as the actual first president of the USA, even thought they are the sole possessors of the property of being the first president of the USA in their respective worlds.
-Why?
-That's an interesting question, but for the immediate purposes of writing it as a symbolic statement, it doesn't need an answer.</p>
+<p>Parece común en las discusiones sobre la lógica modal cuantificada suponer que dos objetos en dos mundos posibles diferentes pueden ser idénticos de alguna manera; se consideran el mismo objeto.
+En todas las lógicas modales cuantificadas que he encontrado, el operador de igualdad ("<span class="symbolic">=</span>") significa este tipo de identidad.
+Desarrollé el manejo de este software de la lógica modal cuantificada sin saber que este tipo de identidad era lo que normalmente se usaba en la lógica modal cuantificada y, en consecuencia, hice que "<span class="simbólico">=</span>" indicara el único tipo de identidad que sabía estaba bien definida: identidad de indiscernibles.
+Esto causa el modal cuantificado del software ser inusual, pero espero que no sea inútil.
+Es posible representar la identidad común en el lenguaje del software.
+Considere lo que significa que dos objetos en dos mundos diferentes sean el mismo objeto.
+Si digo "Si no me hubiera sentido tan mal el lunes, habría ido a trabajar", estoy hablando de dos mundos posibles: el mundo real y un mundo contrafactual donde fui a trabajar el lunes, pero estoy hablando de una persona que existe en ambos mundos.
+Pero, ¿qué es lo que los hace iguales?
+Mi primera suposición sería que comparten una propiedad en común &mdash; el de ser <em>yo</em> &mdash; y cada uno de ellos es el único objeto en su respectivo mundo que tiene esa propiedad, pero no es tan simple.
+En algún otro mundo, George Washington podría no haber sido el primer presidente de los Estados Unidos de América.
+Si empezáramos a escribir una historia alternativa sobre los EE. UU. como hubiera sido si George Washington nunca hubiera sido presidente, probablemente consideraríamos que el George Washington que no es presidente es la misma persona que el George Washington real, pero no consideraríamos a quien sea. De lo contrario, elegimos ser el primer presidente para ser la misma persona que el primer presidente real de los EE. UU., aunque son los únicos poseedores de la propiedad de ser el primer presidente de los EE. UU. en sus respectivos mundos.
+¿Por qué?
+Esta es una pregunta interesante, pero para los propósitos inmediatos de escribirla como una declaración simbólica, no necesita respuesta.</p>
 
-<p>To capture this notion of identity which is customarily used in modal logic in this language, we would choose a predicate to represent the property that the two objects are supposed to share in common, assert that no more than one object in a world can have that property, and then assert that both objects have that property.  For example:</p>
+<p>Para capturar esta noción de identidad que se usa habitualmente en la lógica modal en este lenguaje, elegiríamos un predicado para representar la propiedad que se supone que los dos objetos tienen en común, afirmaríamos que no más de un objeto en un mundo puede tener esa propiedad, y luego afirmar que ambos objetos tienen esta propiedad. Por ejemplo:</p>
 
-<pre class="symbolic">// In any world, there can only be one first predsident of the USA.
+<pre class="symbolic">// En cualquier mundo, solo puede haber un primer presidente de los EE. UU.
 []x,y, Px&Py -> x=y
 
-// George Washington was the first president of the USA.
+// George Washington fue el primer presidente de los Estados Unidos.
 x,Gx -> Px
 
-// George Washington might not have been the first president of the USA.
+// George Washington podría no haber sido el primer presidente de los Estados Unidos.
 <>3x,Gx&~Px
 </pre>
 
-<p>Unfortunately, the software does not support propositions of this complexity, so it can't decide proposition that use this representation of transworld identity.
+<p>Desafortunadamente, el software no admite declaraciones de esta complejidad, y por lo tanto no puede decidir declaraciones que utilicen esta representación de identidad transmundial.</p>
 
-<h4>Instantiation of Object inside of Modal Expressions</h4>
+<h4>Instanciacións de objetos dentro de expresiones modales</h4>
 
-<p>Quantifiers are always evaluated within a Kind of World.  They only range over the objects which exist in that Kind of World. I'm not sure if I should call it "actualist", but the idea is at least similar to the idea in Rod Girle's <a href="http://www.amazon.com/Possible-Worlds-Rod-Girle/dp/0773526684"><em>Possible Worlds</em></a>.  So any time a variable is instantiated with a kind of object, the kind of world that it exists in is fixed.  This entails that "<span class="symbolic">x, Px -&gt; []Px</span>" is necessarily true.  If you wanted to express the proposition <em>if anything is P, then it is necessarily P</em>, you could use the formulation of transworld identity described above:</p>
+<p>Los cuantificadores siempre se evalúan dentro de un tipo de mundo. Solo se extienden sobre los objetos que existen en este tipo de mundo. No estoy seguro de si debería llamarlo "actualist", pero la idea es al menos similar a la idea en <a href="http://www.amazon.com/Possible-Worlds-Rod-Girle/" de Rod Girle dp/0773526684"><em>Mundos posibles</em></a>. Entonces, cada vez que se crea una instancia de una variable con un tipo de objeto, se fija el tipo de mundo en el que existe. Esto implica que "<span class="symbolic">x, Px -&gt; []Px</span>" es necesariamente cierto. Si quisiera expresar la proposición <em>si algo es P, entonces necesariamente es P</em>, podría usar la formulación de identidad transmundial descrita anteriormente:</p>
 
-<pre class="symbolic">// Choose R arbitrarily.
-[]x,y, Rx&Ry -> x=y // In any world, there is no more than one R.
+<pre class="symbolic">// Elija R arbitrariamente.
+[]x,y, Rx&Ry -> x=y // En cualquier mundo, no hay más de una R.
 
 x, Rx & (Px -> []y, Ry -> Py)
 </pre>
 
-<p>Unfortunately, this expression involves too many interpretations and the software will reject it.  </p>
+<p>Desafortunadamente, esta expresión implica demasiadas interpretaciones y el software la rechazará.</p>
 
 
-<h3>Run-Time Efficiency and Limitations</h3>
+<h3>Eficiencia y limitaciones del tiempo de ejecución</h3>
 
-<p>As can be seen by combining the formulas given in the sections on <a href="#kind_of_object">kinds of objects</a>, <a href="#kind_of_world">kinds of worlds</a>, and <a href="#interpretation">interpretations</a>, to decide a proposition with no modalities, the software must evaluate the proposition in up to <span style="font-size: medium;">2<sup><em>n</em></sup>&nbsp;&times;&nbsp;Max(0,&nbsp;2<sup><em>i</em>2<sup><em>u</em></sup></sup>&nbsp;-&nbsp;1)</span> kinds of worlds, where <em>n</em> is the number of distinct nullary predicates in the proposition, <em>u</em> is the number of distinct unary predicates in the proposition, and <em>i</em> is the maximum number of distinct free variables involved in identifications for any matrix bound by a quantifier within the proposition, or 1 if the proposition contains variables but no identifications, or 0 if the proposition contains no variables.  To decide a proposition with modalities, the software must evaluate the proposition in up to <span style="font-size: large;">2<sup>2<sup><em>n</em></sup>&nbsp;&times;&nbsp;Max(0,&nbsp;2<sup><em>i</em>2<sup><em>u</em></sup></sup>&nbsp;-&nbsp;1)</sup></span> interpretations.  This means that the algorithm does not scale well; its run time is exponential or super-exponential in relation to the complexity of the proposition being decided.  This does not, however, prevent the software from performing fast enough when deciding propositions with small values for <em>n</em>, <em>u</em> and <em>i</em>.</p>
+<p>Como se puede ver al combinar las fórmulas dadas en las secciones sobre <a href="#kind_of_object">tipos de objetos</a>, <a href="#kind_of_world">tipos de mundos</a> y <a href="#interpretation">interpretaciones</a>, para decidir una propuesta sin modalidades, el software debe evaluar la propuesta en hasta <span style="font-size: medium;">2<sup><em>n</em></sup>&nbsp;&times;&nbsp;Max(0,&nbsp;2<sup><em>i</em>2<sup><em>u</em></sup></sup>&nbsp;-&nbsp;1)</span> tipos de mundos, donde <em>n</em> es el número de predicados nulos distintos en la proposición, <em>u</em> es el número de predicados unarios distintos en la proposición, y <em>i</em> es el número máximo de variables libres distintas que son involucradas en identificaciones para cualquier matriz limitada por un cuantificador dentro de la proposición, o 1 si la proposición contiene variables pero no identificaciones, o 0 si la proposición no contiene variables. Para decidir una proposición con modalidades, el software debe evaluar la proposición en hasta <span style="font-size: large;">2<sup>2<sup><em>n</em></sup>&nbsp ;&times;&nbsp;Max(0,&nbsp;2<sup><em>i</em>2<sup><em>u</em></sup></sup>&nbsp;-&nbsp;1) </sup></span> interpretaciones. Esto significa que el algoritmo no escala bien; su tiempo de ejecución es exponencial o superexponencial en relación con la complejidad de la proposición que se decide. Sin embargo, esto no impide que el software funcione lo suficientemente rápido al decidir proposición con valores pequeños para <em>n</em>, <em>u</em> y <em>i</em>.</p>
 
-<p>The software actually defines <em>i&#772;</em>2<sup><em>u</em></sup> kinds of objects, where <em>i&#772;</em> is <em>i</em> rounded up to the nearest power of 2.  It is not necessary for <em>i</em> to be rounded up in order for the algorithm to be correct, but it makes it easier to encode kinds of objects as binary numbers.  Also to keep binary encoding simple, it does define empty worlds, but it skips over them when evaluating propositions.  The software actually encodes kinds of worlds and interpretations as 32-bit binary numbers.  This enables the software to go fast, but does put a hard limit on the complexity of propositions it can decide; <span style="font-size: medium;"><em>n</em><em>&nbsp;+&nbsp;i&#772;</em>2<sup><em>u</em></sup>&nbsp;&le;&nbsp;32</span> for non-modal propositions and  <span style="font-size: medium;">2<sup><em>n</em>&nbsp;+&nbsp;<em>i&#772;</em>2<sup><em>u</em></sup></sup> &le; 32</span> for modal propositions.</p>
+<p>En realidad, el software define <em>i&#772;</em>2<sup><em>u</em></sup> tipos de objetos, donde <em>i&#772;</em> es <em >i</em> redondeado a la potencia de 2 más cercana. No es necesario que <em>i</em> se redondee para que el algoritmo sea correcto, pero facilita la codificación de tipos de objetos como números binarios. Además, para mantener la codificación binaria simple, define mundos vacíos, pero los omite al evaluar las proposiciones. El software en realidad codifica tipos de mundos e interpretaciones como números binarios de 32 bits. Esto permite que el software funcione rápido, pero pone un límite estricto a la complejidad de las propuestas que puede decidir; <span style="font-size: medium;"><em>n</em><em>&nbsp;+&nbsp;i&#772;</em>2<sup><em>u</em></sup>&nbsp;&le;&nbsp;32</span> para proposiciones no modales y <span style="font-size: medium;">2<sup><em>n</em>&nbsp;+&nbsp; <em>i&#772;</em>2<sup><em>u</em></sup></sup> &le; 32</span> para proposiciones modales.</p>
 
-<p>The following tables list the largest combined values of <em>n</em>, <em>u</em> and <em>i</em> that the software supports.</p>
+<p>Las siguientes tablas enumeran los valores combinados más grandes de <em>n</em>, <em>u</em> y <em>i</em> que admite el software.</p>
 
 <table id="maxima_for_modal_propositions">
-  <caption>Maxima for Modal Propositions</caption>
+  <caption>Maxima para proposiciones modales</caption>
   <tr><td>5</td><td>0</td><td>0</td></tr>
   <tr><td>4</td><td>0</td><td>2</td></tr>
   <tr><td>3</td><td>1</td><td>2</td></tr>
@@ -632,7 +632,7 @@ x, Rx & (Px -> []y, Ry -> Py)
 </table>
 
 <table id="maxima_for_non_modal_propositions">
-  <caption>Maxima for Non-modal Propositions</caption>
+  <caption>Maxima para proposiciones no modales</caption>
   <tr><td>32</td><td>0</td><td>0</td></tr>
   <tr><td>31</td><td>0</td><td>2</td></tr>
   <tr><td>30</td><td>1</td><td>2</td></tr>
@@ -658,27 +658,27 @@ x, Rx & (Px -> []y, Ry -> Py)
   <tr><td>0</td><td>3</td><td>16</td></tr>
 </table>
 
-<h3>Contact</h3>
+<h3>Contacto</h3>
 
-<p>You can contact me (the developer of this application) by emailing me at <span id="a"><span id="sgnimuc" class="backwards">g@sgnimuc.eiznekcam</span>mail.com</span> or by adding a comment to <a href="http://mackwai.blogspot.com/2014/11/feedback-for-somerbynetmacklogic.html" target="_blank">this blog post</a>.  I'm willing to answer questions or provide help on using the software.</p>
+<p>Puede ponerse en contacto conmigo (el desarrollador de esta aplicación) enviándome un correo electrónico a <span id="a"><span id="sgnimuc" class="backwards">g@sgnimuc.eiznekcam</span>mail.com</span> o agregando un comentario a <a href="http://mackwai.blogspot.com/2014/11/feedback-for-somerbynetmacklogic.html" target="_blank">esta publicación de blog</a>. Estoy dispuesto a responder preguntas o brindar ayuda sobre el uso del software.</p>
 
-<p>You would be doing me a favor if you were to notify me of<p>
-
-<ul>
-  <li>bugs or errors in the software,</li>
-  <li>incorrect decisions made by the software, or</li>
-  <li>unclear or or incorrect statements in this document.</li>
-</ul>
-
-<p>Also,</p>
+<p>Me harías un favor si me avisaras de<p>
 
 <ul>
-  <li>If you find this application useful, I'm curious to know what you are using it for.</li>
-  <li>If there is any part of the user interface you find confusing, tell me and I'll try to improve it.</li>
-  <li>If you have ideas for new features, feel free to suggest them.  I'm open to expanding this application's functionality, so long as it is in keeping with the Possible Worlds-based approach that the software is using to decide propositions.</li>
+  <li>errores en el software,</li>
+  <li>decisiones incorrectas tomadas por el software, o</li>
+  <li>declaraciones poco claras o equivocadas en este documento.</li>
 </ul>
 
-<p id="feedback">Thanks.</p>
+<p>También,</p>
+
+<ul>
+  <li>Si encuentra útil esta aplicación, me gustaría saber para qué la usa.</li>
+  <li>Si hay alguna parte de la interfaz de usuario que encuentra confusa, dígame e intentaré mejorarla.</li>
+  <li>Si tiene ideas para nuevas funciones, no dude en sugerirlas. Estoy abierto a expandir la funcionalidad de esta aplicación, siempre y cuando esté en consonancia con el enfoque basado en los mundos posibles que el software utiliza para decidir propuestas.</li>
+</ul>
+
+<p id="feedback">Gracias.</p>
 
 </div>
 

@@ -1,5 +1,5 @@
 ﻿// somerby.net/mack/logic
-// Copyright (C) 2019 MacKenzie Cumings
+// Copyright (C) 2019, 2023 MacKenzie Cumings
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -57,6 +57,10 @@ namespace Logic
       return string.Format( "[{0}]", string.Join( ", ", Coefficients ) );
     }
 
+    /// <summary>
+    /// Using the coefficients and variable names, build and return an expression for the formula that determines if the
+    /// proposition is true for a combination of variables.
+    /// </summary>
     public string Formula
     {
       get
@@ -66,9 +70,15 @@ namespace Logic
         {
           if ( Coefficients[i] != 0 )
           {
+            // The absolute value of the coefficient is needed; it will be appended after a '+' sign or a '-' sign
+            // as the expression is built.
             int lAbsoluteCoefficient = System.Math.Abs( Coefficients[i] );
+
+            // The variables associated with a coefficient are at indices that are the powers that express
+            // the coefficient's index as a sum of powers of two.
             string[] lVariables = Variables.AtIndices( PowersOfTwo( i ) ).ToArray();
 
+            // If the expression already contains terms, add or subtract the next term from the expression.
             if ( lFormula.Length > 0 )
             {
               if ( Coefficients[i] > 0 )
@@ -76,21 +86,26 @@ namespace Logic
               else
                 lFormula.Append( " - " );
             }
+            // If the expression is currently empty, add the first term, with a minus sign if the first term's
+            // coefficient is negative.
             else
             {
               if ( Coefficients[i] < 0 )
                 lFormula.Append( "-" );
             }
 
+            // Add the absolute value of the current term's coefficient to the expression.
             if ( lAbsoluteCoefficient > 1 || lVariables.Length == 0 )
                 lFormula.Append( lAbsoluteCoefficient );
               
+            // Add the term's variables to the expression.
             foreach ( string lVariableName in lVariables )
             {
               lFormula.Append( lVariableName );
             }
           }
         }
+        // If all of the coefficients were 0, then return "0", else return the expression that was built.
         return lFormula.Length == 0
           ? "0"
           : lFormula.ToString();
@@ -158,8 +173,8 @@ namespace Logic
       if ( aOperandsToBeApplied.Count() == 0 )
       {
         aAccumulatedSums[aAccumulatedIndex] += aAccumulatedProduct;
-        if ( aAccumulatedIndex == 0 )
-          System.Console.WriteLine( string.Format( "{0} added to product", aAccumulatedProduct ) );
+        //if ( aAccumulatedIndex == 0 )
+        //  System.Console.WriteLine( string.Format( "{0} added to product", aAccumulatedProduct ) );
       }
       else
       {
@@ -178,7 +193,7 @@ namespace Logic
 
     internal static CoefficientVector Apply( CoefficientVector aOperator, params CoefficientVector[] aOperands )
     {
-      System.Console.WriteLine( string.Format( "Applying {0}", aOperator ) );
+      //System.Console.WriteLine( string.Format( "Applying {0}", aOperator ) );
       ValidateOperands( aOperands );
 
       int[] lResult = new int[ aOperands[ 0 ].Coefficients.Length ];
@@ -221,6 +236,7 @@ namespace Logic
     internal static CoefficientVector IMPL { get; private set; }
     internal static CoefficientVector NOR { get; private set; }
     internal static CoefficientVector EQUIV { get; private set; }
+    internal static CoefficientVector XOR { get; private set; }
     static CoefficientVector()
     {
       CoefficientVector P = Operator( 0, 1, 0, 0 );
@@ -233,6 +249,7 @@ namespace Logic
       OR = Apply( NOT, NOR );
       IMPL = Apply( OR, NOTP, Q );
       EQUIV = Apply( AND, IMPL, Apply( IMPL, Q, P ) );
+      XOR = Apply( NOT, EQUIV );
     }
   }
 }

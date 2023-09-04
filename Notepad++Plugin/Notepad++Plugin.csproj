@@ -28,7 +28,7 @@
     <RootNamespace>Logic</RootNamespace>
     <AssemblyName>Notepad++Plugin</AssemblyName>
     <OutputPath>bin\Debug\</OutputPath>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
