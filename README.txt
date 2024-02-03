@@ -8,32 +8,38 @@ found at http://www.somerby.net/mack/logic/
 
 INSTRUCTIONS FOR BUILDING THE SOFTWARE
 
-1. Install Microsoft Visual Studio Community 2022 for Windows Desktop or
-   some equivalent.
+1. Install Microsoft Visual Studio Community for Windows Desktop or
+   some equivalent.  If you want to be able to build the web application,
+   you will need Microsoft Visual Studio ***2015***; the Saltarelle tool,
+   mentioned below, which converts C# .NET to Javascript, is not compatible with later versions of Visual Studio.
+   You can download an [ISO for the Visual Studio Community 2015](http://download.microsoft.com/download/b/e/d/bedddfc4-55f4-4748-90a8-ffe38a40e89f/vs2015.3.com_enu.iso)
+   or see [this Stack Overlflow post](https://stackoverflow.com/questions/38134857/visual-studio-2015-update-3-offline-installer-iso)
+   for other options.  If you use a later version of Visual Studio, you can
+   still build the other projects, including the desktop application.
 
 2. Open the Visual Studio solution file named "Logic.sln".
 
 3. Build the solution in the Release configuration.  Don't build it in the
-   Debug configuration first; for some reason this hoses up the project files
+   Debug configuration first; for some reason this messes up the project files
    and the solution fails to build.  When you first build, Visual Studio should
-   install Saltarelle automatically.  If it doesn't, instructions
-   for installing Saltarelle can be found at
-   http://www.saltarelle-compiler.com/getting-started.  You only need to
-   follow the instructions as far as running the following commands in Visual
-   Studio's package manager console:
+   install Saltarelle automatically.  If it doesn't, run the following commands
+   in Visual Studio's package manager console:
 
+```console
 > Install-Package Saltarelle.Compiler
 > Install-Package Saltarelle.Runtime
 > Install-Package Saltarelle.Web
+```
 
 4. For Saltarelle to work, you may need to install Microsoft.Build.dll and
    Microsoft.Build.Framework.dll in the GAC.  To do this, open a command prompt
    in administrator mode and use gacutil.exe to install them, e.g.:
 
-> cd "C:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin"
+```console
+> cd "C:\Program Files (x86)\MSBuild\14.0\Bin"
 > "C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools\gacutil.exe" /i Microsoft.Build.dll
 > "C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools\gacutil.exe" /i Microsoft.Build.Framework.dll
- 
+```
 
 CONTENTS
 
@@ -68,6 +74,7 @@ read and decide statements in symbolic logic.
 
 A Notepad++Plugin that decides and depicts statements in symbolic logic.  It
 uses Graphviz, if it's installed and on the PATH, to generate depictions.
+*This plugin has not been maintained for a long time and probably won't work.*
 
 
 - WindowsFormsApplication
